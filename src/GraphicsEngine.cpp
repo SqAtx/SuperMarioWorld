@@ -27,11 +27,11 @@ GraphicsEngine::~GraphicsEngine()
 
 void GraphicsEngine::LoadTextures()
 {
-	m_textures["background"].loadFromFile("../SuperMario/Sprites/backgrounds.png", sf::IntRect(516, 438, 512, 432));
-	m_textures["floor_left"].loadFromFile("../SuperMario/Sprites/ground_tiles.png", sf::IntRect(120, 150, 16, 16));
-	m_textures["floor_middle"].loadFromFile("../SuperMario/Sprites/ground_tiles.png", sf::IntRect(137, 150, 16, 16));
-	m_textures["floor_right"].loadFromFile("../SuperMario/Sprites/ground_tiles.png", sf::IntRect(154, 150, 16, 16));
-	m_textures["mario"].loadFromFile("../SuperMario/Sprites/mario.png", sf::IntRect(5, 60, 13, 28));
+	m_textures["background"].loadFromFile("../assets/sprites/backgrounds.png", sf::IntRect(516, 438, 512, 432));
+	m_textures["floor_left"].loadFromFile("../assets/sprites/ground_tiles.png", sf::IntRect(120, 150, 16, 16));
+	m_textures["floor_middle"].loadFromFile("../assets/sprites/ground_tiles.png", sf::IntRect(137, 150, 16, 16));
+	m_textures["floor_right"].loadFromFile("../assets/sprites/ground_tiles.png", sf::IntRect(154, 150, 16, 16));
+	m_textures["mario"].loadFromFile("../assets/sprites/mario.png", sf::IntRect(5, 60, 13, 28));
 }
 
 void GraphicsEngine::Frame()
