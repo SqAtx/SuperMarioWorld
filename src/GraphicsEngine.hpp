@@ -27,6 +27,7 @@ class GraphicsEngine : public Engine
     private:
 		sf::RenderWindow *m_gameWindow;
 		static const float FramerateLimit;
+		static const int GraphicsEngine::FramesBetweenAnimationChanges;
 
 		std::map<std::string, sf::Texture> m_textures;
 
@@ -36,6 +37,8 @@ class GraphicsEngine : public Engine
 		std::vector<sf::Sprite> m_backgroundToDraw;
 		std::vector<sf::Sprite> m_levelStructureToDraw;
 		std::vector<sf::Sprite> m_displayableObjectsToDraw;
+
+		std::map<int, std::string> m_spritesCurrentlyDisplayed; // Contains id of displayable object and which sprite (name from RECT file) is displayed ATM
 		
 		void ProcessEvent(EngineEvent& _event);
 		void ProcessWindowEvents();
@@ -52,7 +55,10 @@ class GraphicsEngine : public Engine
 		void SetFloorToDraw();
 		void SetDisplayableObjectToDraw(InfoForDisplay _info);
 
-		std::string GetSpriteNameFromState(State _state);
+		std::string GetTextureNameFromDisplayInfo(int _id, std::string _name, State _state);
+		std::string GetTextureNameFromStateName(int _id, std::string _name);
+		int HowManyLoadedTexturesContainThisName(std::string _name);
+		std::string FindNextTextureName(int _id, std::string _name, int _nbTextures);
 
 		void DrawGame();
 

@@ -5,6 +5,7 @@
 #endif
 
 const float GraphicsEngine::FramerateLimit = 60;
+const int GraphicsEngine::FramesBetweenAnimationChanges = 7;
 const std::string GraphicsEngine::texturesPath = "../assets/sprites/";
 
 GraphicsEngine::GraphicsEngine(Game *_g): Engine (_g)
@@ -157,76 +158,6 @@ void GraphicsEngine::DisplayWindow()
 #endif
 
 	m_gameWindow->display();
-}
-
-void GraphicsEngine::ResetSpritesToDraw()
-{
-	while (!m_backgroundToDraw.empty())
-		m_backgroundToDraw.pop_back();
-	while (!m_levelStructureToDraw.empty())
-		m_levelStructureToDraw.pop_back();
-	while (!m_displayableObjectsToDraw.empty())
-		m_displayableObjectsToDraw.pop_back();
-}
-
-void GraphicsEngine::SetBackgroundToDraw()
-{
-	ResetTmpSprite();
-	m_tmpSprite->setTexture(m_textures["background_sky"]);
-	m_backgroundToDraw.push_back(*m_tmpSprite);
-}
-
-void GraphicsEngine::SetFloorToDraw()
-{
-	ResetTmpSprite();
-	m_tmpSprite->setTexture(m_textures["floor_left"]);
-	m_tmpSprite->setPosition(sf::Vector2f(0, WIN_HEIGHT - 16));
-	m_levelStructureToDraw.push_back(*m_tmpSprite);
-
-	for (unsigned int i = 1; i < WIDTH_IN_BLOCKS - 1; i++)
-	{
-		ResetTmpSprite();
-		m_tmpSprite->setTexture(m_textures["floor_middle"]);
-		m_tmpSprite->setPosition(sf::Vector2f(SIZE_BLOCK * i, WIN_HEIGHT - 16));
-		m_levelStructureToDraw.push_back(*m_tmpSprite);
-	}
-
-	ResetTmpSprite();
-	m_tmpSprite->setTexture(m_textures["floor_right"]);
-	m_tmpSprite->setPosition(sf::Vector2f(WIN_WIDTH - 16, WIN_HEIGHT - 16));
-	m_levelStructureToDraw.push_back(*m_tmpSprite);
-}
-
-void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
-{
-	ResetTmpSprite();
-	m_tmpSprite->setTexture(m_textures[_info.name + "_" + GetSpriteNameFromState(_info.state)]);
-	m_tmpSprite->setPosition(sf::Vector2f(_info.coordinates.x, _info.coordinates.y - m_tmpSprite->getGlobalBounds().height));
-	if (_info.reverse)
-	{
-		float height = m_tmpSprite->getGlobalBounds().height;
-		float width = m_tmpSprite->getGlobalBounds().width;
-		m_tmpSprite->setTextureRect(sf::IntRect(width, 0, -width, height));
-	}
-	m_displayableObjectsToDraw.push_back(*m_tmpSprite);
-
-#ifdef DEBUG_MODE
-	if (_info.name == "mario")
-		m_posMario = _info.coordinates;
-#endif
-}
-
-/* Takes the state of the object to display as a parameter, and figures out which sprite to display: could be moved in a SpriteManagement class / file ? */
-std::string GraphicsEngine::GetSpriteNameFromState(State _state)
-{
-	switch (_state)
-	{
-		case UNKNOWN:
-		case STATIC:
-			return "static";
-		case WALK:
-			return "walk2";
-	}
 }
 
 // Draw the 3 layers in the correct order
