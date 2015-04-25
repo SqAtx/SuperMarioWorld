@@ -7,10 +7,9 @@
 #include "PhysicsConstants.hpp"
 
 typedef enum {
-	UP,
-	DOWN,
-	LEFT,
-	RIGHT,
+	STATIC,
+	WALK,
+	RUN,
 	UNKNOWN
 } State;
 
@@ -20,7 +19,8 @@ typedef enum {
 struct InfoForDisplay
 {
 	unsigned int id;
-	std::string name;  // to find sprite
+	std::string name;	// to find sprite
+	State state;		// Idem
 	sf::Vector2f coordinates;
 	bool reverse; // Reverse sprite display (left/right) ?
 };
@@ -44,6 +44,7 @@ class DisplayableObject
 	protected:
 		int m_id; // Unique identifier for each object
 		std::string m_name;
+		State m_state;
 
 		sf::Vector2f m_coord; // Coordinates of the bottom left corner, in pixels, with respect to the top left corner of the window
 

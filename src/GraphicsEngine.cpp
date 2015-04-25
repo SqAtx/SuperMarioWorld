@@ -5,6 +5,7 @@
 #endif
 
 const float GraphicsEngine::FramerateLimit = 60;
+const std::string GraphicsEngine::texturesPath = "../assets/sprites/";
 
 GraphicsEngine::GraphicsEngine(Game *_g): Engine (_g)
 {
@@ -27,11 +28,65 @@ GraphicsEngine::~GraphicsEngine()
 
 void GraphicsEngine::LoadTextures()
 {
-	m_textures["background"].loadFromFile("../assets/sprites/backgrounds.png", sf::IntRect(516, 438, 512, 432));
-	m_textures["floor_left"].loadFromFile("../assets/sprites/ground_tiles.png", sf::IntRect(120, 150, 16, 16));
-	m_textures["floor_middle"].loadFromFile("../assets/sprites/ground_tiles.png", sf::IntRect(137, 150, 16, 16));
-	m_textures["floor_right"].loadFromFile("../assets/sprites/ground_tiles.png", sf::IntRect(154, 150, 16, 16));
-	m_textures["mario"].loadFromFile("../assets/sprites/mario.png", sf::IntRect(5, 60, 13, 28));
+	LoadTexturesFromFile("background");
+	LoadTexturesFromFile("floor");
+	LoadTexturesFromFile("mario");
+}
+
+void GraphicsEngine::LoadTexturesFromFile(std::string _fileName)
+{
+	/* Each line looks like "state 00 00 00 00 " with the numbers being left top right bottom */
+	std::string buffer;
+	std::string tmpStateName;
+	sf::IntRect tmpCoordinates;
+
+	int cursor = 0; // On 0 when reading the name, 1 when reading the first number, etc.
+
+	std::string imgFileName = GraphicsEngine::texturesPath + _fileName + ".png";
+	std::string rectFileName = GraphicsEngine::texturesPath + _fileName + ".rect";
+
+	std::ifstream rectFile;
+	rectFile.open(rectFileName);
+
+	while (getline(rectFile, buffer, ' '))
+	{
+		try
+		{
+			switch (cursor)
+			{
+			case 0:
+				tmpStateName = buffer;
+				break;
+			case 1:
+				tmpCoordinates.left = std::stoi(buffer);
+				break;
+			case 2:
+				tmpCoordinates.top = std::stoi(buffer);
+				break;
+			case 3:
+				tmpCoordinates.width = std::stoi(buffer) - tmpCoordinates.left;
+				break;
+			case 4:
+				tmpCoordinates.height = std::stoi(buffer) - tmpCoordinates.top;
+				break;
+			}
+			if (cursor == 4)
+			{
+				m_textures[_fileName + "_" + tmpStateName].loadFromFile(texturesPath + _fileName + ".png", tmpCoordinates);
+				cursor = 0;
+				getline(rectFile, buffer); // Read until the end of the line so the next call sets buffer to be the next state name
+			}
+			else
+				cursor++;
+		}
+		catch (std::invalid_argument err)
+		{
+			std::cerr << "Error trying to parse coordinate #" << cursor << " for state " << tmpStateName << " in file " << _fileName << ".rect" << std::endl;
+			std::cerr << err.what() << std::endl;
+		}
+	}
+
+	rectFile.close();
 }
 
 void GraphicsEngine::Frame()
@@ -42,9 +97,6 @@ void GraphicsEngine::Frame()
 		ProcessWindowEvents();
 	ProcessQueue();
 	DisplayWindow();
-
-	//m_lastFramerate.setString(std::to_string(1 / m_clock.getElapsedTime().asSeconds()));
-	//m_clock.restart();
 }
 
 // Process a single event, sent by another engine
@@ -120,7 +172,7 @@ void GraphicsEngine::ResetSpritesToDraw()
 void GraphicsEngine::SetBackgroundToDraw()
 {
 	ResetTmpSprite();
-	m_tmpSprite->setTexture(m_textures["background"]);
+	m_tmpSprite->setTexture(m_textures["background_sky"]);
 	m_backgroundToDraw.push_back(*m_tmpSprite);
 }
 
@@ -148,7 +200,7 @@ void GraphicsEngine::SetFloorToDraw()
 void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
 {
 	ResetTmpSprite();
-	m_tmpSprite->setTexture(m_textures[_info.name]);
+	m_tmpSprite->setTexture(m_textures[_info.name + "_" + GetSpriteNameFromState(_info.state)]);
 	m_tmpSprite->setPosition(sf::Vector2f(_info.coordinates.x, _info.coordinates.y - m_tmpSprite->getGlobalBounds().height));
 	if (_info.reverse)
 	{
@@ -162,6 +214,19 @@ void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
 	if (_info.name == "mario")
 		m_posMario = _info.coordinates;
 #endif
+}
+
+/* Takes the state of the object to display as a parameter, and figures out which sprite to display: could be moved in a SpriteManagement class / file ? */
+std::string GraphicsEngine::GetSpriteNameFromState(State _state)
+{
+	switch (_state)
+	{
+		case UNKNOWN:
+		case STATIC:
+			return "static";
+		case WALK:
+			return "walk2";
+	}
 }
 
 // Draw the 3 layers in the correct order

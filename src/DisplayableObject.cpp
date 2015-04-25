@@ -15,6 +15,8 @@ DisplayableObject::DisplayableObject(std::string _name, float _x, float _y)
 	m_name = _name;
 	m_coord.x = _x;
 	m_coord.y = _y;
+
+	m_state = UNKNOWN;
 }
 
 DisplayableObject::~DisplayableObject()
@@ -27,6 +29,7 @@ InfoForDisplay DisplayableObject::GetInfoForDisplay()
 	InfoForDisplay info;
 	info.id = m_id;
 	info.name = m_name;
+	info.state = m_state;
 	info.coordinates = m_coord;
 	info.reverse = m_reverseSprite;
 	return info;

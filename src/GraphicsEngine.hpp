@@ -4,6 +4,7 @@
 #include "Engine.hpp"
 
 #include <SFML/Graphics.hpp>
+#include <fstream>
 
 #define WIN_HEIGHT			432
 #define WIN_WIDTH			512
@@ -22,9 +23,7 @@ class GraphicsEngine : public Engine
 
         void Frame();
 		float GetFramerateLimit();
-
-
-
+		
     private:
 		sf::RenderWindow *m_gameWindow;
 		static const float FramerateLimit;
@@ -42,6 +41,7 @@ class GraphicsEngine : public Engine
 		void ProcessWindowEvents();
 
 		void LoadTextures(); // Load all textures at beginning of level
+		void LoadTexturesFromFile(std::string _fileName);
 
 		void ResetSpritesToDraw();
 
@@ -52,9 +52,13 @@ class GraphicsEngine : public Engine
 		void SetFloorToDraw();
 		void SetDisplayableObjectToDraw(InfoForDisplay _info);
 
+		std::string GetSpriteNameFromState(State _state);
+
 		void DrawGame();
 
 		void ResetTmpSprite();
+
+		static const std::string texturesPath;
 
 #ifdef DEBUG_MODE
 		sf::Clock m_clock;

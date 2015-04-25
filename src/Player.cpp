@@ -38,6 +38,8 @@ void Player::move(int _a)
 		if (m_facing == DLEFT)
 			m_velocity.x = 0; // Player should skid
 		m_facing = DRIGHT;
+
+		m_state = WALK;
 	}
 	else if (_a < 0)
 	{
@@ -45,6 +47,8 @@ void Player::move(int _a)
 		if (m_facing == DRIGHT)
 			m_velocity.x = 0; // Player should skid
 		m_facing = DLEFT;
+
+		m_state = WALK;
 	}
 	else
 	{

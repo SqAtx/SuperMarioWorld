@@ -70,6 +70,10 @@ void MovingObject::UpdatePosition(float _dt)
 		if (abs(m_velocity.x) < 0.5)
 			m_velocity.x = 0;
 	}
+
+	// If Mario is not moving, his state should be STATIC
+	if (m_velocity.x == 0)
+		m_state = STATIC;
 }
 
 #ifdef DEBUG_MODE
