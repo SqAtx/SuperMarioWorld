@@ -1,9 +1,5 @@
 #include "GraphicsEngine.hpp"
 
-#ifdef DEBUG_MODE
-#include <math.h>
-#endif
-
 const float GraphicsEngine::FramerateLimit = 60;
 
 GraphicsEngine::GraphicsEngine(Game *_g): Engine (_g)

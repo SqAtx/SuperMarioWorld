@@ -30,6 +30,9 @@ void MovingObject::UpdatePosition(float _dt)
 	UpdateAcceleration();
 	UpdateVelocity(_dt);
 
+	if (m_acceleration.x == 0)
+		m_state = STATIC;
+
 	m_coord = {
 		m_coord.x += m_velocity.x * _dt,
 		m_coord.y += m_velocity.y * _dt,
@@ -46,16 +49,13 @@ void MovingObject::UpdateAcceleration()
 
 	AddOwnAcceleration();
 
-	// Basic friction too, so Mario stops instead of skidding endlessly
-	if (m_acceleration.x == 0)
-	{
-		m_state = STATIC;
-		m_velocity.x *= 0.9;
-		if (abs(m_velocity.x) < 5)
-			m_velocity.x /= 2;
-		if (abs(m_velocity.x) < 0.5)
-			m_velocity.x = 0;
-	}
+	/*
+	*	Friction
+	*	P + n + f = ma, with a the acceleration resulting from friction. I removed the "own acceleration" (which should be A = F * const, so the same on both sides of the equation).
+	*	On x axis: 0 + 0 + µN = ma ==> µg = a
+	*/
+	if (m_acceleration.x == 0 && abs(m_velocity.x) >= PhysicsConstants::MinSpeed_X)
+		m_acceleration.x += PhysicsConstants::FrictionPlayerGound * PhysicsConstants::Gravity * (m_facing == DLEFT ? 1 : -1);
 }
 
 void MovingObject::UpdateVelocity(float _dt)
@@ -65,11 +65,19 @@ void MovingObject::UpdateVelocity(float _dt)
 		m_velocity.y += m_acceleration.y * _dt,
 	};
 
+	// Check for maximum velocity
 	float maxAbsVel = GetMaxAbsVelocity_X();
 	if (m_velocity.x > maxAbsVel)
 		m_velocity.x = maxAbsVel;
 	if (m_velocity.x < -maxAbsVel)
 		m_velocity.x = -maxAbsVel;
+
+	// Make sure the player is not running backwards (which can happen when the friction force creates a big acceleration in the opposite direction)
+	if (m_facing == DLEFT && m_velocity.x > 0 || m_facing == DRIGHT && m_velocity.x < 0)
+		m_velocity.x = 0;
+
+	if (abs(m_velocity.x) < PhysicsConstants::MinSpeed_X)
+		m_velocity.x = 0;
 }
 
 float MovingObject::GetMaxAbsVelocity_X()
@@ -99,7 +107,7 @@ void MovingObject::HandleCollisionsWithMapEdges()
 
 void MovingObject::HandleCollisionsWithLevel()
 {
-	// dirty but the level is currently very simple :)
+	// Dirty but the level is currently very simple :)
 	if (m_coord.y > 432 - 16)
 	{
 		m_coord.y = 432 - 16;
