@@ -1,4 +1,3 @@
-#include <string>
 #include <SFML/Graphics.hpp>
 #include "MovingObject.hpp"
 

@@ -5,8 +5,6 @@
 #endif
 
 const float GraphicsEngine::FramerateLimit = 60;
-const int GraphicsEngine::FramesBetweenAnimationChanges = 7;
-const std::string GraphicsEngine::texturesPath = "../assets/sprites/";
 
 GraphicsEngine::GraphicsEngine(Game *_g): Engine (_g)
 {
@@ -25,69 +23,6 @@ GraphicsEngine::GraphicsEngine(Game *_g): Engine (_g)
 GraphicsEngine::~GraphicsEngine()
 {
 	delete m_gameWindow;
-}
-
-void GraphicsEngine::LoadTextures()
-{
-	LoadTexturesFromFile("background");
-	LoadTexturesFromFile("floor");
-	LoadTexturesFromFile("mario");
-}
-
-void GraphicsEngine::LoadTexturesFromFile(std::string _fileName)
-{
-	/* Each line looks like "state 00 00 00 00 " with the numbers being left top right bottom */
-	std::string buffer;
-	std::string tmpStateName;
-	sf::IntRect tmpCoordinates;
-
-	int cursor = 0; // On 0 when reading the name, 1 when reading the first number, etc.
-
-	std::string imgFileName = GraphicsEngine::texturesPath + _fileName + ".png";
-	std::string rectFileName = GraphicsEngine::texturesPath + _fileName + ".rect";
-
-	std::ifstream rectFile;
-	rectFile.open(rectFileName);
-
-	while (getline(rectFile, buffer, ' '))
-	{
-		try
-		{
-			switch (cursor)
-			{
-			case 0:
-				tmpStateName = buffer;
-				break;
-			case 1:
-				tmpCoordinates.left = std::stoi(buffer);
-				break;
-			case 2:
-				tmpCoordinates.top = std::stoi(buffer);
-				break;
-			case 3:
-				tmpCoordinates.width = std::stoi(buffer) - tmpCoordinates.left;
-				break;
-			case 4:
-				tmpCoordinates.height = std::stoi(buffer) - tmpCoordinates.top;
-				break;
-			}
-			if (cursor == 4)
-			{
-				m_textures[_fileName + "_" + tmpStateName].loadFromFile(texturesPath + _fileName + ".png", tmpCoordinates);
-				cursor = 0;
-				getline(rectFile, buffer); // Read until the end of the line so the next call sets buffer to be the next state name
-			}
-			else
-				cursor++;
-		}
-		catch (std::invalid_argument err)
-		{
-			std::cerr << "Error trying to parse coordinate #" << cursor << " for state " << tmpStateName << " in file " << _fileName << ".rect" << std::endl;
-			std::cerr << err.what() << std::endl;
-		}
-	}
-
-	rectFile.close();
 }
 
 void GraphicsEngine::Frame()
@@ -189,12 +124,6 @@ void GraphicsEngine::DrawDebugInfo()
 	m_gameWindow->draw(m_debugText);
 }
 #endif
-
-void GraphicsEngine::ResetTmpSprite()
-{
-	delete m_tmpSprite;
-	m_tmpSprite = new sf::Sprite();
-}
 
 float GraphicsEngine::GetFramerateLimit()
 {

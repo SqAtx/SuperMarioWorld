@@ -1,7 +1,6 @@
 #ifndef DISPLAYABLEOBJECT_H
 #define DISPLAYABLEOBJECT_H
 
-#include <string>
 #include <SFML/System/Vector2.hpp>
 #include "Debug.hpp"
 #include "PhysicsConstants.hpp"

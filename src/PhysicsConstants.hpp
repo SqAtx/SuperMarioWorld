@@ -2,6 +2,7 @@
 #define PHYSICS_H
 
 #include <math.h>
+#include "Util.hpp"
 
 namespace PhysicsConstants
 {
