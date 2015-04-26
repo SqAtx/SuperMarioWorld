@@ -13,7 +13,7 @@ typedef enum {
 } State;
 
 /*
-*	Information sent from g to gfx for display. The name will be used to fetch the sprite(s).
+*	Information sent from g to gfx for display. The name and state will be used to fetch the correct sprite.
 */
 struct InfoForDisplay
 {

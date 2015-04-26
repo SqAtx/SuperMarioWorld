@@ -26,6 +26,18 @@ InfoForDisplay Player::GetInfoForDisplay()
 	return MovingObject::GetInfoForDisplay();
 }
 
+void Player::AddOwnAcceleration()
+{
+	switch (m_state)
+	{
+		case WALK:
+			m_acceleration.x = PhysicsConstants::PlayerAcc_Walk * (m_facing == DLEFT ? -1 : 1);
+			break;
+		case RUN:
+			m_acceleration.x = PhysicsConstants::PlayerAcc_Run * (m_facing == DLEFT ? -1 : 1);
+			break;
+	}
+}
 
 /*
 *	TEST, not pretty, could be refactored too, but very temporary anyway :)
@@ -34,7 +46,6 @@ void Player::move(int _a)
 {
 	if (_a > 0)
 	{
-		m_acceleration.x = PhysicsConstants::PlayerAcc;
 		if (m_facing == DLEFT)
 			m_velocity.x = 0; // Player should skid
 		m_facing = DRIGHT;
@@ -43,7 +54,6 @@ void Player::move(int _a)
 	}
 	else if (_a < 0)
 	{
-		m_acceleration.x = -PhysicsConstants::PlayerAcc;
 		if (m_facing == DRIGHT)
 			m_velocity.x = 0; // Player should skid
 		m_facing = DLEFT;
@@ -52,6 +62,6 @@ void Player::move(int _a)
 	}
 	else
 	{
-		m_acceleration.x = 0;
+		m_state = STATIC;
 	}
 }

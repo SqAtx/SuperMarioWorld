@@ -36,6 +36,14 @@ class MovingObject : public DisplayableObject
 	protected:
 		Direction m_facing;
 
+		void UpdateAcceleration();
+		void UpdateVelocity(float _dt);
+			float GetMaxAbsVelocity_X();
+		void HandleCollisionsWithMapEdges();
+		void HandleCollisionsWithLevel();
+
+		virtual void AddOwnAcceleration() = 0;
+
 		int m_maxSpeed;
 		sf::Vector2f m_velocity;
 		sf::Vector2f m_acceleration;

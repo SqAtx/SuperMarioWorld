@@ -18,6 +18,8 @@ class Player : public MovingObject
 
 	private:
 
+		void AddOwnAcceleration();
+
 };
 
 #endif

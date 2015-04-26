@@ -4,7 +4,7 @@
 
 GameEngine::GameEngine(Game *_g): Engine (_g)
 {
-	mario = new Player("mario", SIZE_BLOCK * 5, 10);
+	mario = new Player("mario", SIZE_BLOCK * 5, 150);
 }
 
 GameEngine::~GameEngine()

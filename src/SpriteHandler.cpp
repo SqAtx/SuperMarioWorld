@@ -1,5 +1,5 @@
 /*
-	SpriteHandler: All operations from retrieving the textures to deciding whicch sprites to display
+	SpriteHandler: All operations from retrieving the textures to deciding which sprites to display
 */
 
 #include "GraphicsEngine.hpp"
@@ -126,6 +126,7 @@ std::string GraphicsEngine::GetTextureNameFromDisplayInfo(int _id, std::string _
 		case UNKNOWN:
 		case STATIC:
 			return GetTextureNameFromStateName(_id, _name + "_static");
+		case RUN:
 		case WALK:
 			return GetTextureNameFromStateName(_id, _name + "_walk");
 		default:

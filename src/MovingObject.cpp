@@ -27,24 +27,64 @@ MovingObject::~MovingObject()
 */
 void MovingObject::UpdatePosition(float _dt)
 {
-	m_velocity = {
-		m_velocity.x += m_acceleration.x * _dt,
-		m_velocity.y += m_acceleration.y * _dt,
-	};
-
-	if (m_velocity.x > PhysicsConstants::PlayerMaxSpeed_X)
-		m_velocity.x = PhysicsConstants::PlayerMaxSpeed_X;
-	if (m_velocity.x < -PhysicsConstants::PlayerMaxSpeed_X)
-		m_velocity.x = -PhysicsConstants::PlayerMaxSpeed_X;
+	UpdateAcceleration();
+	UpdateVelocity(_dt);
 
 	m_coord = {
 		m_coord.x += m_velocity.x * _dt,
 		m_coord.y += m_velocity.y * _dt,
 	};
 
-	/*
-	*	Very basic collision handling, shouldn't be here; only for testing =)
-	*/
+	HandleCollisionsWithMapEdges();
+	HandleCollisionsWithLevel();
+}
+
+void MovingObject::UpdateAcceleration()
+{
+	m_acceleration.x = 0;
+	m_acceleration.y = PhysicsConstants::Gravity;
+
+	AddOwnAcceleration();
+
+	// Basic friction too, so Mario stops instead of skidding endlessly
+	if (m_acceleration.x == 0)
+	{
+		m_state = STATIC;
+		m_velocity.x *= 0.9;
+		if (abs(m_velocity.x) < 5)
+			m_velocity.x /= 2;
+		if (abs(m_velocity.x) < 0.5)
+			m_velocity.x = 0;
+	}
+}
+
+void MovingObject::UpdateVelocity(float _dt)
+{
+	m_velocity = {
+		m_velocity.x += m_acceleration.x * _dt,
+		m_velocity.y += m_acceleration.y * _dt,
+	};
+
+	float maxAbsVel = GetMaxAbsVelocity_X();
+	if (m_velocity.x > maxAbsVel)
+		m_velocity.x = maxAbsVel;
+	if (m_velocity.x < -maxAbsVel)
+		m_velocity.x = -maxAbsVel;
+}
+
+float MovingObject::GetMaxAbsVelocity_X()
+{
+	switch (m_state)
+	{
+		case WALK:
+			return PhysicsConstants::PlayerMaxSpeed_Walk_X;
+		case RUN:
+			return PhysicsConstants::PlayerMaxSpeed_Run_X;
+	}
+}
+
+void MovingObject::HandleCollisionsWithMapEdges()
+{
 	if (m_coord.x < 0)
 	{
 		m_coord.x = 0;
@@ -55,25 +95,16 @@ void MovingObject::UpdatePosition(float _dt)
 		m_coord.x = 512 - 13;
 		m_velocity.x = 0;
 	}
+}
+
+void MovingObject::HandleCollisionsWithLevel()
+{
+	// dirty but the level is currently very simple :)
 	if (m_coord.y > 432 - 16)
 	{
 		m_coord.y = 432 - 16;
 		m_velocity.y = 0;
 	}
-
-	// Basic friction too, so Mario stops instead of skidding endlessly
-	if (m_acceleration.x == 0)
-	{
-		m_velocity.x *= 0.9;
-		if (abs(m_velocity.x) < 5)
-			m_velocity.x /= 2;
-		if (abs(m_velocity.x) < 0.5)
-			m_velocity.x = 0;
-	}
-
-	// If Mario is not moving, his state should be STATIC
-	if (m_velocity.x == 0)
-		m_state = STATIC;
 }
 
 #ifdef DEBUG_MODE
