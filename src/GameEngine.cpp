@@ -55,11 +55,16 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 	switch (_key)
 	{
 		case sf::Keyboard::Left:
-			mario->move(-1);
+			mario->Move(-1);
 			break;
 		case sf::Keyboard::Right:
-			mario->move(1);
+			mario->Move(1);
 			break;
+		case sf::Keyboard::C:
+			mario->ToggleRun(true);
+			break;
+		case sf::Keyboard::Space:
+			mario->Jump();
 		default:
 			break;
 	}
@@ -71,7 +76,10 @@ void GameEngine::HandleReleasedKey(sf::Keyboard::Key _key)
 	{
 		case sf::Keyboard::Left:
 		case sf::Keyboard::Right:
-			mario->move(0);
+			mario->Move(0);
+			break;
+		case sf::Keyboard::C:
+			mario->ToggleRun(false);
 			break;
 		default:
 			break;

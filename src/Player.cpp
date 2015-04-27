@@ -13,6 +13,8 @@ Player::Player(std::string _name, float _x, float _y) : MovingObject(_name, _x, 
 void Player::Init()
 {
 	m_facing = DRIGHT;
+	m_isRunning = false;
+	m_isJumping = false;
 }
 
 Player:: ~Player()
@@ -39,10 +41,16 @@ void Player::AddOwnAcceleration()
 	}
 }
 
-/*
-*	TEST, not pretty, could be refactored too, but very temporary anyway :)
-*/
-void Player::move(int _a)
+void Player::ToggleRun(bool _mustRun)
+{
+	if (_mustRun && m_state == WALK)
+		m_state = RUN;
+	if (!_mustRun && m_state == RUN)
+		m_state = WALK;
+	m_isRunning = _mustRun;
+}
+
+void Player::Move(int _a)
 {
 	if (_a > 0)
 	{
@@ -50,7 +58,7 @@ void Player::move(int _a)
 			m_velocity.x = 0; // Player should skid
 		m_facing = DRIGHT;
 
-		m_state = WALK;
+		m_state = m_isRunning ? RUN : WALK;
 	}
 	else if (_a < 0)
 	{
@@ -58,10 +66,13 @@ void Player::move(int _a)
 			m_velocity.x = 0; // Player should skid
 		m_facing = DLEFT;
 
-		m_state = WALK;
+		m_state = m_isRunning ? RUN : WALK;
 	}
 	else
-	{
 		m_state = STATIC;
-	}
+}
+
+void Player::Jump()
+{
+
 }

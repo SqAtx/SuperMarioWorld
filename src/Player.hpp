@@ -14,12 +14,17 @@ class Player : public MovingObject
 
 		InfoForDisplay GetInfoForDisplay();
 
-		void move(int);
+		void ToggleRun(bool _mustRun);
+
+		void Move(int);
+		void Jump();
 
 	private:
 
 		void AddOwnAcceleration();
 
+		bool m_isRunning;
+		bool m_isJumping;
 };
 
 #endif
