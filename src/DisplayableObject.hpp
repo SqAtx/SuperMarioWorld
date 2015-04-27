@@ -9,6 +9,8 @@ typedef enum {
 	STATIC,
 	WALK,
 	RUN,
+	JUMP,	// Only used for transmission to GameEngine
+	FALL,	// Idem
 	UNKNOWN
 } State;
 

@@ -23,6 +23,16 @@ MovingObject::~MovingObject()
 
 }
 
+InfoForDisplay MovingObject::GetInfoForDisplay()
+{
+	InfoForDisplay info = DisplayableObject::GetInfoForDisplay();
+	if (m_jumpState == JUMPING || m_jumpState == REACHINGAPEX)
+		info.state = JUMP; // This state is for GraphicsEngine to know which sprite to display. GameEngine still needs to make a difference between "Jump and Walk" and "Jump and Run"
+	if (m_jumpState == FALLING)
+		info.state = FALL;
+	return info;
+}
+
 void MovingObject::UpdatePosition(float _dt)
 {
 	UpdateAcceleration();
@@ -30,6 +40,9 @@ void MovingObject::UpdatePosition(float _dt)
 
 	if (m_acceleration.x == 0)
 		m_state = STATIC;
+
+	if (m_velocity.y > 0)
+		m_jumpState = FALLING;
 
 	m_coord = {
 		m_coord.x += m_velocity.x * _dt,
@@ -47,13 +60,25 @@ void MovingObject::UpdateAcceleration()
 
 	AddOwnAcceleration();
 
-	/*
-	*	Friction
-	*	P + n + f = ma, with a the acceleration resulting from friction. I removed the "own acceleration" (which should be A = F * const, so the same on both sides of the equation).
-	*	On x axis: 0 + 0 + µN = ma ==> µg = a
-	*/
-	if (m_acceleration.x == 0 && abs(m_velocity.x) >= PhysicsConstants::MinSpeed_X)
-		m_acceleration.x += PhysicsConstants::FrictionPlayerGound * PhysicsConstants::Gravity * (m_facing == DLEFT ? 1 : -1);
+	switch (m_jumpState)
+	{
+		/*
+		*	Friction of floor
+		*	P + n + f = ma, with a the acceleration resulting from friction. I removed the "own acceleration" (which should be A = F * const, so the same on both sides of the equation).
+		*	On x axis: 0 + 0 + µN = ma ==> µg = a
+		*/
+		case ONFLOOR:
+			if (m_acceleration.x == 0 && abs(m_velocity.x) >= PhysicsConstants::MinSpeed_X)
+				m_acceleration.x += PhysicsConstants::FrictionPlayerGound * PhysicsConstants::Gravity * (m_facing == DLEFT ? 1 : -1);
+			break;
+
+			// In the air, simplified fluid model: friction force is proportional to velocity
+		case JUMPING:
+		case REACHINGAPEX:
+		case FALLING:
+			break;
+	}
+
 }
 
 void MovingObject::UpdateVelocity(float _dt)

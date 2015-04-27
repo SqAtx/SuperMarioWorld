@@ -129,6 +129,10 @@ std::string GraphicsEngine::GetTextureNameFromDisplayInfo(int _id, std::string _
 		case RUN:
 		case WALK:
 			return GetTextureNameFromStateName(_id, _name + "_walk");
+		case JUMP:
+			return GetTextureNameFromStateName(_id, _name + "_jump");
+		case FALL:
+			return GetTextureNameFromStateName(_id, _name + "_fall");
 		default:
 			assert(false);
 			return NULL;

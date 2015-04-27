@@ -17,6 +17,7 @@ enum Direction {
 
 enum JumpState {
 	JUMPING,
+	REACHINGAPEX, // Phase between the jump and the fall: the object is still rising but without acceleration on the Y axis 
 	FALLING,
 	ONFLOOR,
 	NONE	// At the beginning of the level, for example
@@ -33,6 +34,8 @@ class MovingObject : public DisplayableObject
 		~MovingObject();
 
 		void Init();
+
+		virtual InfoForDisplay GetInfoForDisplay();
 
 		void UpdatePosition(float _dt);
 

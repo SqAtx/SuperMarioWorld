@@ -45,7 +45,7 @@ void Player::AddOwnAcceleration()
 		if (abs(m_velocity.y) < PhysicsConstants::MinYVelForJump)
 			m_acceleration.y += PhysicsConstants::PlayerJumpAcc;
 		else
-			m_jumpState = FALLING;
+			m_jumpState = REACHINGAPEX;
 	}
 }
 
@@ -62,16 +62,16 @@ void Player::Move(int _a)
 {
 	if (_a > 0)
 	{
-		if (m_facing == DLEFT)
-			m_velocity.x = 0; // Player should skid
+		//if (m_facing == DLEFT)
+			//m_velocity.x = 0; // Player should skid
 		m_facing = DRIGHT;
 
 		m_state = m_isRunning ? RUN : WALK;
 	}
 	else if (_a < 0)
 	{
-		if (m_facing == DRIGHT)
-			m_velocity.x = 0; // Player should skid
+		//if (m_facing == DRIGHT)
+			//m_velocity.x = 0; // Player should skid
 		m_facing = DLEFT;
 
 		m_state = m_isRunning ? RUN : WALK;
