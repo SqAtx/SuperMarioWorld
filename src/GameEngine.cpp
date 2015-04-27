@@ -81,6 +81,9 @@ void GameEngine::HandleReleasedKey(sf::Keyboard::Key _key)
 		case sf::Keyboard::C:
 			mario->ToggleRun(false);
 			break;
+		case sf::Keyboard::Space:
+			mario->EndJump();
+			break;
 		default:
 			break;
 	}

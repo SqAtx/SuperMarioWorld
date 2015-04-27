@@ -68,14 +68,16 @@ void MovingObject::UpdateAcceleration()
 		*	On x axis: 0 + 0 + µN = ma ==> µg = a
 		*/
 		case ONFLOOR:
-			if (m_acceleration.x == 0 && abs(m_velocity.x) >= PhysicsConstants::MinSpeed_X)
+			if (m_acceleration.x == 0 && abs(m_velocity.x) >= PhysicsConstants::MinSpeed)
 				m_acceleration.x += PhysicsConstants::FrictionPlayerGound * PhysicsConstants::Gravity * (m_facing == DLEFT ? 1 : -1);
 			break;
 
-			// In the air, simplified fluid model: friction force is proportional to velocity
+		// In the air, simplified fluid model: friction force is proportional to velocity. a  = F/m, an acceleration is also sort of proporional to a force
 		case JUMPING:
 		case REACHINGAPEX:
 		case FALLING:
+			m_acceleration.x -= PhysicsConstants::FrictionPlayerAir * m_velocity.x;
+			m_acceleration.y -= PhysicsConstants::FrictionPlayerAir * m_velocity.y;
 			break;
 	}
 
@@ -99,7 +101,7 @@ void MovingObject::UpdateVelocity(float _dt)
 	if (m_facing == DLEFT && m_velocity.x > 0 || m_facing == DRIGHT && m_velocity.x < 0)
 		m_velocity.x = 0;
 
-	if (abs(m_velocity.x) < PhysicsConstants::MinSpeed_X)
+	if (abs(m_velocity.x) < PhysicsConstants::MinSpeed)
 		m_velocity.x = 0;
 }
 

@@ -14,6 +14,7 @@ void Player::Init()
 {
 	m_facing = DRIGHT;
 	m_isRunning = false;
+	m_canJump = true;
 }
 
 Player:: ~Player()
@@ -42,7 +43,9 @@ void Player::AddOwnAcceleration()
 	// Takes off if enough speed on the Y axis
 	if (m_jumpState == JUMPING)
 	{
-		if (abs(m_velocity.y) < PhysicsConstants::MinYVelForJump)
+		if (abs(m_velocity.y) < PhysicsConstants::MinSpeed) // Little push at the beginning of the jump
+			m_velocity.y -= PhysicsConstants::InitialYVelForJump;
+		if (abs(m_velocity.y) < PhysicsConstants::MaxYVelForJump)
 			m_acceleration.y += PhysicsConstants::PlayerJumpAcc;
 		else
 			m_jumpState = REACHINGAPEX;
@@ -82,8 +85,15 @@ void Player::Move(int _a)
 
 void Player::Jump()
 {
-	if (m_jumpState == ONFLOOR)
+	if (m_jumpState == ONFLOOR && m_canJump)
 	{
 		m_jumpState = JUMPING;
+		m_canJump = false;
 	}
+}
+
+// This is called when the jump key is released, so the player doesn't keep jumping around if the key stays down
+void Player::EndJump()
+{
+	m_canJump = true;
 }

@@ -18,12 +18,15 @@ class Player : public MovingObject
 
 		void Move(int);
 		void Jump();
+		void EndJump();
 
 	private:
 
 		void AddOwnAcceleration();
 
 		bool m_isRunning;
+
+		bool m_canJump; // To avoid Mario jumping around if the jump key is pressed and held
 };
 
 #endif
