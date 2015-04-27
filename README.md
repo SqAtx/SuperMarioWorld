@@ -16,8 +16,8 @@ What has been done:
 - A debug mode that displays extra information (can be disabled by commenting #define DEBUG_MODE in Debug.hpp)
 - Sprite management: a .rect file indicates which textures to use for static sprites and for animations (with any number of frames)
 - Friction between Mario and the floor
+- Jumps and friction with air
 
 What next ?
-- Jumps
 - Sounds and musics
 - Level storage
