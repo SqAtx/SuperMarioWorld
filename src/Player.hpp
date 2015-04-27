@@ -24,7 +24,6 @@ class Player : public MovingObject
 		void AddOwnAcceleration();
 
 		bool m_isRunning;
-		bool m_isJumping;
 };
 
 #endif

@@ -15,6 +15,7 @@ void MovingObject::Init()
 	m_maxSpeed = 0;
 	m_velocity = { 0, 0 };
 	m_acceleration = { 0, PhysicsConstants::Gravity};
+	m_jumpState = NONE;
 }
 
 MovingObject::~MovingObject()
@@ -22,9 +23,6 @@ MovingObject::~MovingObject()
 
 }
 
-/*
-*	To be refactored, this is just for basic testing and displaying something fun
-*/
 void MovingObject::UpdatePosition(float _dt)
 {
 	UpdateAcceleration();
@@ -107,11 +105,11 @@ void MovingObject::HandleCollisionsWithMapEdges()
 
 void MovingObject::HandleCollisionsWithLevel()
 {
-	// Dirty but the level is currently very simple :)
 	if (m_coord.y > 432 - 16)
 	{
 		m_coord.y = 432 - 16;
 		m_velocity.y = 0;
+		m_jumpState = ONFLOOR;
 	}
 }
 

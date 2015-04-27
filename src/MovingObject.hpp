@@ -15,6 +15,13 @@ enum Direction {
 	DRIGHT
 };
 
+enum JumpState {
+	JUMPING,
+	FALLING,
+	ONFLOOR,
+	NONE	// At the beginning of the level, for example
+};
+
 /*
 *	A MovingObject can be a player, an enemy, or a moving item, such as a power-up
 */
@@ -47,6 +54,8 @@ class MovingObject : public DisplayableObject
 		int m_maxSpeed;
 		sf::Vector2f m_velocity;
 		sf::Vector2f m_acceleration;
+
+		JumpState m_jumpState;
 };
 
 #endif

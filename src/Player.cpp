@@ -14,7 +14,6 @@ void Player::Init()
 {
 	m_facing = DRIGHT;
 	m_isRunning = false;
-	m_isJumping = false;
 }
 
 Player:: ~Player()
@@ -38,6 +37,15 @@ void Player::AddOwnAcceleration()
 		case RUN:
 			m_acceleration.x = PhysicsConstants::PlayerAcc_Run * (m_facing == DLEFT ? -1 : 1);
 			break;
+	}
+
+	// Takes off if enough speed on the Y axis
+	if (m_jumpState == JUMPING)
+	{
+		if (abs(m_velocity.y) < PhysicsConstants::MinYVelForJump)
+			m_acceleration.y += PhysicsConstants::PlayerJumpAcc;
+		else
+			m_jumpState = FALLING;
 	}
 }
 
@@ -74,5 +82,8 @@ void Player::Move(int _a)
 
 void Player::Jump()
 {
-
+	if (m_jumpState == ONFLOOR)
+	{
+		m_jumpState = JUMPING;
+	}
 }
