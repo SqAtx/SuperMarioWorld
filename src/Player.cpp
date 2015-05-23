@@ -83,13 +83,15 @@ void Player::Move(int _a)
 		m_state = STATIC;
 }
 
-void Player::Jump()
+bool Player::Jump()
 {
 	if (m_jumpState == ONFLOOR && m_canJump)
 	{
 		m_jumpState = JUMPING;
 		m_canJump = false;
+		return true;
 	}
+	return false;
 }
 
 // This is called when the jump key is released, so the player doesn't keep jumping around if the key stays down

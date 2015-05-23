@@ -65,9 +65,11 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 			mario->ToggleRun(true);
 			break;
 		case sf::Keyboard::Space:
-			tmpEvent.set(PLAY_SOUND, JUMP_SND);
-			m_engines["s"]->PushEvent(tmpEvent);
-			mario->Jump();
+			if (mario->Jump())
+			{
+				tmpEvent.set(PLAY_SOUND, JUMP_SND);
+				m_engines["s"]->PushEvent(tmpEvent);
+			}
 		default:
 			break;
 	}

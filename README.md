@@ -17,7 +17,11 @@ What has been done:
 - Sprite management: a .rect file indicates which textures to use for static sprites and for animations (with any number of frames)
 - Friction between Mario and the floor
 - Jumps and friction with air
+- Sound management
 
 What next ?
-- Sounds and musics
+- Music
+- Scrolling
 - Level storage
+- Collisions with level
+- Enemies :) 

@@ -17,7 +17,7 @@ class Player : public MovingObject
 		void ToggleRun(bool _mustRun);
 
 		void Move(int);
-		void Jump();
+		bool Jump();
 		void EndJump();
 
 	private:
