@@ -52,6 +52,7 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 
 void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 {
+	EngineEvent tmpEvent;
 	switch (_key)
 	{
 		case sf::Keyboard::Left:
@@ -64,6 +65,8 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 			mario->ToggleRun(true);
 			break;
 		case sf::Keyboard::Space:
+			tmpEvent.set(PLAY_SOUND, JUMP_SND);
+			m_engines["s"]->PushEvent(tmpEvent);
 			mario->Jump();
 		default:
 			break;

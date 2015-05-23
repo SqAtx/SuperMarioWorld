@@ -10,7 +10,15 @@ typedef enum
 	KEY_PRESSED,
 	KEY_RELEASED,
 	INFO_POS,
+	PLAY_SOUND,
 } EventType;
+
+typedef enum
+{
+	JUMP_SND,
+	COIN_SND,
+	DEATH_SND
+} SoundType;
 
 /* This class represents a message sent from an engine to another */
 class EngineEvent
@@ -25,6 +33,7 @@ class EngineEvent
 			struct { // Unnamed struct to fool VS which is being annoying..
 				InfoForDisplay m_infoDisplay;
 			};
+			SoundType m_sound;
 		} data;
 
 #ifdef DEBUG_MODE
@@ -47,6 +56,12 @@ class EngineEvent
 		{
 			m_type = _type;
 			data.m_infoDisplay = _info;
+		}
+
+		void set(EventType _type, SoundType _sound)
+		{
+			m_type = _type;
+			data.m_sound = _sound;
 		}
 
 #ifdef DEBUG_MODE

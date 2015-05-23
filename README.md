@@ -7,7 +7,7 @@ The program uses SFML 2.2, you will need the following SFML DLLs in your executa
 Commands:
 - Left and Right arrows to move Mario
 - C to run
-- ... that's it for now ^^
+- Space to jump
 
 What has been done:
 - Communication between GameEngine, GraphicsEngine and SoundEngine
