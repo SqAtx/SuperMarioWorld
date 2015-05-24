@@ -2,11 +2,12 @@
 
 const std::string SoundEngine::soundsPath = "../assets/sounds/";
 
-SoundEngine::SoundEngine(Game *_g): Engine (_g)
+SoundEngine::SoundEngine(Game *_g) : Engine(_g), m_indexCurrentMusic(-1)
 {
 	m_soundBeingPlayed = new sf::Sound();
 	m_currentMusic = new sf::Music();
 	LoadSounds();
+	StoreMusicNames();
 }
 
 SoundEngine::~SoundEngine()
@@ -17,6 +18,9 @@ SoundEngine::~SoundEngine()
 
 void SoundEngine::Frame()
 {
+	if (m_indexCurrentMusic != -1 && m_currentMusic->getStatus() == sf::SoundSource::Status::Stopped)
+		ChangeMusic();
+
 	ProcessQueue();
 }
 
@@ -25,7 +29,7 @@ void SoundEngine::ProcessEvent(EngineEvent& _event)
 	switch (_event.m_type)
 	{
 		case LEVEL_START:
-			StartMusic(_event.m_string);
+			StartLevelMusic(_event.m_string);
 			break;
 		case PLAY_SOUND:
 			PlaySound(_event.data.m_sound);
@@ -58,9 +62,27 @@ void SoundEngine::PlaySound(SoundType _type)
 	m_soundBeingPlayed->play();
 }
 
-void SoundEngine::StartMusic(std::string _lvlName)
+void SoundEngine::StoreMusicNames()
 {
-	std::string musicFullName = SoundEngine::soundsPath + "Super_Jungle_Brothers_OC_ReMix.ogg";
+	m_musicNames.push_back("Super_Jungle_Brothers_OC_ReMix.ogg");
+	m_musicNames.push_back("SwankyVegas_OC_ReMix.ogg");
+}
+
+void SoundEngine::StartLevelMusic(std::string _lvlName) // Beginning of level
+{
+	PlayMusic(m_musicNames[0]);
+	m_indexCurrentMusic = 0;
+}
+
+void SoundEngine::ChangeMusic()
+{
+	m_indexCurrentMusic = (m_indexCurrentMusic == m_musicNames.size() - 1) ? 0 : m_indexCurrentMusic + 1;
+	PlayMusic(m_musicNames[m_indexCurrentMusic]);
+}
+
+void SoundEngine::PlayMusic(std::string _musicName)
+{
+	std::string musicFullName = SoundEngine::soundsPath + _musicName;
 	if (!m_currentMusic->openFromFile(musicFullName))
 		std::cerr << "Can't open music file " << musicFullName << std::endl;
 	else
