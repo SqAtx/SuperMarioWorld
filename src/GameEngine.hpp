@@ -17,11 +17,14 @@ class GameEngine : public Engine
 		void Frame(float _dt);
 
     private:
+		bool m_levelStarted;
 		Player *mario;
 
 		void ProcessEvent(EngineEvent& _event);
 		void HandlePressedKey(sf::Keyboard::Key _key);
 		void HandleReleasedKey(sf::Keyboard::Key _key);
+
+		void StartLevel();
 };
 
 #endif // GAMEENGINE_H

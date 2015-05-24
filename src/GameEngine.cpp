@@ -2,7 +2,7 @@
 #include "Game.hpp"
 
 
-GameEngine::GameEngine(Game *_g): Engine (_g)
+GameEngine::GameEngine(Game *_g) : Engine(_g), m_levelStarted(false)
 {
 	mario = new Player("mario", SIZE_BLOCK * 5, 150);
 }
@@ -19,6 +19,9 @@ void GameEngine::Frame()
 
 void GameEngine::Frame(float _dt)
 {
+	if (!m_levelStarted)
+		StartLevel(); // In the future there will be some sort of level selection so this call will be moved
+
 	ProcessQueue();
 
 	// Send Mario's position to gfx
@@ -92,4 +95,13 @@ void GameEngine::HandleReleasedKey(sf::Keyboard::Key _key)
 		default:
 			break;
 	}
+}
+
+// This will probably need an argument (like the name of the level) at some point
+void GameEngine::StartLevel()
+{
+	EngineEvent startLevel;
+	startLevel.set(LEVEL_START, "");
+	m_engines["s"]->PushEvent(startLevel);
+	m_levelStarted = true;
 }

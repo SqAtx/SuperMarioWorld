@@ -6,6 +6,7 @@ typedef enum
 #ifdef DEBUG_MODE
 	INFO_DEBUG,
 #endif
+	LEVEL_START,
 	GAME_STOPPED,
 	KEY_PRESSED,
 	KEY_RELEASED,
@@ -35,6 +36,7 @@ class EngineEvent
 			};
 			SoundType m_sound;
 		} data;
+		std::string m_string; // A string can't be inside a union
 
 #ifdef DEBUG_MODE
 		DebugInfo m_debugInfo;
@@ -62,6 +64,12 @@ class EngineEvent
 		{
 			m_type = _type;
 			data.m_sound = _sound;
+		}
+
+		void set(EventType _type, std::string _str)
+		{
+			m_type = _type;
+			m_string = _str;
 		}
 
 #ifdef DEBUG_MODE
