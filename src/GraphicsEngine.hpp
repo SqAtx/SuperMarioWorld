@@ -40,13 +40,18 @@ class GraphicsEngine : public Engine
 		std::vector<sf::Sprite> m_levelStructureToDraw;
 		std::vector<sf::Sprite> m_displayableObjectsToDraw;
 
+		// List of all the floor tiles in the current level and their coordinates
+		std::map<sf::Vector2f, std::string, CompareVector2f> m_listFloorTileNames;
+
 		std::map<int, std::string> m_spritesCurrentlyDisplayed; // Contains id of displayable object and which sprite (name from RECT file) is displayed ATM
-		
+
 		void ProcessEvent(EngineEvent& _event);
 		void ProcessWindowEvents();
 
 		bool LoadLevel(std::string _lvlName);
+		void FillListFloorTileNames(irr::io::IrrXMLReader *_lvlFile);
 		std::string GetAttributeValue(irr::io::IrrXMLReader *_lvlFile, const char* _name);
+		float GetAttributeValueAsFloat(irr::io::IrrXMLReader *_lvlFile, const char* _name);
 
 		void LoadTextures(); // Load all textures at beginning of level
 		void LoadTexturesFromFile(std::string _fileName);

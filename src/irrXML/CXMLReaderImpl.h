@@ -156,7 +156,7 @@ public:
 	{
 		const SAttribute* attr = getAttributeByName(name);
 		if (!attr)
-			return 0;
+			return -1;
 
 		core::stringc c = attr->Value.c_str();
 		return core::fast_atof(c.c_str());

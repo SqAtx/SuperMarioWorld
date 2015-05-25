@@ -34,3 +34,12 @@ std::vector<std::string> Util::Split(std::string _str, char _sep)
 
 	return splitted;
 }
+
+bool CompareVector2f::operator()(sf::Vector2f const& _a, sf::Vector2f const& _b)
+{
+	if (_a.x < _b.x)
+		return true;
+	if (_a.x == _b.x && _a.y < _b.y)
+		return true;
+	return false;
+}

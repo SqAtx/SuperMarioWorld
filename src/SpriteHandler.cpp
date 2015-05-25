@@ -79,22 +79,12 @@ void GraphicsEngine::SetBackgroundToDraw()
 void GraphicsEngine::SetFloorToDraw()
 {
 	ResetTmpSprite();
-	m_tmpSprite->setTexture(m_textures["floor_left"]);
-	m_tmpSprite->setPosition(sf::Vector2f(0, WIN_HEIGHT - 16));
-	m_levelStructureToDraw.push_back(*m_tmpSprite);
-
-	for (unsigned int i = 1; i < WIDTH_IN_BLOCKS - 1; i++)
+	for (std::map<sf::Vector2f, std::string, CompareVector2f>::iterator it = m_listFloorTileNames.begin(); it != m_listFloorTileNames.end(); ++it)
 	{
-		ResetTmpSprite();
-		m_tmpSprite->setTexture(m_textures["floor_middle"]);
-		m_tmpSprite->setPosition(sf::Vector2f(SIZE_BLOCK * i, WIN_HEIGHT - 16));
+		m_tmpSprite->setPosition(it->first);
+		m_tmpSprite->setTexture(m_textures["floor_" + it->second]);
 		m_levelStructureToDraw.push_back(*m_tmpSprite);
 	}
-
-	ResetTmpSprite();
-	m_tmpSprite->setTexture(m_textures["floor_right"]);
-	m_tmpSprite->setPosition(sf::Vector2f(WIN_WIDTH - 16, WIN_HEIGHT - 16));
-	m_levelStructureToDraw.push_back(*m_tmpSprite);
 }
 
 void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)

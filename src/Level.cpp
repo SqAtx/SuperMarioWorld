@@ -21,11 +21,13 @@ bool GraphicsEngine::LoadLevel(std::string _lvlName)
 		switch (lvlFile->getNodeType())
 		{
 			case EXN_ELEMENT:
-			{
 				if (!strcmp("level", lvlFile->getNodeName()))
 					m_currentBackgroundName = GetAttributeValue(lvlFile, "background");
-			}
-			break;
+				if (!strcmp("floor", lvlFile->getNodeName()))
+					FillListFloorTileNames(lvlFile);
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -39,10 +41,48 @@ bool GraphicsEngine::LoadLevel(std::string _lvlName)
 	return true;
 }
 
+void GraphicsEngine::FillListFloorTileNames(irr::io::IrrXMLReader *_lvlFile)
+{
+	sf::Vector2f tmpCoords;
+	std::string tmpTileName;
+	bool foundTiles = false;
+
+	while (_lvlFile && _lvlFile->read())
+	{
+		switch (_lvlFile->getNodeType())
+		{
+			case EXN_ELEMENT:
+				foundTiles = true;
+				if (!strcmp("tile", _lvlFile->getNodeName()))
+				{
+					tmpCoords.x = GetAttributeValueAsFloat(_lvlFile, "x");
+					tmpCoords.y = GetAttributeValueAsFloat(_lvlFile, "y");
+					tmpTileName = GetAttributeValue(_lvlFile, "type");
+					m_listFloorTileNames[tmpCoords] = tmpTileName;
+				}
+				break;
+			case EXN_ELEMENT_END:
+				if (!foundTiles)
+					std::cerr << "No floor tiles in level file." << std::endl;
+				return;
+			default:
+				break;
+		}
+	}
+}
+
 std::string GraphicsEngine::GetAttributeValue(IrrXMLReader *_lvlFile, const char* _name)
 {
 	std::string str(_lvlFile->getAttributeValueSafe(_name));
 	if (str == "")
 		std::cerr << "Can't read attribute " << _name << std::endl;
 	return str;
+}
+
+float GraphicsEngine::GetAttributeValueAsFloat(IrrXMLReader *_lvlFile, const char* _name)
+{
+	float ret = _lvlFile->getAttributeValueAsFloat(_name);
+	if (ret == -1)
+		std::cerr << "Can't read attribute " << _name << std::endl;
+	return ret;
 }
