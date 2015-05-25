@@ -18,9 +18,9 @@ What has been done:
 - Friction between Mario and the floor
 - Jumps and friction with air
 - Sound and music management (Uncomment //StartLevelMusic(_event.m_string); in SoundEngine.cpp for music)
+- Level stored in an XML file
 
 What next ?
-- Scrolling
-- Level storage
 - Collisions with level
+- Scrolling
 - Enemies :) 

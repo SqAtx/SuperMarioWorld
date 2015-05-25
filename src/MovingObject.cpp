@@ -16,6 +16,7 @@ void MovingObject::Init()
 	m_velocity = { 0, 0 };
 	m_acceleration = { 0, PhysicsConstants::Gravity};
 	m_jumpState = NONE;
+	m_isDead = false;
 }
 
 MovingObject::~MovingObject()

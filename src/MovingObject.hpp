@@ -39,16 +39,19 @@ class MovingObject : public DisplayableObject
 
 		void UpdatePosition(float _dt);
 
+		bool IsDead() { return m_isDead; };
+
 #ifdef DEBUG_MODE
 		DebugInfo GetDebugInfo();
 #endif
 
 	protected:
 		Direction m_facing;
+		JumpState m_jumpState;
 
 		void UpdateAcceleration();
 		void UpdateVelocity(float _dt);
-			float GetMaxAbsVelocity_X();
+		float GetMaxAbsVelocity_X();
 		void HandleCollisionsWithMapEdges();
 		void HandleCollisionsWithLevel();
 
@@ -58,7 +61,7 @@ class MovingObject : public DisplayableObject
 		sf::Vector2f m_velocity;
 		sf::Vector2f m_acceleration;
 
-		JumpState m_jumpState;
+		bool m_isDead;
 };
 
 #endif

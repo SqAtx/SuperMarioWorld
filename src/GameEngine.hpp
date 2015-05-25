@@ -18,12 +18,17 @@ class GameEngine : public Engine
 
     private:
 		bool m_levelStarted;
-		Player *mario;
+		Player *m_mario;
 
 		void ProcessEvent(EngineEvent& _event);
 		void HandlePressedKey(sf::Keyboard::Key _key);
 		void HandleReleasedKey(sf::Keyboard::Key _key);
 
+		void UpdateMarioPosition(float _dt);
+		void CheckMarioDeath();
+		void KillMario();
+		void SendMarioPosition(float _dt);
+		
 		void StartLevel();
 };
 

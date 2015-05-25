@@ -4,12 +4,12 @@
 
 GameEngine::GameEngine(Game *_g) : Engine(_g), m_levelStarted(false)
 {
-	mario = new Player("mario", SIZE_BLOCK * 5, 150);
+	m_mario = new Player("mario", SIZE_BLOCK * 5, 150);
 }
 
 GameEngine::~GameEngine()
 {
-	delete mario;
+	delete m_mario;
 }
 
 void GameEngine::Frame()
@@ -24,15 +24,9 @@ void GameEngine::Frame(float _dt)
 
 	ProcessQueue();
 
-	// Send Mario's position to gfx
-	EngineEvent posMario, debugMario;
-	mario->UpdatePosition(_dt);
-	posMario.set(INFO_POS, mario->GetInfoForDisplay());
-	m_engines["gfx"]->PushEvent(posMario);
-#ifdef DEBUG_MODE
-	debugMario.set(INFO_DEBUG, mario->GetDebugInfo());
-	m_engines["gfx"]->PushEvent(debugMario);
-#endif
+	UpdateMarioPosition(_dt);
+	CheckMarioDeath();
+	SendMarioPosition(_dt);
 }
 
 void GameEngine::ProcessEvent(EngineEvent& _event)
@@ -59,16 +53,19 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 	switch (_key)
 	{
 		case sf::Keyboard::Left:
-			mario->Move(-1);
+			if (m_mario != NULL)
+				m_mario->Move(-1);
 			break;
 		case sf::Keyboard::Right:
-			mario->Move(1);
+			if (m_mario != NULL)
+				m_mario->Move(1);
 			break;
 		case sf::Keyboard::C:
-			mario->ToggleRun(true);
+			if (m_mario != NULL)
+				m_mario->ToggleRun(true);
 			break;
 		case sf::Keyboard::Space:
-			if (mario->Jump())
+			if (m_mario != NULL && m_mario->Jump())
 			{
 				tmpEvent.set(PLAY_SOUND, JUMP_SND);
 				m_engines["s"]->PushEvent(tmpEvent);
@@ -84,13 +81,16 @@ void GameEngine::HandleReleasedKey(sf::Keyboard::Key _key)
 	{
 		case sf::Keyboard::Left:
 		case sf::Keyboard::Right:
-			mario->Move(0);
+			if (m_mario != NULL)
+				m_mario->Move(0);
 			break;
 		case sf::Keyboard::C:
-			mario->ToggleRun(false);
+			if (m_mario != NULL)
+				m_mario->ToggleRun(false);
 			break;
 		case sf::Keyboard::Space:
-			mario->EndJump();
+			if (m_mario != NULL)
+				m_mario->EndJump();
 			break;
 		default:
 			break;
@@ -104,4 +104,44 @@ void GameEngine::StartLevel()
 	startLevel.set(LEVEL_START, "");
 	m_engines["s"]->PushEvent(startLevel);
 	m_levelStarted = true;
+}
+
+void GameEngine::UpdateMarioPosition(float _dt)
+{
+	if (m_mario != NULL)
+		m_mario->UpdatePosition(_dt);
+}
+
+void GameEngine::CheckMarioDeath()
+{
+	EngineEvent tmpEvent;
+
+	if (m_mario != NULL && m_mario->IsDead())
+	{
+		tmpEvent.set(PLAY_SOUND, DEATH_SND);
+		m_engines["s"]->PushEvent(tmpEvent);
+		KillMario();
+	}
+}
+
+void GameEngine::KillMario()
+{
+	delete m_mario;
+	m_mario = NULL;
+}
+
+// Send Mario's position to gfx
+void GameEngine::SendMarioPosition(float _dt)
+{
+	EngineEvent tmpEvent;
+
+	if (m_mario == NULL)
+		return;
+
+	tmpEvent.set(INFO_POS, m_mario->GetInfoForDisplay());
+	m_engines["gfx"]->PushEvent(tmpEvent);
+#ifdef DEBUG_MODE
+	tmpEvent.set(INFO_DEBUG, m_mario->GetDebugInfo());
+	m_engines["gfx"]->PushEvent(tmpEvent);
+#endif
 }
