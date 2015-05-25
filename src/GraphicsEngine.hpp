@@ -3,6 +3,7 @@
 
 #include "Engine.hpp"
 
+#include "irrXML/irrXML.h"
 #include <SFML/Graphics.hpp>
 #include <fstream>
 
@@ -32,6 +33,7 @@ class GraphicsEngine : public Engine
 		std::map<std::string, sf::Texture> m_textures;
 
 		sf::Sprite* m_tmpSprite;
+		std::string m_currentBackgroundName;
 
 		// Sprites to draw: 3 levels
 		std::vector<sf::Sprite> m_backgroundToDraw;
@@ -42,6 +44,9 @@ class GraphicsEngine : public Engine
 		
 		void ProcessEvent(EngineEvent& _event);
 		void ProcessWindowEvents();
+
+		bool LoadLevel(std::string _lvlName);
+		std::string GetAttributeValue(irr::io::IrrXMLReader *_lvlFile, const char* _name);
 
 		void LoadTextures(); // Load all textures at beginning of level
 		void LoadTexturesFromFile(std::string _fileName);
@@ -65,6 +70,7 @@ class GraphicsEngine : public Engine
 		void ResetTmpSprite();
 
 		static const std::string texturesPath;
+		static const std::string levelsPath;
 
 #ifdef DEBUG_MODE
 		sf::Clock m_clock;

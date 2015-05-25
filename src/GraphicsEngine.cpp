@@ -7,6 +7,7 @@ GraphicsEngine::GraphicsEngine(Game *_g): Engine (_g)
 	m_gameWindow = new sf::RenderWindow(sf::VideoMode(WIN_WIDTH, WIN_HEIGHT, 32), "Super Mario !", sf::Style::Titlebar | sf::Style::Close);
 	m_tmpSprite = new sf::Sprite();
 	LoadTextures();
+	LoadLevel("testlvl");
 
 #ifdef DEBUG_MODE
 	m_font.loadFromFile("arial.ttf");

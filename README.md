@@ -17,10 +17,9 @@ What has been done:
 - Sprite management: a .rect file indicates which textures to use for static sprites and for animations (with any number of frames)
 - Friction between Mario and the floor
 - Jumps and friction with air
-- Sound management
+- Sound and music management (Uncomment //StartLevelMusic(_event.m_string); in SoundEngine.cpp for music)
 
 What next ?
-- Music
 - Scrolling
 - Level storage
 - Collisions with level

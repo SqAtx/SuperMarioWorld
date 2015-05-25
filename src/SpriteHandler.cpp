@@ -72,7 +72,7 @@ void GraphicsEngine::ResetSpritesToDraw()
 void GraphicsEngine::SetBackgroundToDraw()
 {
 	ResetTmpSprite();
-	m_tmpSprite->setTexture(m_textures["background_sky"]);
+	m_tmpSprite->setTexture(m_textures["background_" + m_currentBackgroundName]);
 	m_backgroundToDraw.push_back(*m_tmpSprite);
 }
 
