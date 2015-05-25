@@ -37,7 +37,7 @@ void GraphicsEngine::ProcessEvent(EngineEvent& _event)
 {
 	switch (_event.m_type)
 	{
-		case INFO_POS:
+		case INFO_POS_CHAR:
 			SetDisplayableObjectToDraw(_event.data.m_infoDisplay);
 			break;
 #ifdef DEBUG_MODE

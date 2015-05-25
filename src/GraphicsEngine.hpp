@@ -41,7 +41,7 @@ class GraphicsEngine : public Engine
 		std::vector<sf::Sprite> m_displayableObjectsToDraw;
 
 		// List of all the floor tiles in the current level and their coordinates
-		std::map<sf::Vector2f, std::string, CompareVector2f> m_listFloorTileNames;
+		std::map<DisplayableObject, std::string, CompareDisplayableObjects> m_listFloorTileNames;
 
 		std::map<int, std::string> m_spritesCurrentlyDisplayed; // Contains id of displayable object and which sprite (name from RECT file) is displayed ATM
 

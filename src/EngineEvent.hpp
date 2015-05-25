@@ -6,11 +6,12 @@ typedef enum
 #ifdef DEBUG_MODE
 	INFO_DEBUG,
 #endif
-	LEVEL_START,
+	LEVEL_START,	// g to s
 	GAME_STOPPED,
-	KEY_PRESSED,
-	KEY_RELEASED,
-	INFO_POS,
+	KEY_PRESSED,	// gfx to g
+	KEY_RELEASED,	// gfx to g
+	INFO_POS_CHAR,	// g to gfx: character (Mario or enemy) position
+	INFO_POS_LVL,	// gfx to g: position of a foreground sprite
 	PLAY_SOUND,
 } EventType;
 
@@ -35,8 +36,10 @@ class EngineEvent
 				InfoForDisplay m_infoDisplay;
 			};
 			SoundType m_sound;
+			int m_id;
 		} data;
 		std::string m_string; // A string can't be inside a union
+		sf::Rect<float> m_rect;
 
 #ifdef DEBUG_MODE
 		DebugInfo m_debugInfo;
@@ -70,6 +73,13 @@ class EngineEvent
 		{
 			m_type = _type;
 			m_string = _str;
+		}
+
+		void set(EventType _type, int _id, sf::Rect<float> _rect)
+		{
+			m_type = _type;
+			data.m_id = _id;
+			m_rect = _rect;
 		}
 
 #ifdef DEBUG_MODE

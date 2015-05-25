@@ -16,16 +16,21 @@ void GameEngine::HandleCollisionsWithMapEdges(MovingObject& _obj)
 
 void GameEngine::HandleCollisionsWithLevel(MovingObject& _obj)
 {
-	if (_obj.GetPosition().y > 432 - 16 && (_obj.GetPosition().x < 140 || _obj.GetPosition().x > 196))
+	sf::Rect<float> objCoords = m_foregroundObjectCoords[_obj.GetID()];
+	/*if (_obj.GetPosition().y > 432 - 16 - objCoords.height && (_obj.GetPosition().x < 140 || _obj.GetPosition().x > 196))
 	{
-		_obj.SetY(432 - 16);
+		_obj.SetY(432 - 16 - objCoords.height);
 		_obj.SetVelY(0);
 		_obj.SetJumpState(ONFLOOR);
-	}
-	if (_obj.GetPosition().y > 432)
+	}*/
+
+	// Fall
+	if (_obj.GetPosition().y > 432-objCoords.height)
 	{
-		//_obj.SetY(432);
-		//_obj.SetJumpState(ONFLOOR);
-		_obj.Kill();
+		_obj.SetY(432-objCoords.height);
+		_obj.SetVelY(0);
+		_obj.SetJumpState(ONFLOOR);
+		//_obj.Kill();
 	}
 }
+

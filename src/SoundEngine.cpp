@@ -58,6 +58,13 @@ void SoundEngine::LoadSoundFromFile(SoundType _type, std::string _fileName)
 
 void SoundEngine::PlaySound(SoundType _type)
 {
+	// Music stops when Mario dies
+	if (_type == DEATH_SND)
+	{
+		m_currentMusic->stop();
+		m_indexCurrentMusic = -1;
+	}
+
 	m_soundBeingPlayed->setBuffer(m_soundBuffers[_type]); // Could optimize this by remembering the last buffer set
 	m_soundBeingPlayed->play();
 }

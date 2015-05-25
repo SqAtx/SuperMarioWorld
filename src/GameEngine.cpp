@@ -24,9 +24,14 @@ void GameEngine::Frame(float _dt)
 
 	ProcessQueue();
 
-	UpdateMarioPosition(_dt);
-	CheckMarioDeath();
-	SendMarioPosition(_dt);
+	if (m_mario != NULL)
+	{
+		m_mario->UpdatePosition(_dt);
+		HandleCollisionsWithMapEdges(*m_mario);
+		HandleCollisionsWithLevel(*m_mario);
+		CheckMarioDeath();
+		SendMarioPosition(_dt);
+	}
 }
 
 void GameEngine::ProcessEvent(EngineEvent& _event)
@@ -38,6 +43,9 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 			break;
 		case KEY_RELEASED:
 			HandleReleasedKey(_event.data.m_key);
+			break;
+		case INFO_POS_LVL:
+			m_foregroundObjectCoords[_event.data.m_id] = _event.m_rect;
 			break;
 		case GAME_STOPPED:
 			m_parent->Stop();
@@ -70,6 +78,11 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 				tmpEvent.set(PLAY_SOUND, JUMP_SND);
 				m_engines["s"]->PushEvent(tmpEvent);
 			}
+			break;
+		case sf::Keyboard::Escape:
+			if (m_mario == NULL)
+				m_mario = new Player("mario", SIZE_BLOCK * 5, 150);
+			break;
 		default:
 			break;
 	}
@@ -106,17 +119,11 @@ void GameEngine::StartLevel()
 	m_levelStarted = true;
 }
 
-void GameEngine::UpdateMarioPosition(float _dt)
-{
-	if (m_mario != NULL)
-		m_mario->UpdatePosition(_dt);
-}
-
 void GameEngine::CheckMarioDeath()
 {
 	EngineEvent tmpEvent;
 
-	if (m_mario != NULL && m_mario->IsDead())
+	if (m_mario->IsDead())
 	{
 		tmpEvent.set(PLAY_SOUND, DEATH_SND);
 		m_engines["s"]->PushEvent(tmpEvent);
@@ -138,7 +145,7 @@ void GameEngine::SendMarioPosition(float _dt)
 	if (m_mario == NULL)
 		return;
 
-	tmpEvent.set(INFO_POS, m_mario->GetInfoForDisplay());
+	tmpEvent.set(INFO_POS_CHAR, m_mario->GetInfoForDisplay());
 	m_engines["gfx"]->PushEvent(tmpEvent);
 #ifdef DEBUG_MODE
 	tmpEvent.set(INFO_DEBUG, m_mario->GetDebugInfo());

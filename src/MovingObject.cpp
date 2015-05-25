@@ -49,9 +49,6 @@ void MovingObject::UpdatePosition(float _dt)
 		m_coord.x += m_velocity.x * _dt,
 		m_coord.y += m_velocity.y * _dt,
 	};
-
-	HandleCollisionsWithMapEdges();
-	HandleCollisionsWithLevel();
 }
 
 void MovingObject::UpdateAcceleration()
@@ -114,30 +111,6 @@ float MovingObject::GetMaxAbsVelocity_X()
 			return PhysicsConstants::PlayerMaxSpeed_Walk_X;
 		case RUN:
 			return PhysicsConstants::PlayerMaxSpeed_Run_X;
-	}
-}
-
-void MovingObject::HandleCollisionsWithMapEdges()
-{
-	if (m_coord.x < 0)
-	{
-		m_coord.x = 0;
-		m_velocity.x = 0;
-	}
-	if (m_coord.x > 512 - 13)
-	{
-		m_coord.x = 512 - 13;
-		m_velocity.x = 0;
-	}
-}
-
-void MovingObject::HandleCollisionsWithLevel()
-{
-	if (m_coord.y > 432 - 16)
-	{
-		m_coord.y = 432 - 16;
-		m_velocity.y = 0;
-		m_jumpState = ONFLOOR;
 	}
 }
 

@@ -57,8 +57,9 @@ void GraphicsEngine::FillListFloorTileNames(irr::io::IrrXMLReader *_lvlFile)
 				{
 					tmpCoords.x = GetAttributeValueAsFloat(_lvlFile, "x");
 					tmpCoords.y = GetAttributeValueAsFloat(_lvlFile, "y");
-					tmpTileName = GetAttributeValue(_lvlFile, "type");
-					m_listFloorTileNames[tmpCoords] = tmpTileName;
+					tmpTileName = GetAttributeValue(_lvlFile, "sprite");
+					DisplayableObject tmpObj(tmpTileName, tmpCoords);
+					m_listFloorTileNames[tmpObj] = tmpTileName;
 				}
 				break;
 			case EXN_ELEMENT_END:

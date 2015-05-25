@@ -1,4 +1,5 @@
 #include "Util.hpp"
+#include "DisplayableObject.hpp"
 
 bool Util::isInteger(std::string& _str)
 {
@@ -35,11 +36,11 @@ std::vector<std::string> Util::Split(std::string _str, char _sep)
 	return splitted;
 }
 
-bool CompareVector2f::operator()(sf::Vector2f const& _a, sf::Vector2f const& _b)
+bool CompareDisplayableObjects::operator()(DisplayableObject const& _a, DisplayableObject const& _b)
 {
-	if (_a.x < _b.x)
+	if (_a.GetPosition().x < _b.GetPosition().x)
 		return true;
-	if (_a.x == _b.x && _a.y < _b.y)
+	if (_a.GetPosition().x == _b.GetPosition().x && _a.GetPosition().y < _b.GetPosition().y)
 		return true;
 	return false;
 }

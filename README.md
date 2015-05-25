@@ -8,6 +8,7 @@ Commands:
 - Left and Right arrows to move Mario
 - C to run
 - Space to jump
+- Escape to bring Mario back from the dead
 
 What has been done:
 - Communication between GameEngine, GraphicsEngine and SoundEngine
@@ -19,6 +20,7 @@ What has been done:
 - Jumps and friction with air
 - Sound and music management (Uncomment //StartLevelMusic(_event.m_string); in SoundEngine.cpp for music)
 - Level stored in an XML file
+- Mario dies if he falls in the hole
 
 What next ?
 - Collisions with level

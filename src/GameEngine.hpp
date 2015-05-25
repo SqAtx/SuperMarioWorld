@@ -20,15 +20,19 @@ class GameEngine : public Engine
 		bool m_levelStarted;
 		Player *m_mario;
 
+		std::map<unsigned int, sf::Rect<float>> m_foregroundObjectCoords; // Part of the level the characters can be in collision with
+
 		void ProcessEvent(EngineEvent& _event);
 		void HandlePressedKey(sf::Keyboard::Key _key);
 		void HandleReleasedKey(sf::Keyboard::Key _key);
 
-		void UpdateMarioPosition(float _dt);
 		void CheckMarioDeath();
 		void KillMario();
 		void SendMarioPosition(float _dt);
-		
+
+		void HandleCollisionsWithMapEdges(MovingObject& _obj);
+		void HandleCollisionsWithLevel(MovingObject& _obj);
+
 		void StartLevel();
 };
 

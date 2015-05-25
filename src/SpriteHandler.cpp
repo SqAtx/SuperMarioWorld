@@ -79,9 +79,9 @@ void GraphicsEngine::SetBackgroundToDraw()
 void GraphicsEngine::SetFloorToDraw()
 {
 	ResetTmpSprite();
-	for (std::map<sf::Vector2f, std::string, CompareVector2f>::iterator it = m_listFloorTileNames.begin(); it != m_listFloorTileNames.end(); ++it)
+	for (std::map<DisplayableObject, std::string, CompareDisplayableObjects>::iterator it = m_listFloorTileNames.begin(); it != m_listFloorTileNames.end(); ++it)
 	{
-		m_tmpSprite->setPosition(it->first);
+		m_tmpSprite->setPosition(it->first.GetPosition());
 		m_tmpSprite->setTexture(m_textures["floor_" + it->second]);
 		m_levelStructureToDraw.push_back(*m_tmpSprite);
 	}
@@ -92,7 +92,7 @@ void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
 	ResetTmpSprite();
 	std::string spriteName = GetTextureNameFromDisplayInfo(_info.id, _info.name, _info.state);
 	m_tmpSprite->setTexture(m_textures[spriteName]);
-	m_tmpSprite->setPosition(sf::Vector2f(_info.coordinates.x, _info.coordinates.y - m_tmpSprite->getGlobalBounds().height));
+	m_tmpSprite->setPosition(sf::Vector2f(_info.coordinates.x, _info.coordinates.y));
 	if (_info.reverse)
 	{
 		float height = m_tmpSprite->getGlobalBounds().height;
@@ -100,6 +100,16 @@ void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
 		m_tmpSprite->setTextureRect(sf::IntRect(width, 0, -width, height));
 	}
 	m_displayableObjectsToDraw.push_back(*m_tmpSprite);
+
+	// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions
+	sf::Rect<float> tmpRect;
+	EngineEvent tmpEvent;
+	tmpRect.left = _info.coordinates.x;
+	tmpRect.top = _info.coordinates.y;
+	tmpRect.width = m_tmpSprite->getGlobalBounds().width;
+	tmpRect.height = m_tmpSprite->getGlobalBounds().height;
+	tmpEvent.set(INFO_POS_LVL, _info.id, tmpRect);
+	m_engines["g"]->PushEvent(tmpEvent);
 
 #ifdef DEBUG_MODE
 	if (_info.name == "mario")

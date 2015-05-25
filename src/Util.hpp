@@ -2,9 +2,14 @@
 *	Util class: Contains all the methods that can be used anywhere
 */
 
+#ifndef UTIL_H
+#define UTIL_H
+
 #include <string>
 #include <vector>
 #include <SFML/System.hpp>
+
+class DisplayableObject;
 
 class Util
 {
@@ -13,7 +18,9 @@ class Util
 		static std::vector<std::string> Split(std::string _str, char _sep);
 };
 
-class CompareVector2f {
+class CompareDisplayableObjects {
 	public:
-		bool operator()(sf::Vector2f const& _a, sf::Vector2f const& _b);
+		bool operator()(DisplayableObject const& _a, DisplayableObject const& _b);
 };
+
+#endif

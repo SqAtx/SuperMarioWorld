@@ -39,6 +39,10 @@ class MovingObject : public DisplayableObject
 
 		void UpdatePosition(float _dt);
 
+		void SetVelX(float _x) { m_velocity.x = _x; };
+		void SetVelY(float _y) { m_velocity.y = _y; }
+		void SetJumpState(JumpState _state) { m_jumpState = _state; };
+		void Kill() { m_isDead = true; };
 		bool IsDead() { return m_isDead; };
 
 #ifdef DEBUG_MODE
@@ -52,8 +56,6 @@ class MovingObject : public DisplayableObject
 		void UpdateAcceleration();
 		void UpdateVelocity(float _dt);
 		float GetMaxAbsVelocity_X();
-		void HandleCollisionsWithMapEdges();
-		void HandleCollisionsWithLevel();
 
 		virtual void AddOwnAcceleration() = 0;
 

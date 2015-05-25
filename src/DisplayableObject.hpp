@@ -27,7 +27,7 @@ struct InfoForDisplay
 };
 
 /*
-*	A DisplayableObject can be the player itself, an enemy, or stuff like pipes, '?' blocks, etc.
+*	A DisplayableObject can be the player itself, an enemy, or stuff like pipes, '?' blocks, the floor etc. Anything you can display.
 */
 class DisplayableObject
 {
@@ -37,17 +37,17 @@ class DisplayableObject
 		virtual ~DisplayableObject();
 
 		virtual InfoForDisplay GetInfoForDisplay();
-
-#ifdef DEBUG_MODE
-		sf::Vector2f GetPosition() { return m_coord; };
-#endif
+		sf::Vector2f GetPosition() const { return m_coord; };
+		unsigned int GetID() { return m_id; };
+		void SetX(float _x) { m_coord.x = _x; };
+		void SetY(float _y) { m_coord.y = _y; };
 
 	protected:
 		int m_id; // Unique identifier for each object
 		std::string m_name;
 		State m_state;
 
-		sf::Vector2f m_coord; // Coordinates of the bottom left corner, in pixels, with respect to the top left corner of the window
+		sf::Vector2f m_coord; // Coordinates of the top left corner, in pixels, with respect to the top left corner of the window
 
 		bool m_reverseSprite;
 
