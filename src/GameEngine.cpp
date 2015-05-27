@@ -26,7 +26,7 @@ void GameEngine::Frame(float _dt)
 
 	if (m_mario != NULL)
 	{
-		m_mario->UpdatePosition(_dt);
+		UpdateMarioPosition(_dt);
 		HandleCollisionsWithMapEdges(*m_mario);
 		HandleCollisionsWithLevel(*m_mario);
 		CheckMarioDeath();
@@ -117,6 +117,17 @@ void GameEngine::StartLevel()
 	startLevel.set(LEVEL_START, "");
 	m_engines["s"]->PushEvent(startLevel);
 	m_levelStarted = true;
+}
+
+void GameEngine::UpdateMarioPosition(float _dt)
+{
+	unsigned int id = m_mario->GetID();
+
+	m_mario->UpdatePosition(_dt);
+
+	sf::Vector2f pos = m_mario->GetPosition();
+	m_foregroundObjectCoords[id].left = pos.x;
+	m_foregroundObjectCoords[id].top = pos.y;
 }
 
 void GameEngine::CheckMarioDeath()

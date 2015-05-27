@@ -30,8 +30,10 @@ class GameEngine : public Engine
 		void KillMario();
 		void SendMarioPosition(float _dt);
 
+		void UpdateMarioPosition(float _dt);
 		void HandleCollisionsWithMapEdges(MovingObject& _obj);
 		void HandleCollisionsWithLevel(MovingObject& _obj);
+		bool GameEngine::HandleCollisionWithRect(unsigned int _objId, sf::Rect<float>_ref);
 
 		void StartLevel();
 };

@@ -78,12 +78,18 @@ void GraphicsEngine::SetBackgroundToDraw()
 
 void GraphicsEngine::SetFloorToDraw()
 {
+	EngineEvent tmpEvent;
+
 	ResetTmpSprite();
 	for (std::map<DisplayableObject, std::string, CompareDisplayableObjects>::iterator it = m_listFloorTileNames.begin(); it != m_listFloorTileNames.end(); ++it)
 	{
 		m_tmpSprite->setPosition(it->first.GetPosition());
 		m_tmpSprite->setTexture(m_textures["floor_" + it->second]);
 		m_levelStructureToDraw.push_back(*m_tmpSprite);
+
+		// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions
+		tmpEvent.set(INFO_POS_LVL, it->first.GetID(), m_tmpSprite->getGlobalBounds());
+		m_engines["g"]->PushEvent(tmpEvent);
 	}
 }
 
@@ -102,13 +108,8 @@ void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
 	m_displayableObjectsToDraw.push_back(*m_tmpSprite);
 
 	// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions
-	sf::Rect<float> tmpRect;
 	EngineEvent tmpEvent;
-	tmpRect.left = _info.coordinates.x;
-	tmpRect.top = _info.coordinates.y;
-	tmpRect.width = m_tmpSprite->getGlobalBounds().width;
-	tmpRect.height = m_tmpSprite->getGlobalBounds().height;
-	tmpEvent.set(INFO_POS_LVL, _info.id, tmpRect);
+	tmpEvent.set(INFO_POS_LVL, _info.id, m_tmpSprite->getGlobalBounds());
 	m_engines["g"]->PushEvent(tmpEvent);
 
 #ifdef DEBUG_MODE

@@ -38,7 +38,8 @@ class DisplayableObject
 
 		virtual InfoForDisplay GetInfoForDisplay();
 		sf::Vector2f GetPosition() const { return m_coord; };
-		unsigned int GetID() { return m_id; };
+		void SetPosition(sf::Vector2f _pos) { m_coord = _pos; };
+		unsigned int GetID() const { return m_id; };
 		void SetX(float _x) { m_coord.x = _x; };
 		void SetY(float _y) { m_coord.y = _y; };
 
