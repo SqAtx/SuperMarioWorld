@@ -40,7 +40,8 @@ class GraphicsEngine : public Engine
 		std::vector<sf::Sprite> m_levelStructureToDraw;
 		std::vector<sf::Sprite> m_displayableObjectsToDraw;
 
-		// List of all the floor tiles in the current level and their coordinates
+		// List of all the foreground tiles in the current level and their coordinates
+		std::map<DisplayableObject, std::string, CompareDisplayableObjects> m_listForegroundItemsTileNames;
 		std::map<DisplayableObject, std::string, CompareDisplayableObjects> m_listFloorTileNames;
 
 		std::map<int, std::string> m_spritesCurrentlyDisplayed; // Contains id of displayable object and which sprite (name from RECT file) is displayed ATM
@@ -49,7 +50,7 @@ class GraphicsEngine : public Engine
 		void ProcessWindowEvents();
 
 		bool LoadLevel(std::string _lvlName);
-		void FillListFloorTileNames(irr::io::IrrXMLReader *_lvlFile);
+		void FillListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile);
 		std::string GetAttributeValue(irr::io::IrrXMLReader *_lvlFile, const char* _name);
 		float GetAttributeValueAsFloat(irr::io::IrrXMLReader *_lvlFile, const char* _name);
 
@@ -63,6 +64,8 @@ class GraphicsEngine : public Engine
 		// Add sprites in m_toDraw: the farthest first
 		void SetBackgroundToDraw();
 		void SetFloorToDraw();
+		void SetForegroundToDraw();
+		void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<DisplayableObject, std::string, CompareDisplayableObjects>& _list, std::string _texturePrefix);
 		void SetDisplayableObjectToDraw(InfoForDisplay _info);
 
 		std::string GetTextureNameFromDisplayInfo(int _id, std::string _name, State _state);

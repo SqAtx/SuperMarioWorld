@@ -12,6 +12,7 @@ void GraphicsEngine::LoadTextures()
 	LoadTexturesFromFile("background");
 	LoadTexturesFromFile("floor");
 	LoadTexturesFromFile("mario");
+	LoadTexturesFromFile("item");
 }
 
 void GraphicsEngine::LoadTexturesFromFile(std::string _fileName)
@@ -78,13 +79,23 @@ void GraphicsEngine::SetBackgroundToDraw()
 
 void GraphicsEngine::SetFloorToDraw()
 {
+	SetListOfDisplayablesToDraw(m_listFloorTileNames, "floor_");
+}
+
+void GraphicsEngine::SetForegroundToDraw()
+{
+	SetListOfDisplayablesToDraw(m_listForegroundItemsTileNames, "item_");
+}
+
+void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<DisplayableObject, std::string, CompareDisplayableObjects>& _list, std::string _texturePrefix)
+{
 	EngineEvent tmpEvent;
 
 	ResetTmpSprite();
-	for (std::map<DisplayableObject, std::string, CompareDisplayableObjects>::iterator it = m_listFloorTileNames.begin(); it != m_listFloorTileNames.end(); ++it)
+	for (std::map<DisplayableObject, std::string, CompareDisplayableObjects>::iterator it = _list.begin(); it != _list.end(); ++it)
 	{
 		m_tmpSprite->setPosition(it->first.GetPosition());
-		m_tmpSprite->setTexture(m_textures["floor_" + it->second]);
+		m_tmpSprite->setTexture(m_textures[_texturePrefix + it->second]);
 		m_levelStructureToDraw.push_back(*m_tmpSprite);
 
 		// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions

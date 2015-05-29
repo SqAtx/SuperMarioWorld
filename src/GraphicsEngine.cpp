@@ -83,6 +83,7 @@ void GraphicsEngine::DisplayWindow()
 {
 	SetBackgroundToDraw();
 	SetFloorToDraw();
+	SetForegroundToDraw();
 	DrawGame();
 
 #ifdef DEBUG_MODE

@@ -20,11 +20,10 @@ What has been done:
 - Jumps and friction with air
 - Sound and music management (Uncomment //StartLevelMusic(_event.m_string); in SoundEngine.cpp for music)
 - Mario dies if he falls in the hole
-- Level stored in an XML file
+- Level stored in an XML file (background, floor, foreground items)
 - Collisions with level (first stable version, to be improved)
 
 What next ?
-- Foreground items
 - Better graphics ?
 - Scrolling
 - Enemies :) 

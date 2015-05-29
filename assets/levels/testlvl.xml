@@ -2,40 +2,38 @@
 <level height="432" width="512" background="sky">
 	<MarioStart x="" y="" sprite=""/>
 	<foreground>
-		<bloc x="" y="" w="16" h="16" sprite=""/>
+		<bloc x="296" y="355" w="16" h="16" sprite="question_box_static"/>
+		<bloc x="24" y="355" w="16" h="16" sprite="question_box_static"/>
+
 		<pipe x="" y="" w="16" h="16" sprite="" type="passage" id="" dest=""/>
 		<!-- A pipe needs an id so Mario can travel with it -->
+		<floor_tile x="0" y="416" w="16" h="16" sprite="left"/>
+		<floor_tile x="16" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="32" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="48" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="64" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="80" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="96" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="112" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="128" y="416" w="16" h="16" sprite="right"/>
+		<floor_tile x="208" y="416" w="16" h="16" sprite="left"/>
+		<floor_tile x="224" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="240" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="256" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="272" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="288" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="304" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="320" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="336" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="352" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="368" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="384" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="400" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="416" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="432" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="448" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="464" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="480" y="416" w="16" h="16" sprite="middle"/>
+		<floor_tile x="496" y="416" w="16" h="16" sprite="right"/>
 	</foreground>
-	<floor>
-		<tile x="0" y="416" w="16" h="16" sprite="left"/>
-		<tile x="16" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="32" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="48" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="64" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="80" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="96" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="112" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="128" y="416" w="16" h="16" sprite="right"/>
-		<tile x="208" y="416" w="16" h="16" sprite="left"/>
-		<tile x="224" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="240" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="256" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="272" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="288" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="304" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="320" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="336" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="352" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="368" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="384" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="400" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="416" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="432" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="448" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="464" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="480" y="416" w="16" h="16" sprite="middle"/>
-		<tile x="496" y="416" w="16" h="16" sprite="right"/>
-
-		<tile x="296" y="350" w="16" h="16" sprite="middle"/>
-	</floor>
 </level>

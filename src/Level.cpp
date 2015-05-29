@@ -23,8 +23,8 @@ bool GraphicsEngine::LoadLevel(std::string _lvlName)
 			case EXN_ELEMENT:
 				if (!strcmp("level", lvlFile->getNodeName()))
 					m_currentBackgroundName = GetAttributeValue(lvlFile, "background");
-				if (!strcmp("floor", lvlFile->getNodeName()))
-					FillListFloorTileNames(lvlFile);
+				if (!strcmp("foreground", lvlFile->getNodeName()))
+					FillListForegroundTileNames(lvlFile);
 				break;
 			default:
 				break;
@@ -41,7 +41,7 @@ bool GraphicsEngine::LoadLevel(std::string _lvlName)
 	return true;
 }
 
-void GraphicsEngine::FillListFloorTileNames(irr::io::IrrXMLReader *_lvlFile)
+void GraphicsEngine::FillListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile)
 {
 	sf::Vector2f tmpCoords;
 	std::string tmpTileName;
@@ -53,7 +53,15 @@ void GraphicsEngine::FillListFloorTileNames(irr::io::IrrXMLReader *_lvlFile)
 		{
 			case EXN_ELEMENT:
 				foundTiles = true;
-				if (!strcmp("tile", _lvlFile->getNodeName()))
+				if (!strcmp("bloc", _lvlFile->getNodeName()))
+				{
+					tmpCoords.x = GetAttributeValueAsFloat(_lvlFile, "x");
+					tmpCoords.y = GetAttributeValueAsFloat(_lvlFile, "y");
+					tmpTileName = GetAttributeValue(_lvlFile, "sprite");
+					DisplayableObject tmpObj(tmpTileName, tmpCoords);
+					m_listForegroundItemsTileNames[tmpObj] = tmpTileName;
+				}
+				if (!strcmp("floor_tile", _lvlFile->getNodeName()))
 				{
 					tmpCoords.x = GetAttributeValueAsFloat(_lvlFile, "x");
 					tmpCoords.y = GetAttributeValueAsFloat(_lvlFile, "y");
@@ -64,7 +72,7 @@ void GraphicsEngine::FillListFloorTileNames(irr::io::IrrXMLReader *_lvlFile)
 				break;
 			case EXN_ELEMENT_END:
 				if (!foundTiles)
-					std::cerr << "No floor tiles in level file." << std::endl;
+					std::cerr << "No foreground items in level file." << std::endl;
 				return;
 			default:
 				break;
