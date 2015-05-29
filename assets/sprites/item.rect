@@ -1,0 +1,6 @@
+question_box_static 32 112 48 128
+question_box1 0 64 16 80
+question_box2 16 64 32 80
+question_box3 32 64 48 80
+question_box4 48 64 64 80
+question_box_empty 64 64 80 80

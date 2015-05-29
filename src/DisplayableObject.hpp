@@ -9,8 +9,9 @@ typedef enum {
 	STATIC,
 	WALK,
 	RUN,
-	JUMP,	// Only used for transmission to GameEngine
-	FALL,	// Idem
+	JUMP,		// Only used for transmission to GameEngine
+	FALL,		// Idem
+	NO_STATE,	// Items with only one state e.g. the animated foreground items
 	UNKNOWN
 } State;
 

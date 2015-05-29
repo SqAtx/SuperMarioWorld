@@ -90,12 +90,14 @@ void GraphicsEngine::SetForegroundToDraw()
 void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<DisplayableObject, std::string, CompareDisplayableObjects>& _list, std::string _texturePrefix)
 {
 	EngineEvent tmpEvent;
+	std::string spriteName;
 
 	ResetTmpSprite();
 	for (std::map<DisplayableObject, std::string, CompareDisplayableObjects>::iterator it = _list.begin(); it != _list.end(); ++it)
 	{
+		spriteName = GetTextureNameFromDisplayInfo(it->first.GetID(), _texturePrefix + it->second, NO_STATE);
+		m_tmpSprite->setTexture(m_textures[spriteName]);
 		m_tmpSprite->setPosition(it->first.GetPosition());
-		m_tmpSprite->setTexture(m_textures[_texturePrefix + it->second]);
 		m_levelStructureToDraw.push_back(*m_tmpSprite);
 
 		// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions
@@ -145,6 +147,8 @@ std::string GraphicsEngine::GetTextureNameFromDisplayInfo(int _id, std::string _
 			return GetTextureNameFromStateName(_id, _name + "_jump");
 		case FALL:
 			return GetTextureNameFromStateName(_id, _name + "_fall");
+		case NO_STATE:
+			return GetTextureNameFromStateName(_id, _name);
 		default:
 			assert(false);
 			return NULL;
