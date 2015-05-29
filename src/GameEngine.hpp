@@ -33,7 +33,9 @@ class GameEngine : public Engine
 		void UpdateMarioPosition(float _dt);
 		void HandleCollisionsWithMapEdges(MovingObject& _obj);
 		void HandleCollisionsWithLevel(MovingObject& _obj);
-		bool GameEngine::HandleCollisionWithRect(unsigned int _objId, sf::Rect<float>_ref);
+		CollisionDirection HandleCollisionWithRect(unsigned int _objId, sf::FloatRect _ref);
+		CollisionDirection DetectCollisionWithRect(unsigned int _objId, sf::FloatRect _ref);
+		void ReactToCollision(unsigned int _objId, sf::FloatRect _ref, CollisionDirection _direction);
 
 		void StartLevel();
 };

@@ -19,7 +19,7 @@ void GameEngine::HandleCollisionsWithLevel(MovingObject& _obj)
 	if (m_foregroundObjectCoords.size() <= 1)
 		return;
 
-	bool collision = false;
+	CollisionDirection tmpDirection = NO_COL, lastCollisionDirection = NO_COL;
 	unsigned int id = _obj.GetID();
 	sf::FloatRect objCoords = m_foregroundObjectCoords[id];
 
@@ -27,83 +27,106 @@ void GameEngine::HandleCollisionsWithLevel(MovingObject& _obj)
 	for (std::map<unsigned int, sf::Rect<float>>::iterator it = m_foregroundObjectCoords.begin(); it != m_foregroundObjectCoords.end(); ++it)
 	{
 		if (it->first != id)
-			collision = collision | HandleCollisionWithRect(id, it->second);
+		{
+			tmpDirection = HandleCollisionWithRect(id, it->second);
+			if (tmpDirection != NO_COL)
+				lastCollisionDirection = tmpDirection;
+		}
 	}
 
-	if (collision)
-	{
-		_obj.SetVelY(0);
-		_obj.SetJumpState(ONFLOOR);
-	}
+	_obj.UpdateAfterCollision(lastCollisionDirection);
 
-	// Fall
-	if (_obj.GetPosition().y > 432-objCoords.height)
-	{
-		m_foregroundObjectCoords[id].top = 432 - objCoords.height;
-		_obj.SetVelY(0);
-		_obj.SetJumpState(ONFLOOR);	
-	}
+	// Debug Fall
+	//if (_obj.GetPosition().y > 432-objCoords.height)
+	//{
+	//	m_foregroundObjectCoords[id].top = 432 - objCoords.height;
+	//	_obj.SetVelY(0);
+	//	_obj.SetJumpState(ONFLOOR);	
+	//}
 
 	// Actual fall ;)
-	//if (_obj.GetPosition().y > 432)
-		//_obj.Kill();
+	if (_obj.GetPosition().y > 432)
+		_obj.Kill();
 
 	objCoords = m_foregroundObjectCoords[id];
 	sf::Vector2f newPos(objCoords.left, objCoords.top);
 	_obj.SetPosition(newPos);
 }
 
-bool GameEngine::HandleCollisionWithRect(unsigned int _objId, sf::Rect<float>_ref)
+CollisionDirection GameEngine::HandleCollisionWithRect(unsigned int _objId, sf::FloatRect _ref)
 {
-	bool collision = false;
-	sf::Rect<float> objCoords = m_foregroundObjectCoords[_objId];
-	float gap;
-
-	// Obj on top
-	if (objCoords.left + objCoords.width > _ref.left && objCoords.left < _ref.left + _ref.width)
-	{
-		gap = objCoords.top + objCoords.height - _ref.top;
-		if (gap > 0)
-		{
-			objCoords.top -= gap;
-			collision = true;
-		}
-	}
-
-	// Obj on the left
-	/*if (!collision && objCoords.top + objCoords.height > _ref.top && objCoords.top < _ref.top + _ref.height)
-	{
-		gap = objCoords.left + objCoords.width - _ref.left;
-		if (gap > 0)
-		{
-			objCoords.left -= gap;
-			collision = true;
-		}
-	}
-
-	// Obj on the right
-	if (!collision && objCoords.top + objCoords.height > _ref.top && objCoords.top < _ref.top + _ref.height)
-	{
-		gap = _ref.left + _ref.width - objCoords.left;
-		if (gap > 0)
-		{
-			objCoords.left += gap;
-			collision = true;
-		}
-	}
-
-	// Obj under ref
-	if (!collision && objCoords.left + objCoords.width > _ref.left && objCoords.left < _ref.left + _ref.width)
-	{
-		gap = _ref.top + _ref.height - objCoords.top;
-		if (gap > 0)
-		{
-			objCoords.top += gap;
-			collision = true;
-		}
-	}*/
-
-	m_foregroundObjectCoords[_objId] = objCoords;
-	return collision;
+	CollisionDirection direction = DetectCollisionWithRect(_objId, _ref);
+	ReactToCollision(_objId, _ref, direction);
+	return direction;
 }
 
+CollisionDirection GameEngine::DetectCollisionWithRect(unsigned int _objId, sf::FloatRect _ref)
+{
+	CollisionDirection direction = NO_COL;
+	sf::Rect<float> objCoords = m_foregroundObjectCoords[_objId];
+
+	/* If TOP or BOTTOM collisions are possible */
+	if ((objCoords.left <= _ref.left && objCoords.left + objCoords.width > _ref.left)
+		|| (objCoords.left < _ref.left + _ref.width && objCoords.left + objCoords.width >= _ref.left + _ref.width)
+		|| (objCoords.left >= _ref.left && objCoords.left + objCoords.width <= _ref.left + _ref.width))
+	{
+		if (objCoords.top < _ref.top && objCoords.top + objCoords.height > _ref.top)
+			direction = TOP;
+		if (objCoords.top < _ref.top + _ref.height && objCoords.top + objCoords.height > _ref.top + _ref.height)
+			direction = BOTTOM;
+	}
+
+	/* If LEFT or RIGHT collisions are possible */
+	if ((objCoords.top <= _ref.top && objCoords.top + objCoords.height > _ref.top)
+		|| (objCoords.top < _ref.top + _ref.height && objCoords.top + objCoords.height >= _ref.top + _ref.height)
+		|| (objCoords.top >= _ref.top && objCoords.top + objCoords.height <= _ref.top + _ref.height))
+	{
+		/* Collision on LEFT but there may be TOP or BOTTOM as well */
+		if (objCoords.left < _ref.left && objCoords.left + objCoords.width > _ref.left)
+		{
+			if (direction == TOP && objCoords.top + objCoords.height - _ref.top < objCoords.left + objCoords.width - _ref.left)
+				direction = TOP;
+			else if (direction == BOTTOM && _ref.top + _ref.height - objCoords.top < objCoords.left + objCoords.width - _ref.left)
+				direction = BOTTOM;
+			else
+				direction = LEFT;
+		}
+
+		/* Collision on RIGHT but there may be TOP or BOTTOM as well */
+		if (objCoords.left < _ref.left +_ref.width && objCoords.left + objCoords.width > _ref.left + _ref.width)
+		{
+			if (direction == TOP && objCoords.top + objCoords.height - _ref.top < _ref.left + _ref.width - objCoords.left)
+				direction = TOP;
+			else if (direction == BOTTOM && _ref.top + _ref.height - objCoords.top < _ref.left + _ref.width - objCoords.left)
+				direction = BOTTOM;
+			else
+				direction = RIGHT;
+		}
+	}
+
+	return direction;
+}
+
+void GameEngine::ReactToCollision(unsigned int _objId, sf::FloatRect _ref, CollisionDirection _direction)
+{
+	sf::Rect<float> objCoords = m_foregroundObjectCoords[_objId];
+	switch (_direction)
+	{
+		case TOP:
+			objCoords.top -= (objCoords.top + objCoords.height - _ref.top);
+			break;
+		case BOTTOM:
+			objCoords.top += (_ref.top + _ref.height - objCoords.top);
+			break;
+		case LEFT:
+			objCoords.left -= (objCoords.left + objCoords.width - _ref.left);
+			break;
+		case RIGHT:
+			objCoords.left += (_ref.left + _ref.width - objCoords.left);
+			break;
+		case NO_COL:
+		default:
+			break;
+	}
+	m_foregroundObjectCoords[_objId] = objCoords;
+}

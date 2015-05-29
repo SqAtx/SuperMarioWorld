@@ -27,8 +27,8 @@ void GameEngine::Frame(float _dt)
 	if (m_mario != NULL)
 	{
 		UpdateMarioPosition(_dt);
-		HandleCollisionsWithMapEdges(*m_mario);
 		HandleCollisionsWithLevel(*m_mario);
+		HandleCollisionsWithMapEdges(*m_mario);
 		CheckMarioDeath();
 		SendMarioPosition(_dt);
 	}

@@ -35,5 +35,7 @@
 		<tile x="464" y="416" w="16" h="16" sprite="middle"/>
 		<tile x="480" y="416" w="16" h="16" sprite="middle"/>
 		<tile x="496" y="416" w="16" h="16" sprite="right"/>
+
+		<tile x="296" y="350" w="16" h="16" sprite="middle"/>
 	</floor>
 </level>

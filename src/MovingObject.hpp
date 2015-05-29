@@ -23,6 +23,14 @@ enum JumpState {
 	NONE	// At the beginning of the level, for example
 };
 
+enum CollisionDirection {
+	TOP,
+	BOTTOM,
+	LEFT,
+	RIGHT,
+	NO_COL
+};
+
 /*
 *	A MovingObject can be a player, an enemy, or a moving item, such as a power-up
 */
@@ -38,6 +46,7 @@ class MovingObject : public DisplayableObject
 		virtual InfoForDisplay GetInfoForDisplay();
 
 		void UpdatePosition(float _dt);
+		void UpdateAfterCollision(CollisionDirection _dir);
 
 		void SetVelX(float _x) { m_velocity.x = _x; };
 		void SetVelY(float _y) { m_velocity.y = _y; }

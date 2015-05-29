@@ -114,6 +114,33 @@ float MovingObject::GetMaxAbsVelocity_X()
 	}
 }
 
+void MovingObject::UpdateAfterCollision(CollisionDirection _dir)
+{
+	switch (_dir)
+	{
+		case TOP:
+			m_velocity.y = 0;
+			m_jumpState = ONFLOOR;
+			break;
+		case BOTTOM:
+			m_velocity.y = 0;
+			m_jumpState = FALLING;
+			break;
+		case LEFT:
+			m_velocity.x = 0;
+			m_jumpState = FALLING;
+			break;
+		case RIGHT:
+			m_velocity.x = 0;
+			m_jumpState = FALLING;
+			break;
+		case NO_COL:
+		default:
+			break;
+	}
+}
+
+
 #ifdef DEBUG_MODE
 DebugInfo MovingObject::GetDebugInfo()
 {
