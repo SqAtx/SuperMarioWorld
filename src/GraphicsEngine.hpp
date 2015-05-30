@@ -51,7 +51,7 @@ class GraphicsEngine : public Engine
 
 		bool LoadLevel(std::string _lvlName);
 		void FillListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile);
-		std::string GetAttributeValue(irr::io::IrrXMLReader *_lvlFile, const char* _name);
+		std::string GetAttributeValue(irr::io::IrrXMLReader *_lvlFile, const char* _name, bool _optionalAttribute = false);
 		float GetAttributeValueAsFloat(irr::io::IrrXMLReader *_lvlFile, const char* _name);
 
 		void LoadTextures(); // Load all textures at beginning of level

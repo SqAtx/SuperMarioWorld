@@ -36,6 +36,18 @@ std::vector<std::string> Util::Split(std::string _str, char _sep)
 	return splitted;
 }
 
+/* After refactoring, this is useless now.. I leave it "in case" until I get tired of it */
+bool Util::StringEndsWith(std::string _full, std::string _ending)
+{
+	if (_ending == "")
+		return true;
+	int lenDiff = _full.length() - _ending.length();
+	if (lenDiff < 0)
+		return false;
+
+	return !_full.compare(lenDiff, _ending.length(), _ending);
+}
+
 bool CompareDisplayableObjects::operator()(DisplayableObject const& _a, DisplayableObject const& _b)
 {
 	if (_a.GetPosition().x < _b.GetPosition().x)

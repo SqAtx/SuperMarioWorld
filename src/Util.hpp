@@ -16,6 +16,7 @@ class Util
 	public:
 		static bool isInteger(std::string& _str);
 		static std::vector<std::string> Split(std::string _str, char _sep);
+		static bool Util::StringEndsWith(std::string _full, std::string _ending);
 };
 
 class CompareDisplayableObjects {

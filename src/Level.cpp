@@ -45,6 +45,7 @@ void GraphicsEngine::FillListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile
 {
 	sf::Vector2f tmpCoords;
 	std::string tmpTileName;
+	State tmpState;
 	bool foundTiles = false;
 
 	while (_lvlFile && _lvlFile->read())
@@ -58,7 +59,8 @@ void GraphicsEngine::FillListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile
 					tmpCoords.x = GetAttributeValueAsFloat(_lvlFile, "x");
 					tmpCoords.y = GetAttributeValueAsFloat(_lvlFile, "y");
 					tmpTileName = GetAttributeValue(_lvlFile, "sprite");
-					DisplayableObject tmpObj(tmpTileName, tmpCoords);
+					tmpState = GetAttributeValue(_lvlFile, "state", true) == "empty" ? EMPTY : NORMAL;
+					DisplayableObject tmpObj(tmpTileName, tmpCoords, tmpState);
 					m_listForegroundItemsTileNames[tmpObj] = tmpTileName;
 				}
 				if (!strcmp("floor_tile", _lvlFile->getNodeName()))
@@ -66,7 +68,7 @@ void GraphicsEngine::FillListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile
 					tmpCoords.x = GetAttributeValueAsFloat(_lvlFile, "x");
 					tmpCoords.y = GetAttributeValueAsFloat(_lvlFile, "y");
 					tmpTileName = GetAttributeValue(_lvlFile, "sprite");
-					DisplayableObject tmpObj(tmpTileName, tmpCoords);
+					DisplayableObject tmpObj(tmpTileName, tmpCoords, NORMAL);
 					m_listFloorTileNames[tmpObj] = tmpTileName;
 				}
 				break;
@@ -80,10 +82,10 @@ void GraphicsEngine::FillListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile
 	}
 }
 
-std::string GraphicsEngine::GetAttributeValue(IrrXMLReader *_lvlFile, const char* _name)
+std::string GraphicsEngine::GetAttributeValue(IrrXMLReader *_lvlFile, const char* _name, bool _optionalAttribute)
 {
 	std::string str(_lvlFile->getAttributeValueSafe(_name));
-	if (str == "")
+	if (str == "" && !_optionalAttribute)
 		std::cerr << "Can't read attribute " << _name << std::endl;
 	return str;
 }

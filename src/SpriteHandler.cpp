@@ -95,7 +95,7 @@ void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<DisplayableObject, std
 	ResetTmpSprite();
 	for (std::map<DisplayableObject, std::string, CompareDisplayableObjects>::iterator it = _list.begin(); it != _list.end(); ++it)
 	{
-		spriteName = GetTextureNameFromDisplayInfo(it->first.GetID(), _texturePrefix + it->second, NO_STATE);
+		spriteName = GetTextureNameFromDisplayInfo(it->first.GetID(), _texturePrefix + it->second, it->first.GetState());
 		m_tmpSprite->setTexture(m_textures[spriteName]);
 		m_tmpSprite->setPosition(it->first.GetPosition());
 		m_levelStructureToDraw.push_back(*m_tmpSprite);
@@ -137,7 +137,6 @@ std::string GraphicsEngine::GetTextureNameFromDisplayInfo(int _id, std::string _
 	std::string test;
 	switch (_state)
 	{
-		case UNKNOWN:
 		case STATIC:
 			return GetTextureNameFromStateName(_id, _name + "_static");
 		case RUN:
@@ -147,7 +146,10 @@ std::string GraphicsEngine::GetTextureNameFromDisplayInfo(int _id, std::string _
 			return GetTextureNameFromStateName(_id, _name + "_jump");
 		case FALL:
 			return GetTextureNameFromStateName(_id, _name + "_fall");
-		case NO_STATE:
+		case EMPTY:
+			return GetTextureNameFromStateName(_id, _name + "_empty");		
+		case UNKNOWN:
+		case NORMAL:
 			return GetTextureNameFromStateName(_id, _name);
 		default:
 			assert(false);

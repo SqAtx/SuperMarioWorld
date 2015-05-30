@@ -3,9 +3,9 @@
 	<MarioStart x="" y="" sprite=""/>
 	<foreground>
 		<bloc x="40" y="355" w="16" h="16" sprite="question_box_static"/>
-		<bloc x="296" y="355" w="16" h="16" sprite="question_box_static"/>
-		<bloc x="376" y="355" w="16" h="16" sprite="question_box_empty"/>
-		<bloc x="456" y="355" w="16" h="16" sprite="question_box"/>
+		<bloc x="296" y="355" w="16" h="16" sprite="question_box_static" state="empty"/>
+		<bloc x="376" y="355" w="16" h="16" sprite="question_box"/>
+		<bloc x="456" y="355" w="16" h="16" sprite="question_box" state="empty"/>
 
 		<pipe x="" y="" w="16" h="16" sprite="" type="passage" id="" dest=""/>
 		<!-- A pipe needs an id so Mario can travel with it -->

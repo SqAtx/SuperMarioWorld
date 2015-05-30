@@ -2,12 +2,12 @@
 
 unsigned int DisplayableObject::id = 1;
 
-DisplayableObject::DisplayableObject(std::string _name, sf::Vector2f _coord) : DisplayableObject(_name, _coord.x, _coord.y)
+DisplayableObject::DisplayableObject(std::string _name, sf::Vector2f _coord, State _state) : DisplayableObject(_name, _coord.x, _coord.y, _state)
 {
 
 }
 
-DisplayableObject::DisplayableObject(std::string _name, float _x, float _y)
+DisplayableObject::DisplayableObject(std::string _name, float _x, float _y, State _state)
 {
 	m_id = DisplayableObject::id;
 	DisplayableObject::id++;
@@ -16,7 +16,7 @@ DisplayableObject::DisplayableObject(std::string _name, float _x, float _y)
 	m_coord.x = _x;
 	m_coord.y = _y;
 
-	m_state = UNKNOWN;
+	m_state = _state;
 }
 
 DisplayableObject::~DisplayableObject()

@@ -11,7 +11,8 @@ typedef enum {
 	RUN,
 	JUMP,		// Only used for transmission to GameEngine
 	FALL,		// Idem
-	NO_STATE,	// Items with only one state e.g. the animated foreground items
+	NORMAL,		// Items with only one state e.g. the animated foreground items
+	EMPTY,		// ? Boxes
 	UNKNOWN
 } State;
 
@@ -33,16 +34,17 @@ struct InfoForDisplay
 class DisplayableObject
 {
 	public:
-		DisplayableObject(std::string _name, sf::Vector2f _coord);
-		DisplayableObject(std::string _name, float _x, float _y);
+		DisplayableObject(std::string _name, sf::Vector2f _coord, State _state = UNKNOWN);
+		DisplayableObject(std::string _name, float _x, float _y, State _state = UNKNOWN);
 		virtual ~DisplayableObject();
 
 		virtual InfoForDisplay GetInfoForDisplay();
 		sf::Vector2f GetPosition() const { return m_coord; };
-		void SetPosition(sf::Vector2f _pos) { m_coord = _pos; };
+		void SetPosition(const sf::Vector2f _pos) { m_coord = _pos; };
+		State GetState() const { return m_state; }
 		unsigned int GetID() const { return m_id; };
-		void SetX(float _x) { m_coord.x = _x; };
-		void SetY(float _y) { m_coord.y = _y; };
+		void SetX(const float _x) { m_coord.x = _x; };
+		void SetY(const float _y) { m_coord.y = _y; };
 
 	protected:
 		int m_id; // Unique identifier for each object

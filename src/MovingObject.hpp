@@ -58,6 +58,7 @@ class MovingObject : public DisplayableObject
 		DebugInfo GetDebugInfo();
 #endif
 
+
 	protected:
 		Direction m_facing;
 		JumpState m_jumpState;
