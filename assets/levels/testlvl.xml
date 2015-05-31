@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <level height="432" width="512" background="sky">
-	<MarioStart x="" y="" sprite=""/>
+	<characters>
+		<mario x="80" y="150"/>
+	</characters>
 	<foreground>
 		<bloc x="40" y="355" w="16" h="16" sprite="question_box_static"/>
 		<bloc x="296" y="355" w="16" h="16" sprite="question_box_static" state="empty"/>

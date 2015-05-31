@@ -1,4 +1,4 @@
-#include "GraphicsEngine.hpp"
+#include "GraphicsEngine.hpp"*
 
 const float GraphicsEngine::FramerateLimit = 60;
 
@@ -7,7 +7,6 @@ GraphicsEngine::GraphicsEngine(Game *_g): Engine (_g)
 	m_gameWindow = new sf::RenderWindow(sf::VideoMode(WIN_WIDTH, WIN_HEIGHT, 32), "Super Mario !", sf::Style::Titlebar | sf::Style::Close);
 	m_tmpSprite = new sf::Sprite();
 	LoadTextures();
-	LoadLevel("testlvl");
 
 #ifdef DEBUG_MODE
 	m_font.loadFromFile("arial.ttf");
@@ -35,6 +34,10 @@ void GraphicsEngine::Frame()
 // Process a single event, sent by another engine
 void GraphicsEngine::ProcessEvent(EngineEvent& _event)
 {
+	// TEMPORARY; the XML file should be loaded in GameEngine (in StartLevel)
+	if (!GraphicsEngine::m_levelLoaded)
+		LoadLevel("testlvl");
+
 	switch (_event.m_type)
 	{
 		case INFO_POS_CHAR:

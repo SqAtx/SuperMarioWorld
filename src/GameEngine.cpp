@@ -44,6 +44,11 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 		case KEY_RELEASED:
 			HandleReleasedKey(_event.data.m_key);
 			break;
+		case INFO_POS_CHAR: // Initial position
+			//AddMovingCharacter();
+			m_mario = new Player(_event.data.m_infoDisplay.name, _event.data.m_infoDisplay.coordinates);
+			m_initPosMario = _event.data.m_infoDisplay.coordinates;
+			break;
 		case INFO_POS_LVL:
 			m_foregroundObjectCoords[_event.data.m_id] = _event.m_rect;
 			break;
@@ -81,7 +86,7 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 			break;
 		case sf::Keyboard::Escape:
 			if (m_mario == NULL)
-				m_mario = new Player("mario", SIZE_BLOCK * 5, 150);
+				m_mario = new Player("mario", m_initPosMario);
 			break;
 		default:
 			break;

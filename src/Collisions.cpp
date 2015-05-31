@@ -20,17 +20,20 @@ void GameEngine::HandleCollisionsWithLevel(MovingObject& _obj)
 		return;
 
 	CollisionDirection tmpDirection = NO_COL, lastCollisionDirection = NO_COL;
-	unsigned int id = _obj.GetID();
-	sf::FloatRect objCoords = m_foregroundObjectCoords[id];
+	unsigned int objId = _obj.GetID(), lastCollisionRefId;
+	sf::FloatRect objCoords = m_foregroundObjectCoords[objId];
 
-	// What happens if there is a collision so Mario is moved and there is another one and Mario is moved again ? The first collision would need to be handled again
+	// What happens if there is a collision so _obj is moved and there is another one and _obj is moved again ? The first collision would need to be handled again
 	for (std::map<unsigned int, sf::Rect<float>>::iterator it = m_foregroundObjectCoords.begin(); it != m_foregroundObjectCoords.end(); ++it)
 	{
-		if (it->first != id)
+		if (it->first != objId)
 		{
-			tmpDirection = HandleCollisionWithRect(id, it->second);
+			tmpDirection = HandleCollisionWithRect(objId, it->second);
 			if (tmpDirection != NO_COL)
+			{
 				lastCollisionDirection = tmpDirection;
+				lastCollisionRefId = it->first;
+			}
 		}
 	}
 
@@ -48,7 +51,7 @@ void GameEngine::HandleCollisionsWithLevel(MovingObject& _obj)
 	if (_obj.GetPosition().y > 432)
 		_obj.Kill();
 
-	objCoords = m_foregroundObjectCoords[id];
+	objCoords = m_foregroundObjectCoords[objId];
 	sf::Vector2f newPos(objCoords.left, objCoords.top);
 	_obj.SetPosition(newPos);
 }

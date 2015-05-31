@@ -37,8 +37,8 @@ enum CollisionDirection {
 class MovingObject : public DisplayableObject
 {
 	public:
-		MovingObject(std::string _name, sf::Vector2f _coord);
-		MovingObject(std::string _name, float _x, float _y);
+		MovingObject(std::string _name, sf::Vector2f _coord, State _state = UNKNOWN);
+		MovingObject(std::string _name, float _x, float _y, State _state = UNKNOWN);
 		~MovingObject();
 
 		void Init();

@@ -10,7 +10,7 @@ typedef enum
 	GAME_STOPPED,
 	KEY_PRESSED,	// gfx to g
 	KEY_RELEASED,	// gfx to g
-	INFO_POS_CHAR,	// g to gfx: character (Mario or enemy) position
+	INFO_POS_CHAR,	// g to gfx during game, gfx to g for init positions (read in XML): character (Mario or enemy) position
 	INFO_POS_LVL,	// gfx to g: position of a foreground sprite
 	PLAY_SOUND,
 } EventType;

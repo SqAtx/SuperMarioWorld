@@ -6,8 +6,8 @@
 class Player : public MovingObject
 {
 	public:
-		Player(std::string _name, sf::Vector2f _coord);
-		Player(std::string _name, float _x, float _y);
+		Player(std::string _name, sf::Vector2f _coord, State _state = UNKNOWN);
+		Player(std::string _name, float _x, float _y, State _state = UNKNOWN);
 		~Player();
 
 		void Init();

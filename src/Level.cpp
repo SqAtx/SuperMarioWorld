@@ -9,8 +9,12 @@ using namespace io;
 
 const std::string GraphicsEngine::levelsPath = "../assets/levels/";
 
+bool GraphicsEngine::m_levelLoaded = false; // TEMPORARY
+
+
 bool GraphicsEngine::LoadLevel(std::string _lvlName)
 {
+	GraphicsEngine::m_levelLoaded = true;
 	bool fileNotEmpty = false;
 	std::string lvlFullName = GraphicsEngine::levelsPath + _lvlName + ".xml";
 	IrrXMLReader* lvlFile = createIrrXMLReader(lvlFullName.c_str());
@@ -23,6 +27,8 @@ bool GraphicsEngine::LoadLevel(std::string _lvlName)
 			case EXN_ELEMENT:
 				if (!strcmp("level", lvlFile->getNodeName()))
 					m_currentBackgroundName = GetAttributeValue(lvlFile, "background");
+				if (!strcmp("characters", lvlFile->getNodeName()))
+					SendCharactersInitialPositions(lvlFile);
 				if (!strcmp("foreground", lvlFile->getNodeName()))
 					FillListForegroundTileNames(lvlFile);
 				break;
@@ -39,6 +45,37 @@ bool GraphicsEngine::LoadLevel(std::string _lvlName)
 
 	delete lvlFile;
 	return true;
+}
+
+void GraphicsEngine::SendCharactersInitialPositions(irr::io::IrrXMLReader *_lvlFile)
+{
+	sf::Vector2f tmpCoords;
+	InfoForDisplay tmpDisplayInfo;
+	EngineEvent tmpEvent;
+	bool foundOneCharacter = false;
+
+	while (_lvlFile && _lvlFile->read())
+	{
+		switch (_lvlFile->getNodeType())
+		{
+		case EXN_ELEMENT:
+			foundOneCharacter = true;
+			if (!strcmp("mario", _lvlFile->getNodeName()))
+			{
+				tmpDisplayInfo.name = "mario";
+				tmpDisplayInfo.coordinates.x = GetAttributeValueAsFloat(_lvlFile, "x");
+				tmpDisplayInfo.coordinates.y = GetAttributeValueAsFloat(_lvlFile, "y");
+				tmpEvent.set(INFO_POS_CHAR, tmpDisplayInfo);
+				m_engines["g"]->PushEvent(tmpEvent);
+			}
+		case EXN_ELEMENT_END:
+			if (!foundOneCharacter)
+				std::cerr << "No character in level file." << std::endl;
+			return;
+		default:
+			break;
+		}
+	}
 }
 
 void GraphicsEngine::FillListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile)

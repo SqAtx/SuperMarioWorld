@@ -19,6 +19,7 @@ class GameEngine : public Engine
     private:
 		bool m_levelStarted;
 		Player *m_mario;
+		sf::Vector2f m_initPosMario;
 
 		std::map<unsigned int, sf::Rect<float>> m_foregroundObjectCoords; // Part of the level the characters can be in collision with
 

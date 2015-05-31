@@ -26,6 +26,8 @@ class GraphicsEngine : public Engine
 		float GetFramerateLimit();
 		
     private:
+		static bool m_levelLoaded; // TEMPORARY
+
 		sf::RenderWindow *m_gameWindow;
 		static const float FramerateLimit;
 		static const int GraphicsEngine::FramesBetweenAnimationChanges;
@@ -50,6 +52,7 @@ class GraphicsEngine : public Engine
 		void ProcessWindowEvents();
 
 		bool LoadLevel(std::string _lvlName);
+		void SendCharactersInitialPositions(irr::io::IrrXMLReader *_lvlFile);
 		void FillListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile);
 		std::string GetAttributeValue(irr::io::IrrXMLReader *_lvlFile, const char* _name, bool _optionalAttribute = false);
 		float GetAttributeValueAsFloat(irr::io::IrrXMLReader *_lvlFile, const char* _name);
