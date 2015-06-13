@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <level height="432" width="512" background="sky">
 	<characters>
-		<mario x="80" y="396"/>
+		<mario x="80" y="350"/>
 	</characters>
 	<foreground>
 		<bloc x="40" y="355" w="16" h="16" sprite="question_box_static"/>

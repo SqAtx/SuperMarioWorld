@@ -17,12 +17,12 @@ void GameEngine::HandleCollisionsWithMapEdges(MovingObject& _obj)
 	}
 
 	// Debug Fall
-	if (_obj.GetPosition().y > 432-objCoords.height)
-	{
-		// Update coords
-		_obj.SetVelY(0);
-		_obj.SetJumpState(ONFLOOR);	
-	}
+	//if (_obj.GetPosition().y > 432-objCoords.height)
+	//{
+	//	_obj.SetY(432 - objCoords.height);
+	//	_obj.SetVelY(0);
+	//	_obj.SetJumpState(ONFLOOR);	
+	//}
 
 	// Actual fall ;)
 	if (_obj.GetPosition().y > 432)

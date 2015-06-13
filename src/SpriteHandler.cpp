@@ -82,33 +82,37 @@ void GraphicsEngine::SetForegroundToDraw()
 	SetListOfDisplayablesToDraw(m_listForegroundItemsTileNames);
 }
 
-/* Keeping this in case I add another layer between foreground and background */
+/* Keeping this function even if called only in one place, in case I add another layer between foreground and background */
 void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<InfoForDisplay, std::string, CompareInfoForDisplay>& _list)
 {
+	unsigned int id;
 	EngineEvent tmpEvent;
 	sf::Vector2f tmpCoords;
 	std::string spriteName;
 
 	ResetTmpSprite();
+
 	for (std::map<InfoForDisplay, std::string, CompareInfoForDisplay>::iterator it = _list.begin(); it != _list.end(); ++it)
 	{
+		id = it->first.id;
 		tmpCoords.x = it->first.coordinates.left;
 		tmpCoords.y = it->first.coordinates.top;
 
-		spriteName = GetTextureNameFromDisplayInfo(it->first.id, it->second, it->first.state);
+		spriteName = GetTextureNameFromDisplayInfo(id, it->second, it->first.state);
+
 		m_tmpSprite->setTexture(m_textures[spriteName]);
 		m_tmpSprite->setPosition(tmpCoords);
 		m_levelStructureToDraw.push_back(*m_tmpSprite);
 
 		// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions
-		tmpEvent.set(INFO_POS_LVL, it->first.id, m_tmpSprite->getGlobalBounds());
+		tmpEvent.set(INFO_POS_LVL, id, m_tmpSprite->getGlobalBounds());
 		m_engines["g"]->PushEvent(tmpEvent);
 	}
 }
 
 void GraphicsEngine::UpdateForegroundItem(InfoForDisplay _info)
 {
-	// Looks silly but you need to keep the name while updating the index
+	// Looks silly but you need to store the name while updating the index
 	std::string tmpName;
 	tmpName = m_listForegroundItemsTileNames[_info];
 	m_listForegroundItemsTileNames[_info] = tmpName == "" || _info.name != tmpName ? _info.name : tmpName; // Change if current name is empty or new name is different
@@ -118,6 +122,7 @@ void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
 {
 	ResetTmpSprite();
 	std::string spriteName = GetTextureNameFromDisplayInfo(_info.id, _info.name, _info.state);
+
 	m_tmpSprite->setTexture(m_textures[spriteName]);
 	m_tmpSprite->setPosition(sf::Vector2f(_info.coordinates.left, _info.coordinates.top));
 	if (_info.reverse)
@@ -145,29 +150,53 @@ void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
 /* Figures out which sprite to display, ie the name of the sprite in the RECT file */
 std::string GraphicsEngine::GetTextureNameFromDisplayInfo(int _id, std::string _name, State _state)
 {
-	std::string test;
+	std::string fullName;
 	switch (_state)
 	{
 		case STATIC:
-			return GetTextureNameFromStateName(_id, _name + "_static");
+			fullName = _name + "_static";
+			break;
 		case RUN:
 		case WALK:
-			return GetTextureNameFromStateName(_id, _name + "_walk");
+			fullName = _name + "_walk";
+			break;
 		case JUMP:
-			return GetTextureNameFromStateName(_id, _name + "_jump");
+			fullName = _name + "_jump";
+			break;
 		case FALL:
-			return GetTextureNameFromStateName(_id, _name + "_fall");
+			fullName = _name + "_fall";
+			break;
 		case EMPTY:
-			return GetTextureNameFromStateName(_id, _name + "_empty");		
+			fullName = _name + "_empty";
+			break;
 		case UNKNOWN:
 		case NORMAL:
-			return GetTextureNameFromStateName(_id, _name);
+			fullName = _name;
+			break;
 		default:
 			assert(false);
 			return NULL;
 	}
+
+	/* Optimisation: The name is fetched only if it's an animation or if the state has changed */
+	if (m_animationStates.find(_id) == m_animationStates.end()) // If id doesn't exist in the map
+		m_animationStates[_id] = Sprite::UNKNOWN;
+
+	switch (m_animationStates[_id])
+	{
+		case Sprite::UNKNOWN:
+		case Sprite::ANIMATED:
+		case Sprite::NEW_STATIC:
+			return GetTextureNameFromStateName(_id, fullName);
+		case Sprite::STATIC:
+			if (fullName == m_spritesCurrentlyDisplayed[_id]) // Sprite same as previous
+				return fullName;
+			else
+				return GetTextureNameFromStateName(_id, fullName);
+	}
 }
 
+/* Get texture name AND updates the animationStates array: STATIC, ANIMATED or NEW_STATIC */
 std::string GraphicsEngine::GetTextureNameFromStateName(int _id, std::string _stateName)
 {
 	std::string textureName;
@@ -175,9 +204,18 @@ std::string GraphicsEngine::GetTextureNameFromStateName(int _id, std::string _st
 	assert(nbTextures > 0);
 
 	if (nbTextures == 1)			// Static
+	{
 		textureName = _stateName;
+		m_animationStates[_id] = Sprite::STATIC;
+
+		if (textureName != m_spritesCurrentlyDisplayed[_id])
+			m_animationStates[_id] = Sprite::NEW_STATIC;
+	}
 	else							// Animation
+	{
 		textureName = FindNextTextureName(_id, _stateName, nbTextures);
+		m_animationStates[_id] = Sprite::ANIMATED;
+	}
 
 	m_spritesCurrentlyDisplayed[_id] = textureName;
 	return textureName;

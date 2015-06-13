@@ -111,6 +111,8 @@ float MovingObject::GetMaxAbsVelocity_X()
 			return PhysicsConstants::PlayerMaxSpeed_Walk_X;
 		case RUN:
 			return PhysicsConstants::PlayerMaxSpeed_Run_X;
+		default:
+			return 0;
 	}
 }
 

@@ -22,7 +22,7 @@ class GraphicsEngine : public Engine
 
         void Frame();
 		float GetFramerateLimit();
-		
+
     private:
 		sf::RenderWindow *m_gameWindow;
 		static const float FramerateLimit;
@@ -57,8 +57,10 @@ class GraphicsEngine : public Engine
 		// Add sprites in m_toDraw: the farthest first
 		void SetBackgroundToDraw();
 		void SetForegroundToDraw();
-		void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<InfoForDisplay, std::string, CompareInfoForDisplay>& _list);
+		void SetListOfDisplayablesToDraw(std::map<InfoForDisplay, std::string, CompareInfoForDisplay>& _list);
 		void SetDisplayableObjectToDraw(InfoForDisplay _info);
+
+		std::map<unsigned int, Sprite::StaticOrAnimated> m_animationStates; // One for each DisplayableObject
 
 		std::string GetTextureNameFromDisplayInfo(int _id, std::string _name, State _state);
 		std::string GetTextureNameFromStateName(int _id, std::string _name);

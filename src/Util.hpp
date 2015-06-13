@@ -13,6 +13,28 @@
 class DisplayableObject;
 struct InfoForDisplay;
 
+typedef enum {
+	UNKNOWN,
+	STATIC,
+	WALK,
+	RUN,
+	JUMP,		// Only used for transmission to GameEngine
+	FALL,		// Idem
+	NORMAL,		// Items with only one state e.g. the animated foreground items
+	EMPTY		// ? Boxes
+} State;
+
+namespace Sprite
+{
+	/* To decide whether we keep the current sprite and avoid calling GetTextureNameFromDisplayInfo */
+	typedef enum {
+		STATIC,			// Yes
+		ANIMATED,		// No
+		NEW_STATIC,		// No: is static BUT different than the previous state (used to be NEW_STATE)
+		UNKNOWN
+	} StaticOrAnimated;
+}
+
 class Util
 {
 	public:

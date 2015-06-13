@@ -5,17 +5,6 @@
 #include "Debug.hpp"
 #include "PhysicsConstants.hpp"
 
-typedef enum {
-	STATIC,
-	WALK,
-	RUN,
-	JUMP,		// Only used for transmission to GameEngine
-	FALL,		// Idem
-	NORMAL,		// Items with only one state e.g. the animated foreground items
-	EMPTY,		// ? Boxes
-	UNKNOWN
-} State;
-
 /*
 *	Information sent from g to gfx for display. The name and state will be used to fetch the correct sprite.
 */

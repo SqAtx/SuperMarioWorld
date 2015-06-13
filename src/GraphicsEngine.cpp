@@ -1,4 +1,4 @@
-#include "GraphicsEngine.hpp"*
+#include "GraphicsEngine.hpp"
 
 const float GraphicsEngine::FramerateLimit = 60;
 
@@ -89,9 +89,7 @@ void GraphicsEngine::DisplayWindow()
 	sf::Clock clock;
 
 	SetBackgroundToDraw();
-	clock.restart();
 	SetForegroundToDraw();
-	std::cout << "SetForegroundToDraw(): " << clock.getElapsedTime().asMilliseconds() << std::endl;
 
 	DrawGame();
 
