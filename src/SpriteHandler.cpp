@@ -77,33 +77,41 @@ void GraphicsEngine::SetBackgroundToDraw()
 	m_backgroundToDraw.push_back(*m_tmpSprite);
 }
 
-void GraphicsEngine::SetFloorToDraw()
-{
-	SetListOfDisplayablesToDraw(m_listFloorTileNames, "floor_");
-}
-
 void GraphicsEngine::SetForegroundToDraw()
 {
-	SetListOfDisplayablesToDraw(m_listForegroundItemsTileNames, "item_");
+	SetListOfDisplayablesToDraw(m_listForegroundItemsTileNames);
 }
 
-void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<DisplayableObject, std::string, CompareDisplayableObjects>& _list, std::string _texturePrefix)
+/* Keeping this in case I add another layer between foreground and background */
+void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<InfoForDisplay, std::string, CompareInfoForDisplay>& _list)
 {
 	EngineEvent tmpEvent;
+	sf::Vector2f tmpCoords;
 	std::string spriteName;
 
 	ResetTmpSprite();
-	for (std::map<DisplayableObject, std::string, CompareDisplayableObjects>::iterator it = _list.begin(); it != _list.end(); ++it)
+	for (std::map<InfoForDisplay, std::string, CompareInfoForDisplay>::iterator it = _list.begin(); it != _list.end(); ++it)
 	{
-		spriteName = GetTextureNameFromDisplayInfo(it->first.GetID(), _texturePrefix + it->second, it->first.GetState());
+		tmpCoords.x = it->first.coordinates.left;
+		tmpCoords.y = it->first.coordinates.top;
+
+		spriteName = GetTextureNameFromDisplayInfo(it->first.id, it->second, it->first.state);
 		m_tmpSprite->setTexture(m_textures[spriteName]);
-		m_tmpSprite->setPosition(it->first.GetPosition());
+		m_tmpSprite->setPosition(tmpCoords);
 		m_levelStructureToDraw.push_back(*m_tmpSprite);
 
 		// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions
-		tmpEvent.set(INFO_POS_LVL, it->first.GetID(), m_tmpSprite->getGlobalBounds());
+		tmpEvent.set(INFO_POS_LVL, it->first.id, m_tmpSprite->getGlobalBounds());
 		m_engines["g"]->PushEvent(tmpEvent);
 	}
+}
+
+void GraphicsEngine::UpdateForegroundItem(InfoForDisplay _info)
+{
+	// Looks silly but you need to keep the name while updating the index
+	std::string tmpName;
+	tmpName = m_listForegroundItemsTileNames[_info];
+	m_listForegroundItemsTileNames[_info] = tmpName == "" || _info.name != tmpName ? _info.name : tmpName; // Change if current name is empty or new name is different
 }
 
 void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
@@ -111,7 +119,7 @@ void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
 	ResetTmpSprite();
 	std::string spriteName = GetTextureNameFromDisplayInfo(_info.id, _info.name, _info.state);
 	m_tmpSprite->setTexture(m_textures[spriteName]);
-	m_tmpSprite->setPosition(sf::Vector2f(_info.coordinates.x, _info.coordinates.y));
+	m_tmpSprite->setPosition(sf::Vector2f(_info.coordinates.left, _info.coordinates.top));
 	if (_info.reverse)
 	{
 		float height = m_tmpSprite->getGlobalBounds().height;
@@ -127,7 +135,10 @@ void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
 
 #ifdef DEBUG_MODE
 	if (_info.name == "mario")
-		m_posMario = _info.coordinates;
+	{
+		m_posMario.x = _info.coordinates.left;
+		m_posMario.y = _info.coordinates.top;
+	}
 #endif
 }
 

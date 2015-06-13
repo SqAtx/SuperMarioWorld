@@ -2,21 +2,18 @@
 Level.cpp: All operations dealing with the XML file representing a level
 */
 
-#include "GraphicsEngine.hpp"
+#include "GameEngine.hpp"
 
 using namespace irr;
 using namespace io;
 
-const std::string GraphicsEngine::levelsPath = "../assets/levels/";
+const std::string GameEngine::levelsPath = "../assets/levels/";
 
-bool GraphicsEngine::m_levelLoaded = false; // TEMPORARY
-
-
-bool GraphicsEngine::LoadLevel(std::string _lvlName)
+bool GameEngine::LoadLevel(std::string _lvlName)
 {
-	GraphicsEngine::m_levelLoaded = true;
+	EngineEvent tmpEvent;
 	bool fileNotEmpty = false;
-	std::string lvlFullName = GraphicsEngine::levelsPath + _lvlName + ".xml";
+	std::string lvlFullName = GameEngine::levelsPath + _lvlName + ".xml";
 	IrrXMLReader* lvlFile = createIrrXMLReader(lvlFullName.c_str());
 
 	while (lvlFile && lvlFile->read())
@@ -26,11 +23,16 @@ bool GraphicsEngine::LoadLevel(std::string _lvlName)
 		{
 			case EXN_ELEMENT:
 				if (!strcmp("level", lvlFile->getNodeName()))
-					m_currentBackgroundName = GetAttributeValue(lvlFile, "background");
+				{
+					LevelInfo info;
+					info.backgroundName = GetAttributeValue(lvlFile, "background");
+					tmpEvent.set(INFO_LVL, info);
+					m_engines["gfx"]->PushEvent(tmpEvent);
+				}
 				if (!strcmp("characters", lvlFile->getNodeName()))
-					SendCharactersInitialPositions(lvlFile);
+					StoreCharactersInitialPositions(lvlFile);
 				if (!strcmp("foreground", lvlFile->getNodeName()))
-					FillListForegroundTileNames(lvlFile);
+					StoreListForegroundTileNames(lvlFile);
 				break;
 			default:
 				break;
@@ -47,7 +49,7 @@ bool GraphicsEngine::LoadLevel(std::string _lvlName)
 	return true;
 }
 
-void GraphicsEngine::SendCharactersInitialPositions(irr::io::IrrXMLReader *_lvlFile)
+void GameEngine::StoreCharactersInitialPositions(irr::io::IrrXMLReader *_lvlFile)
 {
 	sf::Vector2f tmpCoords;
 	InfoForDisplay tmpDisplayInfo;
@@ -62,11 +64,8 @@ void GraphicsEngine::SendCharactersInitialPositions(irr::io::IrrXMLReader *_lvlF
 			foundOneCharacter = true;
 			if (!strcmp("mario", _lvlFile->getNodeName()))
 			{
-				tmpDisplayInfo.name = "mario";
-				tmpDisplayInfo.coordinates.x = GetAttributeValueAsFloat(_lvlFile, "x");
-				tmpDisplayInfo.coordinates.y = GetAttributeValueAsFloat(_lvlFile, "y");
-				tmpEvent.set(INFO_POS_CHAR, tmpDisplayInfo);
-				m_engines["g"]->PushEvent(tmpEvent);
+				m_initPosMario.x = GetAttributeValueAsFloat(_lvlFile, "x");
+				m_initPosMario.y = GetAttributeValueAsFloat(_lvlFile, "y");
 			}
 		case EXN_ELEMENT_END:
 			if (!foundOneCharacter)
@@ -78,11 +77,13 @@ void GraphicsEngine::SendCharactersInitialPositions(irr::io::IrrXMLReader *_lvlF
 	}
 }
 
-void GraphicsEngine::FillListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile)
+void GameEngine::StoreListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile)
 {
 	sf::Vector2f tmpCoords;
 	std::string tmpTileName;
 	State tmpState;
+	EngineEvent tmpEvent;
+	InfoForDisplay tmpInfo;
 	bool foundTiles = false;
 
 	while (_lvlFile && _lvlFile->read())
@@ -97,16 +98,26 @@ void GraphicsEngine::FillListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile
 					tmpCoords.y = GetAttributeValueAsFloat(_lvlFile, "y");
 					tmpTileName = GetAttributeValue(_lvlFile, "sprite");
 					tmpState = GetAttributeValue(_lvlFile, "state", true) == "empty" ? EMPTY : NORMAL;
-					DisplayableObject tmpObj(tmpTileName, tmpCoords, tmpState);
-					m_listForegroundItemsTileNames[tmpObj] = tmpTileName;
+
+					DisplayableObject tmpBloc("item_" + tmpTileName, tmpCoords, tmpState);
+					m_listForegroundItems[tmpBloc.GetID()] = tmpBloc;
+
+					tmpInfo = tmpBloc.GetInfoForDisplay();
+					tmpEvent.set(INFO_POS_LVL, tmpInfo);
+					m_engines["gfx"]->PushEvent(tmpEvent);
 				}
 				if (!strcmp("floor_tile", _lvlFile->getNodeName()))
 				{
 					tmpCoords.x = GetAttributeValueAsFloat(_lvlFile, "x");
 					tmpCoords.y = GetAttributeValueAsFloat(_lvlFile, "y");
 					tmpTileName = GetAttributeValue(_lvlFile, "sprite");
-					DisplayableObject tmpObj(tmpTileName, tmpCoords, NORMAL);
-					m_listFloorTileNames[tmpObj] = tmpTileName;
+
+					DisplayableObject tmpFloor("floor_" + tmpTileName, tmpCoords, NORMAL);
+					m_listForegroundItems[tmpFloor.GetID()] = tmpFloor;
+
+					tmpInfo = tmpFloor.GetInfoForDisplay();
+					tmpEvent.set(INFO_POS_LVL, tmpInfo);
+					m_engines["gfx"]->PushEvent(tmpEvent);
 				}
 				break;
 			case EXN_ELEMENT_END:
@@ -119,7 +130,7 @@ void GraphicsEngine::FillListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile
 	}
 }
 
-std::string GraphicsEngine::GetAttributeValue(IrrXMLReader *_lvlFile, const char* _name, bool _optionalAttribute)
+std::string GameEngine::GetAttributeValue(IrrXMLReader *_lvlFile, const char* _name, bool _optionalAttribute)
 {
 	std::string str(_lvlFile->getAttributeValueSafe(_name));
 	if (str == "" && !_optionalAttribute)
@@ -127,7 +138,7 @@ std::string GraphicsEngine::GetAttributeValue(IrrXMLReader *_lvlFile, const char
 	return str;
 }
 
-float GraphicsEngine::GetAttributeValueAsFloat(IrrXMLReader *_lvlFile, const char* _name)
+float GameEngine::GetAttributeValueAsFloat(IrrXMLReader *_lvlFile, const char* _name)
 {
 	float ret = _lvlFile->getAttributeValueAsFloat(_name);
 	if (ret == -1)

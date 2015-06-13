@@ -4,7 +4,7 @@
 
 GameEngine::GameEngine(Game *_g) : Engine(_g), m_levelStarted(false)
 {
-	m_mario = new Player("mario", SIZE_BLOCK * 5, 150);
+
 }
 
 GameEngine::~GameEngine()
@@ -20,7 +20,7 @@ void GameEngine::Frame()
 void GameEngine::Frame(float _dt)
 {
 	if (!m_levelStarted)
-		StartLevel(); // In the future there will be some sort of level selection so this call will be moved
+		StartLevel("testlvl"); // In the future there will be some sort of level selection so this call will be moved
 
 	ProcessQueue();
 
@@ -44,13 +44,8 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 		case KEY_RELEASED:
 			HandleReleasedKey(_event.data.m_key);
 			break;
-		case INFO_POS_CHAR: // Initial position
-			//AddMovingCharacter();
-			m_mario = new Player(_event.data.m_infoDisplay.name, _event.data.m_infoDisplay.coordinates);
-			m_initPosMario = _event.data.m_infoDisplay.coordinates;
-			break;
 		case INFO_POS_LVL:
-			m_foregroundObjectCoords[_event.data.m_id] = _event.m_rect;
+			m_listForegroundItems[_event.data.m_id].SetCoordinates(_event.m_rect);
 			break;
 		case GAME_STOPPED:
 			m_parent->Stop();
@@ -115,13 +110,23 @@ void GameEngine::HandleReleasedKey(sf::Keyboard::Key _key)
 	}
 }
 
-// This will probably need an argument (like the name of the level) at some point
-void GameEngine::StartLevel()
+void GameEngine::StartLevel(std::string _lvlName)
 {
+	LoadLevel(_lvlName);
+
 	EngineEvent startLevel;
 	startLevel.set(LEVEL_START, "");
 	m_engines["s"]->PushEvent(startLevel);
+
+	CreateCharacters();
+
 	m_levelStarted = true;
+}
+
+void GameEngine::CreateCharacters()
+{
+	m_mario = new Player("mario", m_initPosMario);
+	m_listForegroundItems[m_mario->GetID()] = *m_mario;
 }
 
 void GameEngine::UpdateMarioPosition(float _dt)
@@ -131,8 +136,8 @@ void GameEngine::UpdateMarioPosition(float _dt)
 	m_mario->UpdatePosition(_dt);
 
 	sf::Vector2f pos = m_mario->GetPosition();
-	m_foregroundObjectCoords[id].left = pos.x;
-	m_foregroundObjectCoords[id].top = pos.y;
+	m_listForegroundItems[id].SetX(pos.x);
+	m_listForegroundItems[id].SetY(pos.y);
 }
 
 void GameEngine::CheckMarioDeath()

@@ -23,8 +23,9 @@ struct InfoForDisplay
 {
 	unsigned int id;
 	std::string name;	// to find sprite
+	std::string currentSprite;
 	State state;		// Idem
-	sf::Vector2f coordinates;
+	sf::FloatRect coordinates;
 	bool reverse; // Reverse sprite display (left/right) ?
 };
 
@@ -34,11 +35,15 @@ struct InfoForDisplay
 class DisplayableObject
 {
 	public:
+		DisplayableObject();
 		DisplayableObject(std::string _name, sf::Vector2f _coord, State _state = UNKNOWN);
 		DisplayableObject(std::string _name, float _x, float _y, State _state = UNKNOWN);
 		virtual ~DisplayableObject();
 
 		virtual InfoForDisplay GetInfoForDisplay();
+
+		sf::FloatRect GetCoordinates() const;
+		void SetCoordinates(const sf::FloatRect _coord);
 		sf::Vector2f GetPosition() const { return m_coord; };
 		void SetPosition(const sf::Vector2f _pos) { m_coord = _pos; };
 		State GetState() const { return m_state; }
@@ -51,7 +56,8 @@ class DisplayableObject
 		std::string m_name;
 		State m_state;
 
-		sf::Vector2f m_coord; // Coordinates of the top left corner, in pixels, with respect to the top left corner of the window
+		sf::Vector2f m_coord; // Origin: the top left corner, with respect to the top left corner of the window
+		sf::Vector2f m_size;
 
 		bool m_reverseSprite;
 

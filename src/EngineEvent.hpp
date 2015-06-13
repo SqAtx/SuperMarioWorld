@@ -10,8 +10,9 @@ typedef enum
 	GAME_STOPPED,
 	KEY_PRESSED,	// gfx to g
 	KEY_RELEASED,	// gfx to g
-	INFO_POS_CHAR,	// g to gfx during game, gfx to g for init positions (read in XML): character (Mario or enemy) position
-	INFO_POS_LVL,	// gfx to g: position of a foreground sprite
+	INFO_POS_CHAR,	// g to gfx during game: character (Mario or enemy) position
+	INFO_POS_LVL,	// gfx <-> g: position of a foreground sprite
+	INFO_LVL,		// g to gfx when loading level: basing info about level
 	PLAY_SOUND,
 } EventType;
 
@@ -21,6 +22,13 @@ typedef enum
 	COIN_SND,
 	DEATH_SND
 } SoundType;
+
+struct LevelInfo
+{
+	std::string name;
+	std::string backgroundName;
+	sf::Vector2f size;
+};
 
 /* This class represents a message sent from an engine to another */
 class EngineEvent
@@ -40,6 +48,7 @@ class EngineEvent
 		} data;
 		std::string m_string; // A string can't be inside a union
 		sf::Rect<float> m_rect;
+		LevelInfo m_levelInfo;
 
 #ifdef DEBUG_MODE
 		DebugInfo m_debugInfo;
@@ -80,6 +89,12 @@ class EngineEvent
 			m_type = _type;
 			data.m_id = _id;
 			m_rect = _rect;
+		}
+
+		void set(EventType _type, LevelInfo _info)
+		{
+			m_type = _type;
+			m_levelInfo = _info;
 		}
 
 #ifdef DEBUG_MODE

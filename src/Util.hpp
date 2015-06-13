@@ -8,8 +8,10 @@
 #include <string>
 #include <vector>
 #include <SFML/System.hpp>
+#include <SFML\Graphics.hpp>
 
 class DisplayableObject;
+struct InfoForDisplay;
 
 class Util
 {
@@ -19,9 +21,9 @@ class Util
 		static bool Util::StringEndsWith(std::string _full, std::string _ending);
 };
 
-class CompareDisplayableObjects {
+class CompareInfoForDisplay {
 	public:
-		bool operator()(DisplayableObject const& _a, DisplayableObject const& _b);
+		bool operator()(InfoForDisplay const& _a, InfoForDisplay const& _b);
 };
 
 #endif

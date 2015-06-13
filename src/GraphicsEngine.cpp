@@ -34,12 +34,14 @@ void GraphicsEngine::Frame()
 // Process a single event, sent by another engine
 void GraphicsEngine::ProcessEvent(EngineEvent& _event)
 {
-	// TEMPORARY; the XML file should be loaded in GameEngine (in StartLevel)
-	if (!GraphicsEngine::m_levelLoaded)
-		LoadLevel("testlvl");
-
 	switch (_event.m_type)
 	{
+		case INFO_LVL:
+			StoreLevelInfo(_event.m_levelInfo);
+			break;
+		case INFO_POS_LVL:
+			UpdateForegroundItem(_event.data.m_infoDisplay);
+			break;
 		case INFO_POS_CHAR:
 			SetDisplayableObjectToDraw(_event.data.m_infoDisplay);
 			break;
@@ -84,9 +86,13 @@ void GraphicsEngine::ProcessWindowEvents()
 
 void GraphicsEngine::DisplayWindow()
 {
+	sf::Clock clock;
+
 	SetBackgroundToDraw();
-	SetFloorToDraw();
+	clock.restart();
 	SetForegroundToDraw();
+	std::cout << "SetForegroundToDraw(): " << clock.getElapsedTime().asMilliseconds() << std::endl;
+
 	DrawGame();
 
 #ifdef DEBUG_MODE
@@ -105,6 +111,11 @@ void GraphicsEngine::DrawGame()
 		m_gameWindow->draw(m_levelStructureToDraw[i]);
 	for (unsigned int i = 0; i < m_displayableObjectsToDraw.size(); i++)
 		m_gameWindow->draw(m_displayableObjectsToDraw[i]);
+}
+
+void GraphicsEngine::StoreLevelInfo(LevelInfo _info)
+{
+	m_currentBackgroundName = _info.backgroundName;
 }
 
 #ifdef DEBUG_MODE

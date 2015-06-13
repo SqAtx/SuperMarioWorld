@@ -2,6 +2,9 @@
 
 void GameEngine::HandleCollisionsWithMapEdges(MovingObject& _obj)
 {
+	unsigned int objId = _obj.GetID();
+	sf::FloatRect objCoords = m_listForegroundItems[objId].GetCoordinates();
+
 	if (_obj.GetPosition().x < 0)
 	{
 		_obj.SetX(0);
@@ -12,23 +15,35 @@ void GameEngine::HandleCollisionsWithMapEdges(MovingObject& _obj)
 		_obj.SetX(512 - 13);
 		_obj.SetVelX(0);
 	}
+
+	// Debug Fall
+	if (_obj.GetPosition().y > 432-objCoords.height)
+	{
+		// Update coords
+		_obj.SetVelY(0);
+		_obj.SetJumpState(ONFLOOR);	
+	}
+
+	// Actual fall ;)
+	if (_obj.GetPosition().y > 432)
+		_obj.Kill();
 }
 
 void GameEngine::HandleCollisionsWithLevel(MovingObject& _obj)
 {
-	if (m_foregroundObjectCoords.size() <= 1)
+	if (m_listForegroundItems.size() <= 1)
 		return;
 
 	CollisionDirection tmpDirection = NO_COL, lastCollisionDirection = NO_COL;
 	unsigned int objId = _obj.GetID(), lastCollisionRefId;
-	sf::FloatRect objCoords = m_foregroundObjectCoords[objId];
+	sf::FloatRect objCoords = m_listForegroundItems[objId].GetCoordinates();
 
 	// What happens if there is a collision so _obj is moved and there is another one and _obj is moved again ? The first collision would need to be handled again
-	for (std::map<unsigned int, sf::Rect<float>>::iterator it = m_foregroundObjectCoords.begin(); it != m_foregroundObjectCoords.end(); ++it)
+	for (std::map<unsigned int, DisplayableObject>::iterator it = m_listForegroundItems.begin(); it != m_listForegroundItems.end(); ++it)
 	{
 		if (it->first != objId)
 		{
-			tmpDirection = HandleCollisionWithRect(objId, it->second);
+			tmpDirection = HandleCollisionWithRect(objId, it->second.GetCoordinates());
 			if (tmpDirection != NO_COL)
 			{
 				lastCollisionDirection = tmpDirection;
@@ -39,19 +54,7 @@ void GameEngine::HandleCollisionsWithLevel(MovingObject& _obj)
 
 	_obj.UpdateAfterCollision(lastCollisionDirection);
 
-	// Debug Fall
-	//if (_obj.GetPosition().y > 432-objCoords.height)
-	//{
-	//	m_foregroundObjectCoords[id].top = 432 - objCoords.height;
-	//	_obj.SetVelY(0);
-	//	_obj.SetJumpState(ONFLOOR);	
-	//}
-
-	// Actual fall ;)
-	if (_obj.GetPosition().y > 432)
-		_obj.Kill();
-
-	objCoords = m_foregroundObjectCoords[objId];
+	objCoords = m_listForegroundItems[objId].GetCoordinates();
 	sf::Vector2f newPos(objCoords.left, objCoords.top);
 	_obj.SetPosition(newPos);
 }
@@ -66,7 +69,7 @@ CollisionDirection GameEngine::HandleCollisionWithRect(unsigned int _objId, sf::
 CollisionDirection GameEngine::DetectCollisionWithRect(unsigned int _objId, sf::FloatRect _ref)
 {
 	CollisionDirection direction = NO_COL;
-	sf::Rect<float> objCoords = m_foregroundObjectCoords[_objId];
+	sf::Rect<float> objCoords = m_listForegroundItems[_objId].GetCoordinates();
 
 	/* If TOP or BOTTOM collisions are possible */
 	if ((objCoords.left <= _ref.left && objCoords.left + objCoords.width > _ref.left)
@@ -112,7 +115,7 @@ CollisionDirection GameEngine::DetectCollisionWithRect(unsigned int _objId, sf::
 
 void GameEngine::ReactToCollision(unsigned int _objId, sf::FloatRect _ref, CollisionDirection _direction)
 {
-	sf::Rect<float> objCoords = m_foregroundObjectCoords[_objId];
+	sf::Rect<float> objCoords = m_listForegroundItems[_objId].GetCoordinates();
 	switch (_direction)
 	{
 		case TOP:
@@ -131,5 +134,5 @@ void GameEngine::ReactToCollision(unsigned int _objId, sf::FloatRect _ref, Colli
 		default:
 			break;
 	}
-	m_foregroundObjectCoords[_objId] = objCoords;
+	m_listForegroundItems[_objId].SetCoordinates(objCoords);
 }

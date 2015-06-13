@@ -48,11 +48,9 @@ bool Util::StringEndsWith(std::string _full, std::string _ending)
 	return !_full.compare(lenDiff, _ending.length(), _ending);
 }
 
-bool CompareDisplayableObjects::operator()(DisplayableObject const& _a, DisplayableObject const& _b)
+bool CompareInfoForDisplay::operator()(InfoForDisplay const& _a, InfoForDisplay const& _b)
 {
-	if (_a.GetPosition().x < _b.GetPosition().x)
-		return true;
-	if (_a.GetPosition().x == _b.GetPosition().x && _a.GetPosition().y < _b.GetPosition().y)
-		return true;
-	return false;
+	return (_a.id < _b.id);
 }
+
+

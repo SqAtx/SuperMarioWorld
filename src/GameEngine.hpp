@@ -3,6 +3,7 @@
 
 #include "Engine.hpp"
 #include "Player.hpp"
+#include "irrXML/irrXML.h"
 
 /*
     Game engine: Handles the movements of the player, collisions, etc.
@@ -21,7 +22,7 @@ class GameEngine : public Engine
 		Player *m_mario;
 		sf::Vector2f m_initPosMario;
 
-		std::map<unsigned int, sf::Rect<float>> m_foregroundObjectCoords; // Part of the level the characters can be in collision with
+		std::map<unsigned int, DisplayableObject> m_listForegroundItems; // Part of the level the characters can be in collision with
 
 		void ProcessEvent(EngineEvent& _event);
 		void HandlePressedKey(sf::Keyboard::Key _key);
@@ -38,7 +39,16 @@ class GameEngine : public Engine
 		CollisionDirection DetectCollisionWithRect(unsigned int _objId, sf::FloatRect _ref);
 		void ReactToCollision(unsigned int _objId, sf::FloatRect _ref, CollisionDirection _direction);
 
-		void StartLevel();
+		void StartLevel(std::string _lvlName);
+		void CreateCharacters();
+
+		bool LoadLevel(std::string _lvlName);
+		void StoreCharactersInitialPositions(irr::io::IrrXMLReader *_lvlFile);
+		void StoreListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile);
+		std::string GetAttributeValue(irr::io::IrrXMLReader *_lvlFile, const char* _name, bool _optionalAttribute = false);
+		float GetAttributeValueAsFloat(irr::io::IrrXMLReader *_lvlFile, const char* _name);
+
+		static const std::string levelsPath;
 };
 
 #endif // GAMEENGINE_H

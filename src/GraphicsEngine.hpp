@@ -3,8 +3,6 @@
 
 #include "Engine.hpp"
 
-#include "irrXML/irrXML.h"
-#include <SFML/Graphics.hpp>
 #include <fstream>
 
 #define WIN_HEIGHT			432
@@ -26,8 +24,6 @@ class GraphicsEngine : public Engine
 		float GetFramerateLimit();
 		
     private:
-		static bool m_levelLoaded; // TEMPORARY
-
 		sf::RenderWindow *m_gameWindow;
 		static const float FramerateLimit;
 		static const int GraphicsEngine::FramesBetweenAnimationChanges;
@@ -43,19 +39,13 @@ class GraphicsEngine : public Engine
 		std::vector<sf::Sprite> m_displayableObjectsToDraw;
 
 		// List of all the foreground tiles in the current level and their coordinates
-		std::map<DisplayableObject, std::string, CompareDisplayableObjects> m_listForegroundItemsTileNames;
-		std::map<DisplayableObject, std::string, CompareDisplayableObjects> m_listFloorTileNames;
+		std::map<InfoForDisplay, std::string, CompareInfoForDisplay> m_listForegroundItemsTileNames;
+		void UpdateForegroundItem(InfoForDisplay _info);
 
 		std::map<int, std::string> m_spritesCurrentlyDisplayed; // Contains id of displayable object and which sprite (name from RECT file) is displayed ATM
 
 		void ProcessEvent(EngineEvent& _event);
 		void ProcessWindowEvents();
-
-		bool LoadLevel(std::string _lvlName);
-		void SendCharactersInitialPositions(irr::io::IrrXMLReader *_lvlFile);
-		void FillListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile);
-		std::string GetAttributeValue(irr::io::IrrXMLReader *_lvlFile, const char* _name, bool _optionalAttribute = false);
-		float GetAttributeValueAsFloat(irr::io::IrrXMLReader *_lvlFile, const char* _name);
 
 		void LoadTextures(); // Load all textures at beginning of level
 		void LoadTexturesFromFile(std::string _fileName);
@@ -66,9 +56,8 @@ class GraphicsEngine : public Engine
 
 		// Add sprites in m_toDraw: the farthest first
 		void SetBackgroundToDraw();
-		void SetFloorToDraw();
 		void SetForegroundToDraw();
-		void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<DisplayableObject, std::string, CompareDisplayableObjects>& _list, std::string _texturePrefix);
+		void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<InfoForDisplay, std::string, CompareInfoForDisplay>& _list);
 		void SetDisplayableObjectToDraw(InfoForDisplay _info);
 
 		std::string GetTextureNameFromDisplayInfo(int _id, std::string _name, State _state);
@@ -78,10 +67,11 @@ class GraphicsEngine : public Engine
 
 		void DrawGame();
 
+		void StoreLevelInfo(LevelInfo _info);
+
 		void ResetTmpSprite();
 
 		static const std::string texturesPath;
-		static const std::string levelsPath;
 
 #ifdef DEBUG_MODE
 		sf::Clock m_clock;
