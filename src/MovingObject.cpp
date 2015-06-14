@@ -78,7 +78,6 @@ void MovingObject::UpdateAcceleration()
 			m_acceleration.y -= PhysicsConstants::FrictionPlayerAir * m_velocity.y;
 			break;
 	}
-
 }
 
 void MovingObject::UpdateVelocity(float _dt)
@@ -111,11 +110,8 @@ float MovingObject::GetMaxAbsVelocity_X()
 			return PhysicsConstants::PlayerMaxSpeed_Walk_X;
 		case RUN:
 			return PhysicsConstants::PlayerMaxSpeed_Run_X;
-		case JUMP:
-		case FALL:
-			return PhysicsConstants::PlayerMaxSpeed_Run_X;
 		default:
-			return 0;
+			return PhysicsConstants::PlayerMaxSpeed_Run_X;;
 	}
 }
 
