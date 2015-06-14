@@ -3,34 +3,6 @@
 
 #include "DisplayableObject.hpp"
 
-#ifdef DEBUG_MODE
-struct DebugInfo {
-	sf::Vector2f velocity;
-	sf::Vector2f acceleration;
-};
-#endif
-
-enum Direction {
-	DLEFT,
-	DRIGHT
-};
-
-enum JumpState {
-	JUMPING,
-	REACHINGAPEX, // Phase between the jump and the fall: the object is still rising but without acceleration on the Y axis 
-	FALLING,
-	ONFLOOR,
-	NONE	// At the beginning of the level, for example
-};
-
-enum CollisionDirection {
-	TOP,
-	BOTTOM,
-	LEFT,
-	RIGHT,
-	NO_COL
-};
-
 /*
 *	A MovingObject can be a player, an enemy, or a moving item, such as a power-up
 */
@@ -53,6 +25,7 @@ class MovingObject : public DisplayableObject
 		void SetJumpState(JumpState _state) { m_jumpState = _state; };
 		void Kill() { m_isDead = true; };
 		bool IsDead() { return m_isDead; };
+		bool IsInTheAir() { return m_jumpState != ONFLOOR; };
 
 #ifdef DEBUG_MODE
 		DebugInfo GetDebugInfo();
@@ -61,7 +34,9 @@ class MovingObject : public DisplayableObject
 
 	protected:
 		Direction m_facing;
+
 		JumpState m_jumpState;
+		State m_previousState; // When in the air, store the previous state for acceleration calculation
 
 		void UpdateAcceleration();
 		void UpdateVelocity(float _dt);
@@ -72,6 +47,8 @@ class MovingObject : public DisplayableObject
 		int m_maxSpeed;
 		sf::Vector2f m_velocity;
 		sf::Vector2f m_acceleration;
+
+		bool m_isRunning;
 
 		bool m_isDead;
 };

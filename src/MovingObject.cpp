@@ -42,7 +42,7 @@ void MovingObject::UpdatePosition(float _dt)
 	if (m_acceleration.x == 0)
 		m_state = STATIC;
 
-	if (m_velocity.y > 0)
+	if (m_velocity.y > 0 && m_jumpState != ONFLOOR) // Can't go from ONFLOOR to FALLING (character would be FALLING before collision handling otherwise)
 		m_jumpState = FALLING;
 
 	m_coord = {
@@ -96,7 +96,7 @@ void MovingObject::UpdateVelocity(float _dt)
 		m_velocity.x = -maxAbsVel;
 
 	// Make sure the player is not running backwards (which can happen when the friction force creates a big acceleration in the opposite direction)
-	if (m_facing == DLEFT && m_velocity.x > 0 || m_facing == DRIGHT && m_velocity.x < 0)
+	if (!IsInTheAir() && (m_facing == DLEFT && m_velocity.x > 0 || m_facing == DRIGHT && m_velocity.x < 0))
 		m_velocity.x = 0;
 
 	if (abs(m_velocity.x) < PhysicsConstants::MinSpeed)
@@ -111,6 +111,9 @@ float MovingObject::GetMaxAbsVelocity_X()
 			return PhysicsConstants::PlayerMaxSpeed_Walk_X;
 		case RUN:
 			return PhysicsConstants::PlayerMaxSpeed_Run_X;
+		case JUMP:
+		case FALL:
+			return PhysicsConstants::PlayerMaxSpeed_Run_X;
 		default:
 			return 0;
 	}
@@ -121,6 +124,9 @@ void MovingObject::UpdateAfterCollision(CollisionDirection _dir)
 	switch (_dir)
 	{
 		case TOP:
+			if (m_jumpState != ONFLOOR) // Landing
+				m_state = m_previousState;
+
 			m_velocity.y = 0;
 			m_jumpState = ONFLOOR;
 			break;
@@ -149,6 +155,8 @@ DebugInfo MovingObject::GetDebugInfo()
 	DebugInfo info;
 	info.velocity = m_velocity;
 	info.acceleration = m_acceleration;
+	info.state = m_state;
+	info.jumpState = m_jumpState;
 	return info;
 }
 #endif

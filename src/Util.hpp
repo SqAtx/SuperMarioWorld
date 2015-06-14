@@ -24,6 +24,28 @@ typedef enum {
 	EMPTY		// ? Boxes
 } State;
 
+enum Direction {
+	DLEFT,
+	DRIGHT
+};
+
+enum JumpState {
+	JUMPING,
+	REACHINGAPEX, // Phase between the jump and the fall: the object is still rising but without acceleration on the Y axis 
+	FALLING,
+	ONFLOOR,
+	NONE	// At the beginning of the level, for example
+};
+
+enum CollisionDirection {
+	TOP,
+	BOTTOM,
+	LEFT,
+	RIGHT,
+	NO_COL
+};
+
+
 namespace Sprite
 {
 	/* To decide whether we keep the current sprite and avoid calling GetTextureNameFromDisplayInfo */
@@ -34,6 +56,31 @@ namespace Sprite
 		UNKNOWN
 	} StaticOrAnimated;
 }
+
+
+#ifdef DEBUG_MODE
+namespace Debug
+{
+	static const std::string StateStrings[] = { "UNKNOWN", "STATIC", "WALK", "RUN", "JUMP", "FALL", "NORMAL", "EMPTY" };
+	static const std::string GetTextForState(int _stateValue)
+	{
+		return StateStrings[_stateValue];
+	}
+
+	static const std::string JumpStateStrings[] = { "JUMPING", "REACHINGAPEX", "FALLING", "ONFLOOR", "NONE" };
+	static const std::string GetTextForJumpState(int _jumpStateValue)
+	{
+		return JumpStateStrings[_jumpStateValue];
+	}
+}
+
+struct DebugInfo {
+	sf::Vector2f velocity;
+	sf::Vector2f acceleration;
+	State state;
+	JumpState jumpState;
+};
+#endif
 
 class Util
 {

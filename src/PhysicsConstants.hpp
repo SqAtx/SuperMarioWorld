@@ -8,7 +8,7 @@ namespace PhysicsConstants
 {
 	// Friction coefficients
 	const float FrictionPlayerGound = 0.7;
-	const float FrictionPlayerAir = 0.5;
+	const float FrictionPlayerAir = 0.1;
 
 	// Velocities
 	const float PlayerMaxSpeed_Walk_X = 100;

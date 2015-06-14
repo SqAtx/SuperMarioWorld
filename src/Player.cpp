@@ -30,15 +30,11 @@ InfoForDisplay Player::GetInfoForDisplay()
 
 void Player::AddOwnAcceleration()
 {
-	switch (m_state)
-	{
-		case WALK:
-			m_acceleration.x = PhysicsConstants::PlayerAcc_Walk * (m_facing == DLEFT ? -1 : 1);
-			break;
-		case RUN:
-			m_acceleration.x = PhysicsConstants::PlayerAcc_Run * (m_facing == DLEFT ? -1 : 1);
-			break;
-	}
+	// Player keeps acceleration when jumping
+	if (m_state == WALK || (IsInTheAir() && m_previousState == WALK))
+		m_acceleration.x = PhysicsConstants::PlayerAcc_Walk * (m_facing == DLEFT ? -1 : 1);
+	if (m_state == RUN || (IsInTheAir() && m_previousState == RUN))
+		m_acceleration.x = PhysicsConstants::PlayerAcc_Run * (m_facing == DLEFT ? -1 : 1);
 
 	// Takes off if enough speed on the Y axis
 	if (m_jumpState == JUMPING)
@@ -74,14 +70,20 @@ void Player::Move(int _a)
 		m_state = m_isRunning ? RUN : WALK;
 	}
 	else
+	{
 		m_state = STATIC;
-}
+
+		if (IsInTheAir())
+			m_previousState = STATIC;
+	}
+ }
 
 bool Player::Jump()
 {
 	if (m_jumpState == ONFLOOR && m_canJump)
 	{
 		m_jumpState = JUMPING;
+		m_previousState = m_state;
 		m_canJump = false;
 		return true;
 	}

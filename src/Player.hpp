@@ -24,8 +24,6 @@ class Player : public MovingObject
 
 		void AddOwnAcceleration();
 
-		bool m_isRunning;
-
 		bool m_canJump; // To avoid Mario jumping around if the jump key is pressed and held
 };
 

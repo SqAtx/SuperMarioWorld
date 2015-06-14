@@ -128,6 +128,8 @@ void GraphicsEngine::DrawDebugInfo()
 	toWrite += (" Position: { " + std::to_string(playerPos.x) + "; " + std::to_string(playerPos.y) + " }\n");
 	toWrite += (" Velocity: { " + std::to_string(playerVel.x) + "; " + std::to_string(playerVel.y) + " }\n");
 	toWrite += (" Acceleration: { " + std::to_string(playerAcc.x) + "; " + std::to_string(playerAcc.y) + " }\n");
+	toWrite += (" State: " + Debug::GetTextForState(m_debugInfo.state) + "\n");
+	toWrite += (" Jump state: " + Debug::GetTextForJumpState(m_debugInfo.jumpState) + "\n");
 
 	m_clock.restart();
 	m_debugText.setString(toWrite);
