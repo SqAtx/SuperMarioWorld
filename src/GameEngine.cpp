@@ -2,14 +2,15 @@
 #include "Game.hpp"
 
 
-GameEngine::GameEngine(Game *_g) : Engine(_g), m_levelStarted(false)
+GameEngine::GameEngine(Game *_g) : Engine(_g), m_levelStarted(false), m_indexMario(-1)
 {
 
 }
 
 GameEngine::~GameEngine()
 {
-	delete m_mario;
+	for (int i = 0; i < m_characters.size(); i++)
+		delete m_characters[i];
 }
 
 void GameEngine::Frame()
@@ -24,15 +25,18 @@ void GameEngine::Frame(float _dt)
 
 	ProcessQueue();
 
-	if (m_mario != NULL)
+	for (int i = 0; i < m_characters.size(); i++)
 	{
-		if (1 / _dt > 20) // No updating at all if framerate < 20 (usually the first few iterations) because it results in inacurrate updating (like Mario drops 300 pixels at beginning of level)
-			UpdateMarioPosition(_dt);
+		if (m_characters[i] != NULL)
+		{
+			if (1 / _dt > 20) // No updating at all if framerate < 20 (usually the first few iterations) because it results in inacurrate updating (like Mario drops 300 pixels at beginning of level)
+				UpdateCharacterPosition(*m_characters[i], _dt);
 
-		HandleCollisionsWithLevel(*m_mario);
-		HandleCollisionsWithMapEdges(*m_mario);
-		CheckMarioDeath();
-		SendMarioPosition(_dt);
+			HandleCollisionsWithLevel(*m_characters[i]);
+			HandleCollisionsWithMapEdges(*m_characters[i]);
+			CheckCharacterDeath(*m_characters[i]);
+			SendCharacterPosition(i);
+		}
 	}
 }
 
@@ -60,30 +64,39 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 {
 	EngineEvent tmpEvent;
+	Player *mario = m_indexMario != -1 ? (Player*)m_characters[m_indexMario] : NULL; // Clarity
+
 	switch (_key)
 	{
 		case sf::Keyboard::Left:
-			if (m_mario != NULL)
-				m_mario->Move(GO_LEFT);
+			if (mario != NULL)
+				mario->Move(GO_LEFT);
 			break;
 		case sf::Keyboard::Right:
-			if (m_mario != NULL)
-				m_mario->Move(GO_RIGHT);
+			if (mario != NULL)
+				mario->Move(GO_RIGHT);
 			break;
 		case sf::Keyboard::C:
-			if (m_mario != NULL)
-				m_mario->ToggleRun(true);
+			if (mario != NULL)
+				mario->ToggleRun(true);
 			break;
 		case sf::Keyboard::Space:
-			if (m_mario != NULL && m_mario->Jump())
+			if (mario != NULL && mario->Jump())
 			{
 				tmpEvent.set(PLAY_SOUND, JUMP_SND);
 				m_engines["s"]->PushEvent(tmpEvent);
 			}
 			break;
 		case sf::Keyboard::Escape:
-			if (m_mario == NULL)
-				m_mario = new Player("mario", m_initPosMario);
+			if (m_indexMario == -1)
+			{
+				Player *newMmario = new Player("mario", m_initPosMario);
+				m_indexMario = m_characters.size();
+				m_characters.push_back(newMmario);
+				m_listForegroundItems[newMmario->GetID()] = *newMmario;
+
+				std::cout << "Mario back at index " << m_indexMario << std::endl;
+			}
 			break;
 		default:
 			break;
@@ -92,23 +105,25 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 
 void GameEngine::HandleReleasedKey(sf::Keyboard::Key _key)
 {
+	Player *mario = m_indexMario != -1 ? (Player*)m_characters[m_indexMario] : NULL; // Clarity
+
 	switch (_key)
 	{
 		case sf::Keyboard::Left:
-			if (m_mario != NULL)
-				m_mario->Move(STOP_LEFT);
+			if (mario != NULL)
+				mario->Move(STOP_LEFT);
 			break;
 		case sf::Keyboard::Right:
-			if (m_mario != NULL)
-				m_mario->Move(STOP_RIGHT);
+			if (mario != NULL)
+				mario->Move(STOP_RIGHT);
 			break;
 		case sf::Keyboard::C:
-			if (m_mario != NULL)
-				m_mario->ToggleRun(false);
+			if (mario != NULL)
+				mario->ToggleRun(false);
 			break;
 		case sf::Keyboard::Space:
-			if (m_mario != NULL)
-				m_mario->EndJump();
+			if (mario != NULL)
+				mario->EndJump();
 			break;
 		default:
 			break;
@@ -130,51 +145,72 @@ void GameEngine::StartLevel(std::string _lvlName)
 
 void GameEngine::CreateCharacters()
 {
-	m_mario = new Player("mario", m_initPosMario);
-	m_listForegroundItems[m_mario->GetID()] = *m_mario;
+	Player *mario = new Player("mario", m_initPosMario);
+	m_indexMario = m_characters.size();
+	m_characters.push_back(mario);
+	m_listForegroundItems[mario->GetID()] = *mario;
+
+	std::cout << "Mario created at index " << m_indexMario << std::endl;
 }
 
-void GameEngine::UpdateMarioPosition(float _dt)
+void GameEngine::UpdateCharacterPosition(MovingObject& _character, float _dt)
 {
-	unsigned int id = m_mario->GetID();
+	unsigned int id = _character.GetID();
 
-	m_mario->UpdatePosition(_dt);
+	_character.UpdatePosition(_dt);
 
-	sf::Vector2f pos = m_mario->GetPosition();
+	sf::Vector2f pos = _character.GetPosition();
 	m_listForegroundItems[id].SetX(pos.x);
 	m_listForegroundItems[id].SetY(pos.y);
 }
 
-void GameEngine::CheckMarioDeath()
+void GameEngine::CheckCharacterDeath(MovingObject& _character)
 {
 	EngineEvent tmpEvent;
 
-	if (m_mario->IsDead())
+	if (_character.IsDead())
 	{
 		tmpEvent.set(PLAY_SOUND, DEATH_SND);
 		m_engines["s"]->PushEvent(tmpEvent);
-		KillMario();
+		KillCharacter(_character);
 	}
 }
 
-void GameEngine::KillMario()
+void GameEngine::KillCharacter(MovingObject& _character)
 {
-	delete m_mario;
-	m_mario = NULL;
+	EngineEvent death;
+
+	for (int i = 0; i < m_characters.size(); i++)
+	{
+		if (m_characters[i] != NULL && m_characters[i]->GetID() == _character.GetID())
+		{
+			delete m_characters[i];
+			m_characters[i] = NULL;
+
+			if (i == m_indexMario)
+			{
+				std::cout << "Mario (index " << m_indexMario << ") died :o" << std::endl;
+				m_indexMario = -1;
+			}
+		}
+	}
 }
 
 // Send Mario's position to gfx
-void GameEngine::SendMarioPosition(float _dt)
+void GameEngine::SendCharacterPosition(int _indexCharacter)
 {
 	EngineEvent tmpEvent;
-
-	if (m_mario == NULL)
+	MovingObject *character = m_characters[_indexCharacter];
+	if (character == NULL)
 		return;
 
-	tmpEvent.set(INFO_POS_CHAR, m_mario->GetInfoForDisplay());
+	tmpEvent.set(INFO_POS_CHAR, character->GetInfoForDisplay());
 	m_engines["gfx"]->PushEvent(tmpEvent);
 #ifdef DEBUG_MODE
-	tmpEvent.set(INFO_DEBUG, m_mario->GetDebugInfo());
-	m_engines["gfx"]->PushEvent(tmpEvent);
+	if (_indexCharacter == m_indexMario)
+	{
+		tmpEvent.set(INFO_DEBUG, character->GetDebugInfo());
+		m_engines["gfx"]->PushEvent(tmpEvent);
+	}
 #endif
 }

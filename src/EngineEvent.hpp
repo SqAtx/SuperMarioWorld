@@ -47,7 +47,7 @@ class EngineEvent
 			int m_id;
 		} data;
 		std::string m_string; // A string can't be inside a union
-		sf::Rect<float> m_rect;
+		sf::FloatRect m_rect;
 		LevelInfo m_levelInfo;
 
 #ifdef DEBUG_MODE
@@ -84,7 +84,7 @@ class EngineEvent
 			m_string = _str;
 		}
 
-		void set(EventType _type, int _id, sf::Rect<float> _rect)
+		void set(EventType _type, int _id, sf::FloatRect _rect = sf::FloatRect())
 		{
 			m_type = _type;
 			data.m_id = _id;

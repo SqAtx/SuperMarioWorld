@@ -19,20 +19,22 @@ class GameEngine : public Engine
 
     private:
 		bool m_levelStarted;
-		Player *m_mario;
-		sf::Vector2f m_initPosMario;
 
+		sf::Vector2f m_initPosMario;
+		int m_indexMario; // Index of Mario in m_characters. -1 if he's not in it.
+
+		std::vector<MovingObject*> m_characters;
 		std::map<unsigned int, DisplayableObject> m_listForegroundItems; // Part of the level the characters can be in collision with
 
 		void ProcessEvent(EngineEvent& _event);
 		void HandlePressedKey(sf::Keyboard::Key _key);
 		void HandleReleasedKey(sf::Keyboard::Key _key);
 
-		void CheckMarioDeath();
-		void KillMario();
-		void SendMarioPosition(float _dt);
+		void CheckCharacterDeath(MovingObject& _character);
+		void KillCharacter(MovingObject& _character);
+		void SendCharacterPosition(int _indexCharacter);
 
-		void UpdateMarioPosition(float _dt);
+		void UpdateCharacterPosition(MovingObject& _character, float _dt);
 		void HandleCollisionsWithMapEdges(MovingObject& _obj);
 		void HandleCollisionsWithLevel(MovingObject& _obj);
 		CollisionDirection HandleCollisionWithRect(unsigned int _objId, sf::FloatRect _ref);
