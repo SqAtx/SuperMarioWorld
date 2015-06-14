@@ -29,6 +29,13 @@ enum Direction {
 	DRIGHT
 };
 
+enum Instruction { // From user to player
+	GO_LEFT,
+	GO_RIGHT,
+	STOP_LEFT,
+	STOP_RIGHT
+};
+
 enum JumpState {
 	JUMPING,
 	REACHINGAPEX, // Phase between the jump and the fall: the object is still rising but without acceleration on the Y axis 

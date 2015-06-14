@@ -57,26 +57,36 @@ void Player::ToggleRun(bool _mustRun)
 	m_isRunning = _mustRun;
 }
 
-void Player::Move(int _a)
+void Player::Move(Instruction _inst)
 {
-	if (_a > 0)
+	switch (_inst)
 	{
-		m_facing = DRIGHT;
-		m_state = m_isRunning ? RUN : WALK;
+		case GO_LEFT:
+			m_facing = DLEFT;
+			m_state = m_isRunning ? RUN : WALK;
+			break;
+		case GO_RIGHT:
+			m_facing = DRIGHT;
+			m_state = m_isRunning ? RUN : WALK;
+			break;
+		case STOP_LEFT:
+			if (m_facing == DLEFT) // In case the user presses LEFT then presses RIGHT then releases LEFT
+			{
+				m_state = STATIC;
+				if (IsInTheAir())
+					m_previousState = STATIC;
+			}
+			break;
+		case STOP_RIGHT:
+			if (m_facing == DRIGHT)
+			{
+				m_state = STATIC;
+				if (IsInTheAir())
+					m_previousState = STATIC;
+			}
+			break;
 	}
-	else if (_a < 0)
-	{
-		m_facing = DLEFT;
-		m_state = m_isRunning ? RUN : WALK;
-	}
-	else
-	{
-		m_state = STATIC;
-
-		if (IsInTheAir())
-			m_previousState = STATIC;
-	}
- }
+}
 
 bool Player::Jump()
 {

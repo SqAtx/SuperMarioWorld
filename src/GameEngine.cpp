@@ -62,11 +62,11 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 	{
 		case sf::Keyboard::Left:
 			if (m_mario != NULL)
-				m_mario->Move(-1);
+				m_mario->Move(GO_LEFT);
 			break;
 		case sf::Keyboard::Right:
 			if (m_mario != NULL)
-				m_mario->Move(1);
+				m_mario->Move(GO_RIGHT);
 			break;
 		case sf::Keyboard::C:
 			if (m_mario != NULL)
@@ -93,9 +93,12 @@ void GameEngine::HandleReleasedKey(sf::Keyboard::Key _key)
 	switch (_key)
 	{
 		case sf::Keyboard::Left:
+			if (m_mario != NULL)
+				m_mario->Move(STOP_LEFT);
+			break;
 		case sf::Keyboard::Right:
 			if (m_mario != NULL)
-				m_mario->Move(0);
+				m_mario->Move(STOP_RIGHT);
 			break;
 		case sf::Keyboard::C:
 			if (m_mario != NULL)
