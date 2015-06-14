@@ -26,7 +26,9 @@ void GameEngine::Frame(float _dt)
 
 	if (m_mario != NULL)
 	{
-		UpdateMarioPosition(_dt);
+		if (1 / _dt > 20) // No updating at all if framerate < 20 (usually the first few iterations) because it results in inacurrate updating (like Mario drops 300 pixels at beginning of level)
+			UpdateMarioPosition(_dt);
+
 		HandleCollisionsWithLevel(*m_mario);
 		HandleCollisionsWithMapEdges(*m_mario);
 		CheckMarioDeath();

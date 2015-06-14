@@ -16,6 +16,7 @@ void MovingObject::Init()
 	m_velocity = { 0, 0 };
 	m_acceleration = { 0, PhysicsConstants::Gravity};
 	m_jumpState = NONE;
+	m_previousState = UNKNOWN;
 	m_isDead = false;
 }
 
@@ -87,7 +88,7 @@ void MovingObject::UpdateVelocity(float _dt)
 		m_velocity.y += m_acceleration.y * _dt,
 	};
 
-	// Check for maximum velocity
+	// Check for maximum velocity on X
 	float maxAbsVel = GetMaxAbsVelocity_X();
 	if (m_velocity.x > maxAbsVel)
 		m_velocity.x = maxAbsVel;
