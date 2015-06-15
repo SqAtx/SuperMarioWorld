@@ -93,8 +93,6 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 				Player *mario = new Player("mario", m_initPosMario);
 				m_indexMario = AddCharacterToArray(mario);
 				m_listForegroundItems[mario->GetID()] = *mario;
-
-				std::cout << "Mario back at index " << m_indexMario << std::endl;
 			}
 			break;
 		default:
@@ -147,8 +145,6 @@ void GameEngine::CreateCharacters()
 	Player *mario = new Player("mario", m_initPosMario);
 	m_indexMario = AddCharacterToArray(mario);
 	m_listForegroundItems[mario->GetID()] = *mario;
-
-	std::cout << "Mario created at index " << m_indexMario << std::endl;
 }
 
 /* Takes the place of the first NULL pointer (= dead character), or is pushed at the end */
@@ -198,12 +194,13 @@ void GameEngine::KillCharacter(MovingObject& _character)
 	{
 		if (m_characters[i] != NULL && m_characters[i]->GetID() == _character.GetID())
 		{
+			m_listForegroundItems.erase(m_characters[i]->GetID());
+
 			delete m_characters[i];
 			m_characters[i] = NULL;
 
 			if (i == m_indexMario)
 			{
-				std::cout << "Mario (index " << m_indexMario << ") died :o" << std::endl;
 				m_indexMario = -1;
 			}
 		}
