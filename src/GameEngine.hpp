@@ -43,6 +43,7 @@ class GameEngine : public Engine
 
 		void StartLevel(std::string _lvlName);
 		void CreateCharacters();
+		int AddCharacterToArray(MovingObject *_character);
 
 		bool LoadLevel(std::string _lvlName);
 		void StoreCharactersInitialPositions(irr::io::IrrXMLReader *_lvlFile);

@@ -90,10 +90,9 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 		case sf::Keyboard::Escape:
 			if (m_indexMario == -1)
 			{
-				Player *newMmario = new Player("mario", m_initPosMario);
-				m_indexMario = m_characters.size();
-				m_characters.push_back(newMmario);
-				m_listForegroundItems[newMmario->GetID()] = *newMmario;
+				Player *mario = new Player("mario", m_initPosMario);
+				m_indexMario = AddCharacterToArray(mario);
+				m_listForegroundItems[mario->GetID()] = *mario;
 
 				std::cout << "Mario back at index " << m_indexMario << std::endl;
 			}
@@ -146,11 +145,26 @@ void GameEngine::StartLevel(std::string _lvlName)
 void GameEngine::CreateCharacters()
 {
 	Player *mario = new Player("mario", m_initPosMario);
-	m_indexMario = m_characters.size();
-	m_characters.push_back(mario);
+	m_indexMario = AddCharacterToArray(mario);
 	m_listForegroundItems[mario->GetID()] = *mario;
 
 	std::cout << "Mario created at index " << m_indexMario << std::endl;
+}
+
+/* Takes the place of the first NULL pointer (= dead character), or is pushed at the end */
+int GameEngine::AddCharacterToArray(MovingObject *_character)
+{
+	int initialSize = m_characters.size();
+	for (int i = 0; i < initialSize; i++)
+	{
+		if (m_characters[i] == NULL)
+		{
+			m_characters[i] = _character;
+			return i;
+		}
+	}
+	m_characters.push_back(_character);
+	return initialSize;
 }
 
 void GameEngine::UpdateCharacterPosition(MovingObject& _character, float _dt)
