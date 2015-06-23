@@ -30,6 +30,7 @@ class DisplayableObject
 		virtual ~DisplayableObject();
 
 		virtual InfoForDisplay GetInfoForDisplay();
+		virtual void ReceiveHit(CollisionDirection _direction);
 
 		sf::FloatRect GetCoordinates() const;
 		void SetCoordinates(const sf::FloatRect _coord);

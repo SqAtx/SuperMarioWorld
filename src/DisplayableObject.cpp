@@ -2,7 +2,7 @@
 
 unsigned int DisplayableObject::id = 1;
 
-// Needed in order to create maps of displayable objects
+// Needed in order to create maps of displayable objects and temporary variables
 DisplayableObject::DisplayableObject()
 {
 	m_id = 0;
@@ -39,6 +39,11 @@ InfoForDisplay DisplayableObject::GetInfoForDisplay()
 	info.coordinates = GetCoordinates();
 	info.reverse = m_reverseSprite;
 	return info;
+}
+
+void DisplayableObject::ReceiveHit(CollisionDirection _direction)
+{
+	/* Virtual. Nothing should happen here. It is not pure virtual because some objects such as floor tiles don't react to collisions (not yet ? ;) ) */
 }
 
 sf::FloatRect DisplayableObject::GetCoordinates() const

@@ -83,7 +83,7 @@ void GraphicsEngine::SetForegroundToDraw()
 }
 
 /* Keeping this function even if called only in one place, in case I add another layer between foreground and background */
-void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<InfoForDisplay, std::string, CompareInfoForDisplay>& _list)
+void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<unsigned int, InfoForDisplay>& _list)
 {
 	unsigned int id;
 	EngineEvent tmpEvent;
@@ -92,13 +92,13 @@ void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<InfoForDisplay, std::s
 
 	ResetTmpSprite();
 
-	for (std::map<InfoForDisplay, std::string, CompareInfoForDisplay>::iterator it = _list.begin(); it != _list.end(); ++it)
+	for (std::map<unsigned int, InfoForDisplay>::iterator it = _list.begin(); it != _list.end(); ++it)
 	{
-		id = it->first.id;
-		tmpCoords.x = it->first.coordinates.left;
-		tmpCoords.y = it->first.coordinates.top;
+		id = it->first;
+		tmpCoords.x = it->second.coordinates.left;
+		tmpCoords.y = it->second.coordinates.top;
 
-		spriteName = GetTextureNameFromDisplayInfo(id, it->second, it->first.state);
+		spriteName = GetTextureNameFromDisplayInfo(id, it->second.name, it->second.state);
 
 		m_tmpSprite->setTexture(m_textures[spriteName]);
 		m_tmpSprite->setPosition(tmpCoords);
@@ -112,18 +112,16 @@ void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<InfoForDisplay, std::s
 
 void GraphicsEngine::UpdateForegroundItem(InfoForDisplay _info)
 {
-	// Looks silly but you need to store the name while updating the index
-	std::string tmpName;
-	tmpName = m_listForegroundItemsTileNames[_info];
-	m_listForegroundItemsTileNames[_info] = tmpName == "" || _info.name != tmpName ? _info.name : tmpName; // Change if current name is empty or new name is different
+	m_listForegroundItemsTileNames[_info.id] = _info;
 }
 
 void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
 {
 	ResetTmpSprite();
-	std::string spriteName = GetTextureNameFromDisplayInfo(_info.id, _info.name, _info.state);
 
+	std::string spriteName = GetTextureNameFromDisplayInfo(_info.id, _info.name, _info.state);
 	m_tmpSprite->setTexture(m_textures[spriteName]);
+
 	m_tmpSprite->setPosition(sf::Vector2f(_info.coordinates.left, _info.coordinates.top));
 	if (_info.reverse)
 	{
@@ -131,6 +129,13 @@ void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
 		float width = m_tmpSprite->getGlobalBounds().width;
 		m_tmpSprite->setTextureRect(sf::IntRect(width, 0, -width, height));
 	}
+
+	/*
+	gfx can receive the information to display a character several times (if it has been hit for exemple, info is sent fron g to gfx right after the hit)
+	*/
+	// BLABLABLA
+
+
 	m_displayableObjectsToDraw.push_back(*m_tmpSprite);
 
 	// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions

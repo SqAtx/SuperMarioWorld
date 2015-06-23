@@ -3,6 +3,7 @@
 
 #include "Engine.hpp"
 #include "Player.hpp"
+#include "Box.hpp"
 #include "irrXML/irrXML.h"
 
 /*
@@ -24,7 +25,7 @@ class GameEngine : public Engine
 		int m_indexMario; // Index of Mario in m_characters. -1 if he's not in it.
 
 		std::vector<MovingObject*> m_characters;
-		std::map<unsigned int, DisplayableObject> m_listForegroundItems; // Part of the level the characters can be in collision with
+		std::map<unsigned int, DisplayableObject*> m_listForegroundItems; // Part of the level the characters can be in collision with. Pointers stored to allow polymorphism.
 
 		void ProcessEvent(EngineEvent& _event);
 		void HandlePressedKey(sf::Keyboard::Key _key);
@@ -40,6 +41,7 @@ class GameEngine : public Engine
 		CollisionDirection HandleCollisionWithRect(unsigned int _objId, sf::FloatRect _ref);
 		CollisionDirection DetectCollisionWithRect(unsigned int _objId, sf::FloatRect _ref);
 		void ReactToCollision(unsigned int _objId, sf::FloatRect _ref, CollisionDirection _direction);
+		void HitObject(DisplayableObject *_obj, CollisionDirection _dir);
 
 		void StartLevel(std::string _lvlName);
 		void CreateCharacters();

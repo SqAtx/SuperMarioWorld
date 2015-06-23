@@ -11,6 +11,8 @@ GameEngine::~GameEngine()
 {
 	for (int i = 0; i < m_characters.size(); i++)
 		delete m_characters[i];
+	for (int i = 0; i < m_listForegroundItems.size(); i++)
+		delete m_listForegroundItems[i];
 }
 
 void GameEngine::Frame()
@@ -51,7 +53,7 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 			HandleReleasedKey(_event.data.m_key);
 			break;
 		case INFO_POS_LVL:
-			m_listForegroundItems[_event.data.m_id].SetCoordinates(_event.m_rect);
+			m_listForegroundItems[_event.data.m_id]->SetCoordinates(_event.m_rect);
 			break;
 		case GAME_STOPPED:
 			m_parent->Stop();
@@ -92,7 +94,7 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 			{
 				Player *mario = new Player("mario", m_initPosMario);
 				m_indexMario = AddCharacterToArray(mario);
-				m_listForegroundItems[mario->GetID()] = *mario;
+				m_listForegroundItems[mario->GetID()] = mario;
 			}
 			break;
 		default:
@@ -144,7 +146,7 @@ void GameEngine::CreateCharacters()
 {
 	Player *mario = new Player("mario", m_initPosMario);
 	m_indexMario = AddCharacterToArray(mario);
-	m_listForegroundItems[mario->GetID()] = *mario;
+	m_listForegroundItems[mario->GetID()] = mario;
 }
 
 /* Takes the place of the first NULL pointer (= dead character), or is pushed at the end */
@@ -170,8 +172,8 @@ void GameEngine::UpdateCharacterPosition(MovingObject& _character, float _dt)
 	_character.UpdatePosition(_dt);
 
 	sf::Vector2f pos = _character.GetPosition();
-	m_listForegroundItems[id].SetX(pos.x);
-	m_listForegroundItems[id].SetY(pos.y);
+	m_listForegroundItems[id]->SetX(pos.x);
+	m_listForegroundItems[id]->SetY(pos.y);
 }
 
 void GameEngine::CheckCharacterDeath(MovingObject& _character)

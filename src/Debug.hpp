@@ -6,4 +6,6 @@
 //#define NDEBUG // Uncomment line to turn off asserts
 #include <assert.h>
 
+#include <iostream>
+
 #endif

@@ -39,7 +39,7 @@ class GraphicsEngine : public Engine
 		std::vector<sf::Sprite> m_displayableObjectsToDraw;
 
 		// List of all the foreground tiles in the current level and their coordinates
-		std::map<InfoForDisplay, std::string, CompareInfoForDisplay> m_listForegroundItemsTileNames;
+		std::map<unsigned int, InfoForDisplay> m_listForegroundItemsTileNames;
 		void UpdateForegroundItem(InfoForDisplay _info);
 
 		std::map<int, std::string> m_spritesCurrentlyDisplayed; // Contains id of displayable object and which sprite (name from RECT file) is displayed ATM
@@ -57,7 +57,7 @@ class GraphicsEngine : public Engine
 		// Add sprites in m_toDraw: the farthest first
 		void SetBackgroundToDraw();
 		void SetForegroundToDraw();
-		void SetListOfDisplayablesToDraw(std::map<InfoForDisplay, std::string, CompareInfoForDisplay>& _list);
+		void SetListOfDisplayablesToDraw(std::map<unsigned int, InfoForDisplay>& _list);
 		void SetDisplayableObjectToDraw(InfoForDisplay _info);
 
 		std::map<unsigned int, Sprite::StaticOrAnimated> m_animationStates; // One for each DisplayableObject

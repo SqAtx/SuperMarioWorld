@@ -92,17 +92,17 @@ void GameEngine::StoreListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile)
 		{
 			case EXN_ELEMENT:
 				foundTiles = true;
-				if (!strcmp("bloc", _lvlFile->getNodeName()))
+				if (!strcmp("box", _lvlFile->getNodeName()))
 				{
 					tmpCoords.x = GetAttributeValueAsFloat(_lvlFile, "x");
 					tmpCoords.y = GetAttributeValueAsFloat(_lvlFile, "y");
 					tmpTileName = GetAttributeValue(_lvlFile, "sprite");
 					tmpState = GetAttributeValue(_lvlFile, "state", true) == "empty" ? EMPTY : NORMAL;
 
-					DisplayableObject tmpBloc("item_" + tmpTileName, tmpCoords, tmpState);
-					m_listForegroundItems[tmpBloc.GetID()] = tmpBloc;
+					Box *tmpBox = new Box("item_" + tmpTileName, tmpCoords, tmpState);
+					m_listForegroundItems[tmpBox->GetID()] = tmpBox;
 
-					tmpInfo = tmpBloc.GetInfoForDisplay();
+					tmpInfo = tmpBox->GetInfoForDisplay();
 					tmpEvent.set(INFO_POS_LVL, tmpInfo);
 					m_engines["gfx"]->PushEvent(tmpEvent);
 				}
@@ -112,10 +112,10 @@ void GameEngine::StoreListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile)
 					tmpCoords.y = GetAttributeValueAsFloat(_lvlFile, "y");
 					tmpTileName = GetAttributeValue(_lvlFile, "sprite");
 
-					DisplayableObject tmpFloor("floor_" + tmpTileName, tmpCoords, NORMAL);
-					m_listForegroundItems[tmpFloor.GetID()] = tmpFloor;
+					DisplayableObject *tmpFloor = new DisplayableObject("floor_" + tmpTileName, tmpCoords, NORMAL);
+					m_listForegroundItems[tmpFloor->GetID()] = tmpFloor;
 
-					tmpInfo = tmpFloor.GetInfoForDisplay();
+					tmpInfo = tmpFloor->GetInfoForDisplay();
 					tmpEvent.set(INFO_POS_LVL, tmpInfo);
 					m_engines["gfx"]->PushEvent(tmpEvent);
 				}

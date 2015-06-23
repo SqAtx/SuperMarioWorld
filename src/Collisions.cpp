@@ -3,7 +3,7 @@
 void GameEngine::HandleCollisionsWithMapEdges(MovingObject& _obj)
 {
 	unsigned int objId = _obj.GetID();
-	sf::FloatRect objCoords = m_listForegroundItems[objId].GetCoordinates();
+	sf::FloatRect objCoords = m_listForegroundItems[objId]->GetCoordinates();
 
 	if (_obj.GetPosition().x < 0)
 	{
@@ -34,16 +34,17 @@ void GameEngine::HandleCollisionsWithLevel(MovingObject& _obj)
 	if (m_listForegroundItems.size() <= 1)
 		return;
 
+	DisplayableObject* objectHitByChar;
 	CollisionDirection tmpDirection = NO_COL, lastCollisionDirection = NO_COL;
-	unsigned int objId = _obj.GetID(), lastCollisionRefId;
-	sf::FloatRect objCoords = m_listForegroundItems[objId].GetCoordinates();
+	unsigned int objId = _obj.GetID(), lastCollisionRefId = 0;
+	sf::FloatRect objCoords = m_listForegroundItems[objId]->GetCoordinates();
 
 	// What happens if there is a collision so _obj is moved and there is another one and _obj is moved again ? The first collision would need to be handled again
-	for (std::map<unsigned int, DisplayableObject>::iterator it = m_listForegroundItems.begin(); it != m_listForegroundItems.end(); ++it)
+	for (std::map<unsigned int, DisplayableObject*>::iterator it = m_listForegroundItems.begin(); it != m_listForegroundItems.end(); ++it)
 	{
 		if (it->first != objId)
 		{
-			tmpDirection = HandleCollisionWithRect(objId, it->second.GetCoordinates());
+			tmpDirection = HandleCollisionWithRect(objId, it->second->GetCoordinates());
 			if (tmpDirection != NO_COL)
 			{
 				lastCollisionDirection = tmpDirection;
@@ -52,11 +53,32 @@ void GameEngine::HandleCollisionsWithLevel(MovingObject& _obj)
 		}
 	}
 
-	_obj.UpdateAfterCollision(lastCollisionDirection);
+	if (lastCollisionDirection != NO_COL)
+	{
+		_obj.UpdateAfterCollision(lastCollisionDirection);
+		objCoords = m_listForegroundItems[objId]->GetCoordinates();
+		sf::Vector2f newPos(objCoords.left, objCoords.top);
+		_obj.SetPosition(newPos);
 
-	objCoords = m_listForegroundItems[objId].GetCoordinates();
-	sf::Vector2f newPos(objCoords.left, objCoords.top);
-	_obj.SetPosition(newPos);
+		objectHitByChar = m_listForegroundItems[lastCollisionRefId];
+		HitObject(objectHitByChar, lastCollisionDirection);
+
+		// Send information about the object that has been hit (for gfx to know about states changes)
+		EngineEvent redisplayObject;
+		redisplayObject.m_type = INFO_POS_LVL;
+		for(int i = 0; i < m_characters.size(); i++)
+		{
+			// objectHitByChar is a character
+			if (m_characters[i]->GetID() == objectHitByChar->GetID())
+			{
+				redisplayObject.set(INFO_POS_CHAR, objectHitByChar->GetInfoForDisplay());
+				break;
+			}
+		}
+		if (redisplayObject.m_type == INFO_POS_LVL) // If redisplayObject hasn't been set, ie objectHitByChar is not a character
+			redisplayObject.set(INFO_POS_LVL, objectHitByChar->GetInfoForDisplay());
+		m_engines["gfx"]->PushEvent(redisplayObject);
+	}
 }
 
 CollisionDirection GameEngine::HandleCollisionWithRect(unsigned int _objId, sf::FloatRect _ref)
@@ -69,7 +91,7 @@ CollisionDirection GameEngine::HandleCollisionWithRect(unsigned int _objId, sf::
 CollisionDirection GameEngine::DetectCollisionWithRect(unsigned int _objId, sf::FloatRect _ref)
 {
 	CollisionDirection direction = NO_COL;
-	sf::Rect<float> objCoords = m_listForegroundItems[_objId].GetCoordinates();
+	sf::Rect<float> objCoords = m_listForegroundItems[_objId]->GetCoordinates();
 
 	/* If TOP or BOTTOM collisions are possible */
 	if ((objCoords.left <= _ref.left && objCoords.left + objCoords.width > _ref.left)
@@ -115,7 +137,7 @@ CollisionDirection GameEngine::DetectCollisionWithRect(unsigned int _objId, sf::
 
 void GameEngine::ReactToCollision(unsigned int _objId, sf::FloatRect _ref, CollisionDirection _direction)
 {
-	sf::Rect<float> objCoords = m_listForegroundItems[_objId].GetCoordinates();
+	sf::Rect<float> objCoords = m_listForegroundItems[_objId]->GetCoordinates();
 	switch (_direction)
 	{
 		case TOP:
@@ -134,5 +156,10 @@ void GameEngine::ReactToCollision(unsigned int _objId, sf::FloatRect _ref, Colli
 		default:
 			break;
 	}
-	m_listForegroundItems[_objId].SetCoordinates(objCoords);
+	m_listForegroundItems[_objId]->SetCoordinates(objCoords);
+}
+
+void GameEngine::HitObject(DisplayableObject *_obj, CollisionDirection _dir)
+{
+	_obj->ReceiveHit(_dir);
 }
