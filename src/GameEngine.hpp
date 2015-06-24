@@ -4,6 +4,7 @@
 #include "Engine.hpp"
 #include "Player.hpp"
 #include "Box.hpp"
+#include "Goomba.hpp"
 #include "irrXML/irrXML.h"
 
 /*
@@ -44,7 +45,6 @@ class GameEngine : public Engine
 		void HitObject(DisplayableObject *_obj, CollisionDirection _dir);
 
 		void StartLevel(std::string _lvlName);
-		void CreateCharacters();
 		int AddCharacterToArray(MovingObject *_character);
 
 		bool LoadLevel(std::string _lvlName);

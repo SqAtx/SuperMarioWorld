@@ -103,19 +103,6 @@ void MovingObject::UpdateVelocity(float _dt)
 		m_velocity.x = 0;
 }
 
-float MovingObject::GetMaxAbsVelocity_X()
-{
-	switch (m_state)
-	{
-		case WALK:
-			return PhysicsConstants::PlayerMaxSpeed_Walk_X;
-		case RUN:
-			return PhysicsConstants::PlayerMaxSpeed_Run_X;
-		default:
-			return PhysicsConstants::PlayerMaxSpeed_Run_X;;
-	}
-}
-
 void MovingObject::UpdateAfterCollision(CollisionDirection _dir)
 {
 	switch (_dir)

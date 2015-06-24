@@ -69,7 +69,7 @@ void GameEngine::HandleCollisionsWithLevel(MovingObject& _obj)
 		for(int i = 0; i < m_characters.size(); i++)
 		{
 			// objectHitByChar is a character
-			if (m_characters[i]->GetID() == objectHitByChar->GetID())
+			if (m_characters[i] != NULL && m_characters[i]->GetID() == objectHitByChar->GetID()) /* m_characters[i] can be null if a character just died */
 			{
 				redisplayObject.set(INFO_POS_CHAR, objectHitByChar->GetInfoForDisplay());
 				break;

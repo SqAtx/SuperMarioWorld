@@ -40,9 +40,10 @@ class MovingObject : public DisplayableObject
 
 		void UpdateAcceleration();
 		void UpdateVelocity(float _dt);
-		float GetMaxAbsVelocity_X();
 
+		virtual float GetMaxAbsVelocity_X() = 0;
 		virtual void AddOwnAcceleration() = 0;
+		virtual void Move(Instruction _inst) = 0;
 
 		int m_maxSpeed;
 		sf::Vector2f m_velocity;

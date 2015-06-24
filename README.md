@@ -11,19 +11,16 @@ Commands:
 - Escape to bring Mario back from the dead
 
 What has been done:
-- Communication between GameEngine, GraphicsEngine and SoundEngine
-- Display of the window with background, floor and Mario
-- Mario can fall at the beginning of the level, then move left and right: the arrows give him an acceleration.
+- Mario can walk, run, jump, fall, and die if he falls into the hole
 - A debug mode that displays extra information (can be disabled by commenting #define DEBUG_MODE in Debug.hpp)
 - Sprite management: a .rect file indicates which textures to use for static sprites and for animations (with any number of frames)
-- Friction between Mario and the floor
-- Jumps and friction with air
+- Physics: friction between Mario and the floor / air
 - Sound and music management (Uncomment //StartLevelMusic(_event.m_string); in SoundEngine.cpp for music)
-- Mario dies if he falls in the hole
 - Level stored in an XML file (background, floor, foreground items). Foreground items can be animated.
-- Collisions with level (first stable version, to be improved)
+- Collisions with level (first stable version, to be improved): Mario can hit the boxes; they become empty.
+- Goombas can be added in the XML file. The collisions with the level are working, although the sprite handling need to be improved
 
 What next ?
+- Enemies :) 
 - Better graphics ?
 - Scrolling
-- Enemies :) 

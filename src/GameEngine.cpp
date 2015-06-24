@@ -137,16 +137,7 @@ void GameEngine::StartLevel(std::string _lvlName)
 	startLevel.set(LEVEL_START, "");
 	m_engines["s"]->PushEvent(startLevel);
 
-	CreateCharacters();
-
 	m_levelStarted = true;
-}
-
-void GameEngine::CreateCharacters()
-{
-	Player *mario = new Player("mario", m_initPosMario);
-	m_indexMario = AddCharacterToArray(mario);
-	m_listForegroundItems[mario->GetID()] = mario;
 }
 
 /* Takes the place of the first NULL pointer (= dead character), or is pushed at the end */
@@ -178,20 +169,14 @@ void GameEngine::UpdateCharacterPosition(MovingObject& _character, float _dt)
 
 void GameEngine::CheckCharacterDeath(MovingObject& _character)
 {
-	EngineEvent tmpEvent;
-
 	if (_character.IsDead())
-	{
-		tmpEvent.set(PLAY_SOUND, DEATH_SND);
-		m_engines["s"]->PushEvent(tmpEvent);
 		KillCharacter(_character);
-	}
 }
 
 void GameEngine::KillCharacter(MovingObject& _character)
 {
-	EngineEvent death;
-
+	EngineEvent deathSound;
+	
 	for (int i = 0; i < m_characters.size(); i++)
 	{
 		if (m_characters[i] != NULL && m_characters[i]->GetID() == _character.GetID())
@@ -204,7 +189,11 @@ void GameEngine::KillCharacter(MovingObject& _character)
 			if (i == m_indexMario)
 			{
 				m_indexMario = -1;
+				deathSound.set(PLAY_SOUND, DEATH_SND);
+				m_engines["s"]->PushEvent(deathSound);
 			}
+
+			std::cout << "Character #" << i << " died" << std::endl;
 		}
 	}
 }

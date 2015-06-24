@@ -66,7 +66,19 @@ void GameEngine::StoreCharactersInitialPositions(irr::io::IrrXMLReader *_lvlFile
 			{
 				m_initPosMario.x = GetAttributeValueAsFloat(_lvlFile, "x");
 				m_initPosMario.y = GetAttributeValueAsFloat(_lvlFile, "y");
+
+				Player *mario = new Player("mario", m_initPosMario);
+				m_indexMario = AddCharacterToArray(mario);
+				m_listForegroundItems[mario->GetID()] = mario;
 			}
+			if (!strcmp("goomba", _lvlFile->getNodeName()))
+			{
+				Direction tmpDir = GetAttributeValue(_lvlFile, "direction", true) == "left" ? DLEFT : DRIGHT; // direction = right if attribute not here
+				Goomba *goomba = new Goomba("goomba", GetAttributeValueAsFloat(_lvlFile, "x"), GetAttributeValueAsFloat(_lvlFile, "y"), DLEFT);
+				AddCharacterToArray(goomba);
+				m_listForegroundItems[goomba->GetID()] = goomba;
+			}
+			break;
 		case EXN_ELEMENT_END:
 			if (!foundOneCharacter)
 				std::cerr << "No character in level file." << std::endl;

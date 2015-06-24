@@ -36,7 +36,7 @@ class GraphicsEngine : public Engine
 		// Sprites to draw: 3 levels
 		std::vector<sf::Sprite> m_backgroundToDraw;
 		std::vector<sf::Sprite> m_levelStructureToDraw;
-		std::vector<sf::Sprite> m_displayableObjectsToDraw;
+		std::map<unsigned int, sf::Sprite> m_displayableObjectsToDraw;
 
 		// List of all the foreground tiles in the current level and their coordinates
 		std::map<unsigned int, InfoForDisplay> m_listForegroundItemsTileNames;

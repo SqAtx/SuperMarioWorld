@@ -49,6 +49,19 @@ void Player::AddOwnAcceleration()
 	}
 }
 
+float Player::GetMaxAbsVelocity_X()
+{
+	switch (m_state)
+	{
+		case WALK:
+			return PhysicsConstants::PlayerMaxSpeed_Walk_X;
+		case RUN:
+			return PhysicsConstants::PlayerMaxSpeed_Run_X;
+		default:
+			return PhysicsConstants::PlayerMaxSpeed_Run_X;;
+	}
+}
+
 void Player::ToggleRun(bool _mustRun)
 {
 	if (_mustRun && m_state == WALK)

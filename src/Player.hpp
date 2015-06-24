@@ -16,13 +16,14 @@ class Player : public MovingObject
 
 		void ToggleRun(bool _mustRun);
 
-		void Move(Instruction _inst);
+		virtual float GetMaxAbsVelocity_X();
+		virtual void Move(Instruction _inst);
 		bool Jump();
 		void EndJump();
 
 	private:
 
-		void AddOwnAcceleration();
+		virtual void AddOwnAcceleration();
 
 		bool m_canJump; // To avoid Mario jumping around if the jump key is pressed and held
 };

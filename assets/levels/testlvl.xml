@@ -2,6 +2,7 @@
 <level height="432" width="512" background="sky">
 	<characters>
 		<mario x="80" y="396"/>
+		<goomba x="350" y="396" direction="left"/>
 	</characters>
 	<foreground>
 		<box x="40" y="352" w="16" h="16" sprite="question_box_static"/>
@@ -10,8 +11,7 @@
 		<box x="456" y="352" w="16" h="16" sprite="question_box_static"/>
 		
 		<box x="376" y="288" w="16" h="16" sprite="question_box"/>
-
-
+		
 		<pipe x="" y="" w="16" h="16" sprite="" type="passage" id="" dest=""/>
 		<!-- A pipe needs an id so Mario can travel with it -->
 		<floor_tile x="0" y="416" w="16" h="16" sprite="left"/>

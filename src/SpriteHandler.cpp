@@ -12,6 +12,7 @@ void GraphicsEngine::LoadTextures()
 	LoadTexturesFromFile("background");
 	LoadTexturesFromFile("floor");
 	LoadTexturesFromFile("mario");
+	LoadTexturesFromFile("goomba");
 	LoadTexturesFromFile("item");
 }
 
@@ -66,8 +67,7 @@ void GraphicsEngine::ResetSpritesToDraw()
 		m_backgroundToDraw.pop_back();
 	while (!m_levelStructureToDraw.empty())
 		m_levelStructureToDraw.pop_back();
-	while (!m_displayableObjectsToDraw.empty())
-		m_displayableObjectsToDraw.pop_back();
+	m_displayableObjectsToDraw.clear();
 }
 
 void GraphicsEngine::SetBackgroundToDraw()
@@ -130,13 +130,9 @@ void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
 		m_tmpSprite->setTextureRect(sf::IntRect(width, 0, -width, height));
 	}
 
-	/*
-	gfx can receive the information to display a character several times (if it has been hit for exemple, info is sent fron g to gfx right after the hit)
-	*/
-	// BLABLABLA
-
-
-	m_displayableObjectsToDraw.push_back(*m_tmpSprite);
+	/*	gfx can receive the information to display a character several times (if it has been hit for exemple, info is sent fron g to gfx right after the hit)
+		Only the last one received will be displayed */
+	m_displayableObjectsToDraw[_info.id] = *m_tmpSprite;
 
 	// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions
 	EngineEvent tmpEvent;
