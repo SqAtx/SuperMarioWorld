@@ -11,6 +11,8 @@
 		<box x="456" y="352" w="16" h="16" sprite="question_box_static"/>
 		
 		<box x="376" y="288" w="16" h="16" sprite="question_box"/>
+
+		<box x="240" y="400" w="16" h="16" sprite="question_box"/>
 		
 		<pipe x="" y="" w="16" h="16" sprite="" type="passage" id="" dest=""/>
 		<!-- A pipe needs an id so Mario can travel with it -->

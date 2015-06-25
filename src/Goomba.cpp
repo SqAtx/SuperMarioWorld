@@ -14,7 +14,7 @@ Goomba::Goomba(std::string _name, float _x, float _y, Direction _dir) : MovingOb
 
 void Goomba::Init()
 {
-	m_previousState = WALK; // Walk when hits the floor
+
 }
 
 Goomba:: ~Goomba()
@@ -26,6 +26,52 @@ InfoForDisplay Goomba::GetInfoForDisplay()
 {
 	m_reverseSprite = (m_facing == DRIGHT);
 	return MovingObject::GetInfoForDisplay();
+}
+
+void Goomba::UpdateAfterCollision(CollisionDirection _dir)
+{
+	switch (_dir)
+	{
+		case TOP:
+			m_state = WALK;
+
+			m_velocity.y = 0;
+			m_jumpState = ONFLOOR;
+			break;
+		case BOTTOM:
+			m_velocity.y = 0;
+			m_jumpState = FALLING;
+			break;
+		case LEFT:
+			m_facing = DLEFT;
+			m_velocity.x = 0;
+			m_jumpState = FALLING;
+			break;
+		case RIGHT:
+			m_facing = DRIGHT;
+			m_velocity.x = 0;
+			m_jumpState = FALLING;
+			break;
+		case NO_COL:
+		default:
+			break;
+	}
+}
+
+void Goomba::UpdateAfterCollisionWithMapEdge(CollisionDirection _dir, float _gap)
+{
+	switch (_dir)
+	{
+		case LEFT: // Goomba on the left
+			m_facing = DLEFT;
+			break;
+		case RIGHT:
+			m_facing = DRIGHT;
+			break;
+		default:
+			break;
+	}
+	MovingObject::UpdateAfterCollisionWithMapEdge(_dir, _gap);
 }
 
 void Goomba::AddOwnAcceleration()

@@ -7,13 +7,11 @@ void GameEngine::HandleCollisionsWithMapEdges(MovingObject& _obj)
 
 	if (_obj.GetPosition().x < 0)
 	{
-		_obj.SetX(0);
-		_obj.SetVelX(0);
+		_obj.UpdateAfterCollisionWithMapEdge(CollisionDirection::RIGHT, _obj.GetPosition().x); // RIGHT to be consistent with collision: the player is on the right
 	}
 	if (_obj.GetPosition().x > 512 - 13)
 	{
-		_obj.SetX(512 - 13);
-		_obj.SetVelX(0);
+		_obj.UpdateAfterCollisionWithMapEdge(CollisionDirection::LEFT, _obj.GetPosition().x - (512-13));
 	}
 
 	// Debug Fall

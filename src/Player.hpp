@@ -13,6 +13,7 @@ class Player : public MovingObject
 		void Init();
 
 		InfoForDisplay GetInfoForDisplay();
+		virtual void UpdateAfterCollision(CollisionDirection _dir);
 
 		void ToggleRun(bool _mustRun);
 

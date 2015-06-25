@@ -29,6 +29,35 @@ InfoForDisplay Player::GetInfoForDisplay()
 	return MovingObject::GetInfoForDisplay();
 }
 
+void Player::UpdateAfterCollision(CollisionDirection _dir)
+{
+	switch (_dir)
+	{
+		case TOP:
+			if (m_jumpState != ONFLOOR) // Landing
+				m_state = m_previousState;
+
+			m_velocity.y = 0;
+			m_jumpState = ONFLOOR;
+			break;
+		case BOTTOM:
+			m_velocity.y = 0;
+			m_jumpState = FALLING;
+			break;
+		case LEFT:
+			m_velocity.x = 0;
+			m_jumpState = FALLING;
+			break;
+		case RIGHT:
+			m_velocity.x = 0;
+			m_jumpState = FALLING;
+			break;
+		case NO_COL:
+		default:
+			break;
+	}
+}
+
 void Player::AddOwnAcceleration()
 {
 	// Player keeps acceleration when jumping

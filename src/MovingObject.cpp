@@ -35,6 +35,24 @@ InfoForDisplay MovingObject::GetInfoForDisplay()
 	return info;
 }
 
+void MovingObject::UpdateAfterCollisionWithMapEdge(CollisionDirection _dir, float _gap)
+{
+	switch (_dir)
+	{
+		case LEFT:
+			m_coord.x -= _gap;
+			m_velocity.x = 0;
+			break;
+		case RIGHT: // MovingObject on the left
+			m_coord.x = 0;
+			m_velocity.x = 0;
+			break;
+		default:
+			break;
+	}
+}
+
+
 void MovingObject::UpdatePosition(float _dt)
 {
 	UpdateAcceleration();
@@ -102,36 +120,6 @@ void MovingObject::UpdateVelocity(float _dt)
 	if (abs(m_velocity.x) < PhysicsConstants::MinSpeed)
 		m_velocity.x = 0;
 }
-
-void MovingObject::UpdateAfterCollision(CollisionDirection _dir)
-{
-	switch (_dir)
-	{
-		case TOP:
-			if (m_jumpState != ONFLOOR) // Landing
-				m_state = m_previousState;
-
-			m_velocity.y = 0;
-			m_jumpState = ONFLOOR;
-			break;
-		case BOTTOM:
-			m_velocity.y = 0;
-			m_jumpState = FALLING;
-			break;
-		case LEFT:
-			m_velocity.x = 0;
-			m_jumpState = FALLING;
-			break;
-		case RIGHT:
-			m_velocity.x = 0;
-			m_jumpState = FALLING;
-			break;
-		case NO_COL:
-		default:
-			break;
-	}
-}
-
 
 #ifdef DEBUG_MODE
 DebugInfo MovingObject::GetDebugInfo()

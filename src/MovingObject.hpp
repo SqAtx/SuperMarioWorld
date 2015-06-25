@@ -18,7 +18,8 @@ class MovingObject : public DisplayableObject
 		virtual InfoForDisplay GetInfoForDisplay();
 
 		void UpdatePosition(float _dt);
-		void UpdateAfterCollision(CollisionDirection _dir);
+		virtual void UpdateAfterCollision(CollisionDirection _dir) = 0;
+		virtual void UpdateAfterCollisionWithMapEdge(CollisionDirection _dir, float _gap);
 
 		void SetVelX(float _x) { m_velocity.x = _x; };
 		void SetVelY(float _y) { m_velocity.y = _y; }

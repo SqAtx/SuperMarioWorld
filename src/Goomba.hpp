@@ -16,6 +16,8 @@ public:
 	virtual void Move(Instruction _inst);
 
 	InfoForDisplay GetInfoForDisplay();
+	virtual void UpdateAfterCollision(CollisionDirection _dir);
+	void UpdateAfterCollisionWithMapEdge(CollisionDirection _dir, float _gap);
 
 private:
 
