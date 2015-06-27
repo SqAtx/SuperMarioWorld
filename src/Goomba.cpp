@@ -1,31 +1,13 @@
 #include "Goomba.hpp"
 
-Goomba::Goomba(std::string _name, sf::Vector2f _coord, Direction _dir) : MovingObject(_name, _coord, WALK)
-{
-	m_facing = _dir;
-	Init();
-}
-
-Goomba::Goomba(std::string _name, float _x, float _y, Direction _dir) : MovingObject(_name, _x, _y, WALK)
-{
-	m_facing = _dir;
-	Init();
-}
-
-void Goomba::Init()
+Goomba::Goomba(std::string _name, sf::Vector2f _coord, Direction _dir) : Enemy(_name, _coord, _dir)
 {
 
 }
 
-Goomba:: ~Goomba()
+Goomba::Goomba(std::string _name, float _x, float _y, Direction _dir) : Enemy(_name, _x, _y, _dir)
 {
 
-}
-
-InfoForDisplay Goomba::GetInfoForDisplay()
-{
-	m_reverseSprite = (m_facing == DRIGHT);
-	return MovingObject::GetInfoForDisplay();
 }
 
 void Goomba::UpdateAfterCollision(CollisionDirection _dir)
@@ -58,22 +40,6 @@ void Goomba::UpdateAfterCollision(CollisionDirection _dir)
 	}
 }
 
-void Goomba::UpdateAfterCollisionWithMapEdge(CollisionDirection _dir, float _gap)
-{
-	switch (_dir)
-	{
-		case LEFT: // Goomba on the left
-			m_facing = DLEFT;
-			break;
-		case RIGHT:
-			m_facing = DRIGHT;
-			break;
-		default:
-			break;
-	}
-	MovingObject::UpdateAfterCollisionWithMapEdge(_dir, _gap);
-}
-
 void Goomba::AddOwnAcceleration()
 {
 	m_acceleration.x = PhysicsConstants::GoombaAcc * (m_facing == DLEFT ? -1 : 1);
@@ -83,17 +49,3 @@ float Goomba::GetMaxAbsVelocity_X()
 {
 	return PhysicsConstants::GoombaMaxSpeed_Walk_X;
 }
-
-void Goomba::Move(Instruction _inst)
-{
-	switch (_inst)
-	{
-		case GO_LEFT:
-			m_facing = DLEFT;
-			break;
-		case GO_RIGHT:
-			m_facing = DRIGHT;
-			break;
-	}
-}
-

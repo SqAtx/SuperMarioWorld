@@ -1,27 +1,21 @@
 #ifndef GOOMBA_H
 #define GOOMBA_H
 
-#include "MovingObject.hpp"
+#include "Enemy.hpp"
 
-class Goomba : public MovingObject
+class Goomba : public Enemy
 {
-public:
-	Goomba(std::string _name, sf::Vector2f _coord, Direction _dir);
-	Goomba(std::string _name, float _x, float _y, Direction _dir);
-	~Goomba();
+	public:
+		Goomba(std::string _name, sf::Vector2f _coord, Direction _dir);
+		Goomba(std::string _name, float _x, float _y, Direction _dir);
 
-	void Init();
+		virtual float GetMaxAbsVelocity_X();
 
-	virtual float GetMaxAbsVelocity_X();
-	virtual void Move(Instruction _inst);
+		virtual void UpdateAfterCollision(CollisionDirection _dir);
 
-	InfoForDisplay GetInfoForDisplay();
-	virtual void UpdateAfterCollision(CollisionDirection _dir);
-	void UpdateAfterCollisionWithMapEdge(CollisionDirection _dir, float _gap);
+	protected:
 
-private:
-
-	void AddOwnAcceleration();
+		virtual void AddOwnAcceleration();
 };
 
 #endif
