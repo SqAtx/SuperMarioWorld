@@ -86,7 +86,6 @@ void GraphicsEngine::SetForegroundToDraw()
 void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<unsigned int, InfoForDisplay>& _list)
 {
 	unsigned int id;
-	EngineEvent tmpEvent;
 	sf::Vector2f tmpCoords;
 	std::string spriteName;
 
@@ -105,7 +104,7 @@ void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<unsigned int, InfoForD
 		m_levelStructureToDraw.push_back(*m_tmpSprite);
 
 		// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions
-		tmpEvent.set(INFO_POS_LVL, id, m_tmpSprite->getGlobalBounds());
+		EngineEvent tmpEvent (INFO_POS_LVL, id, m_tmpSprite->getGlobalBounds());
 		m_engines["g"]->PushEvent(tmpEvent);
 	}
 }
@@ -135,8 +134,7 @@ void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
 	m_displayableObjectsToDraw[_info.id] = *m_tmpSprite;
 
 	// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions
-	EngineEvent tmpEvent;
-	tmpEvent.set(INFO_POS_LVL, _info.id, m_tmpSprite->getGlobalBounds());
+	EngineEvent tmpEvent(INFO_POS_LVL, _info.id, m_tmpSprite->getGlobalBounds());
 	m_engines["g"]->PushEvent(tmpEvent);
 
 #ifdef DEBUG_MODE

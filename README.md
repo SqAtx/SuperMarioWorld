@@ -16,11 +16,10 @@ What has been done:
 - Sprite management: a .rect file indicates which textures to use for static sprites and for animations (with any number of frames)
 - Physics: friction between Mario and the floor / air
 - Sound and music management (Uncomment //StartLevelMusic(_event.m_string); in SoundEngine.cpp for music)
-- Level stored in an XML file (background, floor, foreground items). Foreground items can be animated.
-- Collisions with level (first stable version, to be improved): Mario can hit the boxes; they become empty.
-- Goombas can be added in the XML file. The collisions with the level are working, although the sprite handling need to be improved
+- Level stored in an XML file (background, characters, floor, foreground items). Foreground items can be animated.
+- Collisions (first stable version, to be improved) between the player, the enemies and the foregroud items and approproate reaction
 
 What next ?
-- Enemies :) 
-- Better graphics ?
+- Dying animations
 - Scrolling
+- Better graphics ?

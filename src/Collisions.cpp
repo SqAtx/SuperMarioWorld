@@ -65,8 +65,7 @@ void GameEngine::HandleCollisionsWithLevel(MovingObject& _obj)
 		objectHitByChar->UpdateAfterCollision(lastCollisionDirection, _obj.GetClass());
 
 		// Send information about the object that has been hit (for gfx to know about states changes)
-		EngineEvent redisplayObject;
-		redisplayObject.m_type = INFO_POS_LVL;
+		EngineEvent redisplayObject(INFO_POS_LVL);
 		for(int i = 0; i < m_characters.size(); i++)
 		{
 			// objectHitByChar is a character

@@ -69,7 +69,6 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 
 void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 {
-	EngineEvent tmpEvent;
 	Player *mario = m_indexMario != -1 ? (Player*)m_characters[m_indexMario] : NULL; // Clarity
 
 	switch (_key)
@@ -89,8 +88,8 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 		case sf::Keyboard::Space:
 			if (mario != NULL && mario->Jump())
 			{
-				tmpEvent.set(PLAY_SOUND, JUMP_SND);
-				m_engines["s"]->PushEvent(tmpEvent);
+				EngineEvent playJumpSound(PLAY_SOUND, JUMP_SND);
+				m_engines["s"]->PushEvent(playJumpSound);
 			}
 			break;
 		case sf::Keyboard::Escape:
@@ -99,6 +98,9 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 				Player *mario = new Player("mario", m_initPosMario);
 				m_indexMario = AddCharacterToArray(mario);
 				m_listForegroundItems[mario->GetID()] = mario;
+
+				EngineEvent playMusic(LEVEL_START);
+				m_engines["s"]->PushEvent(playMusic);
 			}
 			break;
 		default:
@@ -137,8 +139,7 @@ void GameEngine::StartLevel(std::string _lvlName)
 {
 	LoadLevel(_lvlName);
 
-	EngineEvent startLevel;
-	startLevel.set(LEVEL_START, "");
+	EngineEvent startLevel(LEVEL_START);
 	m_engines["s"]->PushEvent(startLevel);
 
 	m_levelStarted = true;
@@ -179,8 +180,6 @@ void GameEngine::CheckCharacterDeath(MovingObject& _character)
 
 void GameEngine::KillCharacter(MovingObject& _character)
 {
-	EngineEvent deathSound;
-	
 	for (int i = 0; i < m_characters.size(); i++)
 	{
 		if (m_characters[i] != NULL && m_characters[i]->GetID() == _character.GetID())
@@ -193,7 +192,8 @@ void GameEngine::KillCharacter(MovingObject& _character)
 			if (i == m_indexMario)
 			{
 				m_indexMario = -1;
-				deathSound.set(PLAY_SOUND, DEATH_SND);
+
+				EngineEvent deathSound(PLAY_SOUND, DEATH_SND);
 				m_engines["s"]->PushEvent(deathSound);
 			}
 
@@ -205,18 +205,17 @@ void GameEngine::KillCharacter(MovingObject& _character)
 // Send Mario's position to gfx
 void GameEngine::SendCharacterPosition(int _indexCharacter)
 {
-	EngineEvent tmpEvent;
 	MovingObject *character = m_characters[_indexCharacter];
 	if (character == NULL)
 		return;
 
-	tmpEvent.set(INFO_POS_CHAR, character->GetInfoForDisplay());
-	m_engines["gfx"]->PushEvent(tmpEvent);
+	EngineEvent posInfo(INFO_POS_CHAR, character->GetInfoForDisplay());
+	m_engines["gfx"]->PushEvent(posInfo);
 #ifdef DEBUG_MODE
 	if (_indexCharacter == m_indexMario)
 	{
-		tmpEvent.set(INFO_DEBUG, character->GetDebugInfo());
-		m_engines["gfx"]->PushEvent(tmpEvent);
+		EngineEvent debugInfo(INFO_DEBUG, character->GetDebugInfo());
+		m_engines["gfx"]->PushEvent(debugInfo);
 	}
 #endif
 }

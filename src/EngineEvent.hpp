@@ -54,11 +54,21 @@ class EngineEvent
 		DebugInfo m_debugInfo;
 #endif
 
+		EngineEvent()
+		{
+		
+		}
+
+		EngineEvent(EventType _type)
+		{
+			set(_type);
+		}
 		void set(EventType _type)
 		{
 			m_type = _type;
 			data.m_key = sf::Keyboard::Unknown;
 		}
+
 
 		void set(EventType _type, sf::Keyboard::Key _key)
 		{
@@ -66,6 +76,10 @@ class EngineEvent
 			data.m_key = _key;
 		}
 
+		EngineEvent(EventType _type, InfoForDisplay _info)
+		{
+			set(_type, _info);
+		}
 		void set(EventType _type, InfoForDisplay _info)
 		{
 			m_type = _type;
@@ -84,6 +98,11 @@ class EngineEvent
 			m_string = _str;
 		}
 
+		EngineEvent(EventType _type, int _id, sf::FloatRect _rect = sf::FloatRect())
+		{
+			set(_type, _id, _rect);
+		}
+
 		void set(EventType _type, int _id, sf::FloatRect _rect = sf::FloatRect())
 		{
 			m_type = _type;
@@ -91,6 +110,10 @@ class EngineEvent
 			m_rect = _rect;
 		}
 
+		EngineEvent(EventType _type, LevelInfo _info)
+		{
+			set(_type, _info);
+		}
 		void set(EventType _type, LevelInfo _info)
 		{
 			m_type = _type;
@@ -98,6 +121,10 @@ class EngineEvent
 		}
 
 #ifdef DEBUG_MODE
+		EngineEvent(EventType _type, DebugInfo _info)
+		{
+			set(_type, _info);
+		}
 		void set(EventType _type, DebugInfo _info)
 		{
 			m_type = _type;

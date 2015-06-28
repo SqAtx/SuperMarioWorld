@@ -11,7 +11,6 @@ const std::string GameEngine::levelsPath = "../assets/levels/";
 
 bool GameEngine::LoadLevel(std::string _lvlName)
 {
-	EngineEvent tmpEvent;
 	bool fileNotEmpty = false;
 	std::string lvlFullName = GameEngine::levelsPath + _lvlName + ".xml";
 	IrrXMLReader* lvlFile = createIrrXMLReader(lvlFullName.c_str());
@@ -26,7 +25,8 @@ bool GameEngine::LoadLevel(std::string _lvlName)
 				{
 					LevelInfo info;
 					info.backgroundName = GetAttributeValue(lvlFile, "background");
-					tmpEvent.set(INFO_LVL, info);
+
+					EngineEvent tmpEvent(INFO_LVL, info);
 					m_engines["gfx"]->PushEvent(tmpEvent);
 				}
 				if (!strcmp("characters", lvlFile->getNodeName()))
@@ -53,7 +53,6 @@ void GameEngine::StoreCharactersInitialPositions(irr::io::IrrXMLReader *_lvlFile
 {
 	sf::Vector2f tmpCoords;
 	InfoForDisplay tmpDisplayInfo;
-	EngineEvent tmpEvent;
 	bool foundOneCharacter = false;
 
 	while (_lvlFile && _lvlFile->read())
@@ -172,8 +171,7 @@ float GameEngine::GetAttributeValueAsFloat(IrrXMLReader *_lvlFile, const char* _
 
 void GameEngine::SendInfoPosLvlToGFX(InfoForDisplay _info)
 {
-	EngineEvent tmpEvent;
-	tmpEvent.set(INFO_POS_LVL, _info);
+	EngineEvent tmpEvent(INFO_POS_LVL, _info);
 	m_engines["gfx"]->PushEvent(tmpEvent);
 }
 

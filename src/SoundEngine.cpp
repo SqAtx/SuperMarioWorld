@@ -29,7 +29,7 @@ void SoundEngine::ProcessEvent(EngineEvent& _event)
 	switch (_event.m_type)
 	{
 		case LEVEL_START:
-			//StartLevelMusic(_event.m_string);
+			StartLevelMusic(_event.m_string);
 			break;
 		case PLAY_SOUND:
 			PlaySound(_event.data.m_sound);
