@@ -79,7 +79,7 @@ void GraphicsEngine::SetBackgroundToDraw()
 
 void GraphicsEngine::SetForegroundToDraw()
 {
-	SetListOfDisplayablesToDraw(m_listForegroundItemsTileNames);
+	SetListOfDisplayablesToDraw(m_listForegroundItems);
 }
 
 /* Keeping this function even if called only in one place, in case I add another layer between foreground and background */
@@ -90,10 +90,10 @@ void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<unsigned int, InfoForD
 	sf::Vector2f tmpCoords;
 	std::string spriteName;
 
-	ResetTmpSprite();
-
 	for (std::map<unsigned int, InfoForDisplay>::iterator it = _list.begin(); it != _list.end(); ++it)
 	{
+		ResetTmpSprite();
+
 		id = it->first;
 		tmpCoords.x = it->second.coordinates.left;
 		tmpCoords.y = it->second.coordinates.top;
@@ -112,7 +112,7 @@ void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<unsigned int, InfoForD
 
 void GraphicsEngine::UpdateForegroundItem(InfoForDisplay _info)
 {
-	m_listForegroundItemsTileNames[_info.id] = _info;
+	m_listForegroundItems[_info.id] = _info;
 }
 
 void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)

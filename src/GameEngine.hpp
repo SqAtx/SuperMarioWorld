@@ -5,6 +5,7 @@
 #include "Player.hpp"
 #include "Box.hpp"
 #include "Goomba.hpp"
+#include "Pipe.hpp"
 #include "irrXML/irrXML.h"
 
 /*
@@ -49,8 +50,14 @@ class GameEngine : public Engine
 		bool LoadLevel(std::string _lvlName);
 		void StoreCharactersInitialPositions(irr::io::IrrXMLReader *_lvlFile);
 		void StoreListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile);
+		void StoreBox(irr::io::IrrXMLReader *_lvlFile);
+		void StorePipe(irr::io::IrrXMLReader *_lvlFile);
+		void StoreFloor(irr::io::IrrXMLReader *_lvlFile);
+
 		std::string GetAttributeValue(irr::io::IrrXMLReader *_lvlFile, const char* _name, bool _optionalAttribute = false);
 		float GetAttributeValueAsFloat(irr::io::IrrXMLReader *_lvlFile, const char* _name);
+		void SendInfoPosLvlToGFX(InfoForDisplay _info);
+		void GameEngine::GetCoordinatesAndTileName(irr::io::IrrXMLReader *_lvlFile, sf::Vector2f *_coords, std::string *_tileName);
 
 		static const std::string levelsPath;
 };

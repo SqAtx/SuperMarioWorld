@@ -7,17 +7,19 @@
 		<goomba x="450" y="396" direction="left"/>
 	</characters>
 	<foreground>
-		<box x="40" y="352" w="16" h="16" sprite="question_box_static"/>
-		<box x="296" y="352" w="16" h="16" sprite="question_box_static"/>
-		<box x="376" y="352" w="16" h="16" sprite="question_box_static"/>
-		<box x="456" y="352" w="16" h="16" sprite="question_box_static"/>
-		
-		<box x="376" y="288" w="16" h="16" sprite="question_box"/>
+		<pipe x="480" y="384" w="32" h="32" sprite="green_pipe_h" type="spawn" id=""/>
 
-		<box x="240" y="400" w="16" h="16" sprite="question_box"/>
+		<box x="40" y="352" w="16" h="16" sprite="question_box_static"/>
+		<box x="264" y="352" w="16" h="16" sprite="question_box_static"/>
+		<box x="344" y="352" w="16" h="16" sprite="question_box_static"/>
+		<box x="424" y="352" w="16" h="16" sprite="question_box_static"/>
 		
-		<pipe x="" y="" w="16" h="16" sprite="" type="passage" id="" dest=""/>
-		<!-- A pipe needs an id so Mario can travel with it -->
+		<box x="344" y="288" w="16" h="16" sprite="question_box"/>
+
+		<box x="208" y="400" w="16" h="16" sprite="question_box"/>
+		
+		<pipe_example x="" y="" w="16" h="16" sprite="" type="passage" id="" dest=""/>
+		<!-- A pipe needs an id if Mario can travel with it -->
 		<floor_tile x="0" y="416" w="16" h="16" sprite="left"/>
 		<floor_tile x="16" y="416" w="16" h="16" sprite="middle"/>
 		<floor_tile x="32" y="416" w="16" h="16" sprite="middle"/>

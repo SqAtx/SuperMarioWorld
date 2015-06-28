@@ -39,7 +39,7 @@ class GraphicsEngine : public Engine
 		std::map<unsigned int, sf::Sprite> m_displayableObjectsToDraw;
 
 		// List of all the foreground tiles in the current level and their coordinates
-		std::map<unsigned int, InfoForDisplay> m_listForegroundItemsTileNames;
+		std::map<unsigned int, InfoForDisplay> m_listForegroundItems;
 		void UpdateForegroundItem(InfoForDisplay _info);
 
 		std::map<int, std::string> m_spritesCurrentlyDisplayed; // Contains id of displayable object and which sprite (name from RECT file) is displayed ATM

@@ -5,3 +5,4 @@ question_box2 16 64 32 80
 question_box3 32 64 48 80
 question_box4 48 64 64 80
 question_box_empty 64 64 80 80
+green_pipe_h 192 0 224 32
