@@ -22,6 +22,7 @@ DisplayableObject::DisplayableObject(std::string _name, float _x, float _y, Stat
 	m_coord.x = _x;
 	m_coord.y = _y;
 
+	m_class = LEVEL_BLOCK; // May be overwritten by constructors in children
 	m_state = _state;
 }
 
@@ -41,7 +42,7 @@ InfoForDisplay DisplayableObject::GetInfoForDisplay()
 	return info;
 }
 
-void DisplayableObject::ReceiveHit(CollisionDirection _direction)
+void DisplayableObject::UpdateAfterCollision(CollisionDirection _direction, ObjectClass _classOfOtherObject)
 {
 	/* Virtual. Nothing should happen here. It is not pure virtual because some objects such as floor tiles don't react to collisions (not yet ? ;) ) */
 }

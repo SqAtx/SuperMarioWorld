@@ -53,13 +53,16 @@ void GameEngine::HandleCollisionsWithLevel(MovingObject& _obj)
 
 	if (lastCollisionDirection != NO_COL)
 	{
-		_obj.UpdateAfterCollision(lastCollisionDirection);
+		objectHitByChar = m_listForegroundItems[lastCollisionRefId];
+
+		_obj.UpdateAfterCollision(Util::OppositeCollisionDirection(lastCollisionDirection), objectHitByChar->GetClass()); // Updates the state of the object, not his coordinates
+
+		// The coordinates (of the element of m_listForegroundItems) have been changed in HandleCollisionWithRect: we copy that into the object (element of m_characters)
 		objCoords = m_listForegroundItems[objId]->GetCoordinates();
 		sf::Vector2f newPos(objCoords.left, objCoords.top);
 		_obj.SetPosition(newPos);
 
-		objectHitByChar = m_listForegroundItems[lastCollisionRefId];
-		HitObject(objectHitByChar, lastCollisionDirection);
+		objectHitByChar->UpdateAfterCollision(lastCollisionDirection, _obj.GetClass());
 
 		// Send information about the object that has been hit (for gfx to know about states changes)
 		EngineEvent redisplayObject;
@@ -155,9 +158,4 @@ void GameEngine::ReactToCollision(unsigned int _objId, sf::FloatRect _ref, Colli
 			break;
 	}
 	m_listForegroundItems[_objId]->SetCoordinates(objCoords);
-}
-
-void GameEngine::HitObject(DisplayableObject *_obj, CollisionDirection _dir)
-{
-	_obj->ReceiveHit(_dir);
 }

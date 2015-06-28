@@ -53,8 +53,12 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 			HandleReleasedKey(_event.data.m_key);
 			break;
 		case INFO_POS_LVL:
-			m_listForegroundItems[_event.data.m_id]->SetCoordinates(_event.m_rect);
+		{
+			auto DOtoUpdate = m_listForegroundItems.find(_event.data.m_id);
+			if (DOtoUpdate != m_listForegroundItems.end() && DOtoUpdate->second != NULL)
+				m_listForegroundItems[_event.data.m_id]->SetCoordinates(_event.m_rect);
 			break;
+		}
 		case GAME_STOPPED:
 			m_parent->Stop();
 			break;

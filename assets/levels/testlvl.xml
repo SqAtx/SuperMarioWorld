@@ -3,6 +3,8 @@
 	<characters>
 		<mario x="80" y="396"/>
 		<goomba x="350" y="396" direction="left"/>
+		<goomba x="400" y="396" direction="right"/>
+		<goomba x="450" y="396" direction="left"/>
 	</characters>
 	<foreground>
 		<box x="40" y="352" w="16" h="16" sprite="question_box_static"/>

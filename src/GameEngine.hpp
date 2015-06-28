@@ -42,7 +42,6 @@ class GameEngine : public Engine
 		CollisionDirection HandleCollisionWithRect(unsigned int _objId, sf::FloatRect _ref);
 		CollisionDirection DetectCollisionWithRect(unsigned int _objId, sf::FloatRect _ref);
 		void ReactToCollision(unsigned int _objId, sf::FloatRect _ref, CollisionDirection _direction);
-		void HitObject(DisplayableObject *_obj, CollisionDirection _dir);
 
 		void StartLevel(std::string _lvlName);
 		int AddCharacterToArray(MovingObject *_character);

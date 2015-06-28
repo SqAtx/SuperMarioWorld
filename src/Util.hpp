@@ -13,7 +13,15 @@
 class DisplayableObject;
 struct InfoForDisplay;
 
-typedef enum {
+enum ObjectClass
+{
+	PLAYER,
+	ENEMY,
+	HARMLESS_OBJECT, // Just an idea for blocs that can move and push / be pushed by characters (player and enemies), as opposed to a level block that doesn't move
+	LEVEL_BLOCK
+};
+
+enum State {
 	UNKNOWN,
 	STATIC,
 	WALK,
@@ -22,7 +30,7 @@ typedef enum {
 	FALL,		// Idem
 	NORMAL,		// Items with only one state e.g. the animated foreground items
 	EMPTY		// ? Boxes
-} State;
+};
 
 enum Direction {
 	DLEFT,
@@ -95,6 +103,7 @@ class Util
 		static bool isInteger(std::string& _str);
 		static std::vector<std::string> Split(std::string _str, char _sep);
 		static bool Util::StringEndsWith(std::string _full, std::string _ending);
+		static CollisionDirection OppositeCollisionDirection(CollisionDirection _dir);
 };
 
 class CompareInfoForDisplay {

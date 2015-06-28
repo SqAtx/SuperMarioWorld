@@ -48,6 +48,25 @@ bool Util::StringEndsWith(std::string _full, std::string _ending)
 	return !_full.compare(lenDiff, _ending.length(), _ending);
 }
 
+CollisionDirection Util::OppositeCollisionDirection(CollisionDirection _dir)
+{
+	switch (_dir)
+	{
+		case TOP:
+			return BOTTOM;
+		case BOTTOM:
+			return TOP;
+		case LEFT:
+			return RIGHT;
+		case RIGHT:
+			return LEFT;
+		case NO_COL:
+			return NO_COL;
+		default:
+			assert(false);
+	}
+}
+
 bool CompareInfoForDisplay::operator()(InfoForDisplay const& _a, InfoForDisplay const& _b)
 {
 	return (_a.id < _b.id);

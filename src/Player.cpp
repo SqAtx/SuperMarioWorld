@@ -12,6 +12,7 @@ Player::Player(std::string _name, float _x, float _y, State _state) : MovingObje
 
 void Player::Init()
 {
+	m_class = PLAYER;
 	m_previousState = STATIC; // In case player is falling at the beginning of the level
 	m_facing = DRIGHT;
 	m_isRunning = false;
@@ -29,28 +30,37 @@ InfoForDisplay Player::GetInfoForDisplay()
 	return MovingObject::GetInfoForDisplay();
 }
 
-void Player::UpdateAfterCollision(CollisionDirection _dir)
+void Player::UpdateAfterCollision(CollisionDirection _dir, ObjectClass _classOfOtherObject)
 {
 	switch (_dir)
 	{
 		case TOP:
+			m_velocity.y = 0;
+			m_jumpState = FALLING;
+
+			if (_classOfOtherObject == ENEMY)
+				m_isDead = true;
+			break;
+		case BOTTOM:
 			if (m_jumpState != ONFLOOR) // Landing
 				m_state = m_previousState;
 
 			m_velocity.y = 0;
 			m_jumpState = ONFLOOR;
 			break;
-		case BOTTOM:
-			m_velocity.y = 0;
-			m_jumpState = FALLING;
-			break;
 		case LEFT:
 			m_velocity.x = 0;
 			m_jumpState = FALLING;
+
+			if (_classOfOtherObject == ENEMY)
+				m_isDead = true;
 			break;
 		case RIGHT:
 			m_velocity.x = 0;
 			m_jumpState = FALLING;
+
+			if (_classOfOtherObject == ENEMY)
+				m_isDead = true;
 			break;
 		case NO_COL:
 		default:

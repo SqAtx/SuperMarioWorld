@@ -3,11 +3,18 @@
 Enemy::Enemy(std::string _name, sf::Vector2f _coord, Direction _dir) : MovingObject(_name, _coord, WALK)
 {
 	m_facing = _dir;
+	Init();
 }
 
 Enemy::Enemy(std::string _name, float _x, float _y, Direction _dir) : MovingObject(_name, _x, _y, WALK)
 {
 	m_facing = _dir;
+	Init();
+}
+
+void Enemy::Init()
+{
+	m_class = ENEMY;
 }
 
 InfoForDisplay Enemy::GetInfoForDisplay()

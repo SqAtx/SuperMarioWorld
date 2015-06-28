@@ -30,13 +30,14 @@ class DisplayableObject
 		virtual ~DisplayableObject();
 
 		virtual InfoForDisplay GetInfoForDisplay();
-		virtual void ReceiveHit(CollisionDirection _direction);
+		virtual void UpdateAfterCollision(CollisionDirection _direction, ObjectClass _classOfOtherObject);
 
 		sf::FloatRect GetCoordinates() const;
 		void SetCoordinates(const sf::FloatRect _coord);
 		sf::Vector2f GetPosition() const { return m_coord; };
 		void SetPosition(const sf::Vector2f _pos) { m_coord = _pos; };
-		State GetState() const { return m_state; }
+		ObjectClass GetClass() const { return m_class; };
+		State GetState() const { return m_state; };
 		unsigned int GetID() const { return m_id; };
 		void SetX(const float _x) { m_coord.x = _x; };
 		void SetY(const float _y) { m_coord.y = _y; };
@@ -44,6 +45,7 @@ class DisplayableObject
 	protected:
 		int m_id; // Unique identifier for each object
 		std::string m_name;
+		ObjectClass m_class;
 		State m_state;
 
 		sf::Vector2f m_coord; // Origin: the top left corner, with respect to the top left corner of the window

@@ -11,7 +11,7 @@ class Goomba : public Enemy
 
 		virtual float GetMaxAbsVelocity_X();
 
-		virtual void UpdateAfterCollision(CollisionDirection _dir);
+		virtual void UpdateAfterCollision(CollisionDirection _dir, ObjectClass _classOfOtherObject);
 
 	protected:
 
