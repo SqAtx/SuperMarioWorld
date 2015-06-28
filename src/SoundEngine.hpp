@@ -18,6 +18,7 @@ class SoundEngine : public Engine
     private:
 		std::map<SoundType, sf::SoundBuffer> m_soundBuffers;
 		sf::Sound *m_soundBeingPlayed;
+		bool m_deathSoundIsPlaying; // This sound is particular because it stops the music and no input is possible while it's playing
 
 		std::vector<std::string> m_musicNames;
 		sf::Music *m_currentMusic;

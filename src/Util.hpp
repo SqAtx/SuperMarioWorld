@@ -60,6 +60,12 @@ enum CollisionDirection {
 	NO_COL
 };
 
+enum PipeType {
+	TRAVEL,		// Mario can travel through the pipe
+	SPAWN,		// The pipe is used to spawn enemies
+	FLOWER		// Flower in a pipe, classic enemy
+};
+
 
 namespace Sprite
 {

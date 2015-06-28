@@ -7,7 +7,7 @@
 		<goomba x="450" y="396" direction="left"/>
 	</characters>
 	<foreground>
-		<pipe x="480" y="384" w="32" h="32" sprite="green_pipe_h" type="spawn" id=""/>
+		<pipe x="480" y="384" w="32" h="32" sprite="green_pipe_h" type="spawn" id="1"/>
 
 		<box x="40" y="352" w="16" h="16" sprite="question_box_static"/>
 		<box x="264" y="352" w="16" h="16" sprite="question_box_static"/>

@@ -59,6 +59,12 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 				m_listForegroundItems[_event.data.m_id]->SetCoordinates(_event.m_rect);
 			break;
 		}
+		case DEATH_SOUND_STARTED:
+			m_deathSoundIsPlaying = true;
+			break;
+		case DEATH_SOUND_STOPPED:
+			m_deathSoundIsPlaying = false;
+			break;
 		case GAME_STOPPED:
 			m_parent->Stop();
 			break;
@@ -92,8 +98,11 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 				m_engines["s"]->PushEvent(playJumpSound);
 			}
 			break;
+		case sf::Keyboard::N:
+			// Spawn goomba in pipe
+			break;
 		case sf::Keyboard::Escape:
-			if (m_indexMario == -1)
+			if (m_indexMario == -1 && CanRespawnMario())
 			{
 				Player *mario = new Player("mario", m_initPosMario);
 				m_indexMario = AddCharacterToArray(mario);
@@ -106,6 +115,11 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 		default:
 			break;
 	}
+}
+
+bool GameEngine::CanRespawnMario()
+{
+	return !m_deathSoundIsPlaying;
 }
 
 void GameEngine::HandleReleasedKey(sf::Keyboard::Key _key)

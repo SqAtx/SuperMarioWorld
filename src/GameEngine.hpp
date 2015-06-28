@@ -31,12 +31,16 @@ class GameEngine : public Engine
 
 		void ProcessEvent(EngineEvent& _event);
 		void HandlePressedKey(sf::Keyboard::Key _key);
+		bool CanRespawnMario();
 		void HandleReleasedKey(sf::Keyboard::Key _key);
 
 		void CheckCharacterDeath(MovingObject& _character);
 		void KillCharacter(MovingObject& _character);
 		void SendCharacterPosition(int _indexCharacter);
 
+		/*
+		 *	Collisions
+		 */
 		void UpdateCharacterPosition(MovingObject& _character, float _dt);
 		void HandleCollisionsWithMapEdges(MovingObject& _obj);
 		void HandleCollisionsWithLevel(MovingObject& _obj);
@@ -47,17 +51,25 @@ class GameEngine : public Engine
 		void StartLevel(std::string _lvlName);
 		int AddCharacterToArray(MovingObject *_character);
 
-		bool LoadLevel(std::string _lvlName);
-		void StoreCharactersInitialPositions(irr::io::IrrXMLReader *_lvlFile);
-		void StoreListForegroundTileNames(irr::io::IrrXMLReader *_lvlFile);
-		void StoreBox(irr::io::IrrXMLReader *_lvlFile);
-		void StorePipe(irr::io::IrrXMLReader *_lvlFile);
-		void StoreFloor(irr::io::IrrXMLReader *_lvlFile);
+		/* 
+		 * XML Level 
+		 */
+		irr::io::IrrXMLReader *m_lvlFile;
 
-		std::string GetAttributeValue(irr::io::IrrXMLReader *_lvlFile, const char* _name, bool _optionalAttribute = false);
-		float GetAttributeValueAsFloat(irr::io::IrrXMLReader *_lvlFile, const char* _name);
+		bool LoadLevel(std::string _lvlName);
+		void StoreCharactersInitialPositions();
+		void StoreListForegroundTileNames();
+		void StoreBox();
+		void StorePipe();
+		PipeType GetPipeTypeFromXML();
+		void StoreFloor();
+
+		std::string GetAttributeValue(const char* _name, bool _optionalAttribute = false);
+		float GetAttributeValueAsFloat(const char* _name);
 		void SendInfoPosLvlToGFX(InfoForDisplay _info);
-		void GameEngine::GetCoordinatesAndTileName(irr::io::IrrXMLReader *_lvlFile, sf::Vector2f *_coords, std::string *_tileName);
+		void GetCoordinatesAndTileName(sf::Vector2f *_coords, std::string *_tileName);
+
+		bool m_deathSoundIsPlaying; // No input is taken into account while this sound is playing [see sound engine]
 
 		static const std::string levelsPath;
 };

@@ -15,7 +15,7 @@ What has been done:
 - A debug mode that displays extra information (can be disabled by commenting #define DEBUG_MODE in Debug.hpp)
 - Sprite management: a .rect file indicates which textures to use for static sprites and for animations (with any number of frames)
 - Physics: friction between Mario and the floor / air
-- Sound and music management (Uncomment //StartLevelMusic(_event.m_string); in SoundEngine.cpp for music)
+- Sound and music management
 - Level stored in an XML file (background, characters, floor, foreground items). Foreground items can be animated.
 - Collisions (first stable version, to be improved) between the player, the enemies and the foregroud items and approproate reaction
 
