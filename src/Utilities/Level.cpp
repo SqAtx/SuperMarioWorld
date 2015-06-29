@@ -2,7 +2,7 @@
 Level.cpp: All operations dealing with the XML file representing a level
 */
 
-#include "GameEngine.hpp"
+#include "../Engines/GameEngine.hpp"
 
 using namespace irr;
 using namespace io;
@@ -76,7 +76,7 @@ void GameEngine::StoreCharactersInitialPositions()
 			if (!strcmp("goomba", nodeName))
 			{
 				Direction tmpDir = GetAttributeValue("direction", true) == "left" ? DLEFT : DRIGHT; // direction = right if attribute not here
-				Goomba *goomba = new Goomba("goomba", GetAttributeValueAsFloat("x"), GetAttributeValueAsFloat("y"), DLEFT);
+				Goomba *goomba = new Goomba("goomba", GetAttributeValueAsFloat("x"), GetAttributeValueAsFloat("y"), tmpDir);
 				AddCharacterToArray(goomba);
 				m_listForegroundItems[goomba->GetID()] = goomba;
 			}
@@ -141,8 +141,9 @@ void GameEngine::StorePipe()
 	GetCoordinatesAndTileName(&tmpCoords, &tmpTileName);
 
 	PipeType type = GetPipeTypeFromXML();
+	int id = GetAttributeValueAsInt("id");
 
-	Pipe *tmpPipe = new Pipe("item_" + tmpTileName, tmpCoords, NORMAL);
+	Pipe *tmpPipe = new Pipe("item_" + tmpTileName, tmpCoords, id, type);
 	m_listForegroundItems[tmpPipe->GetID()] = tmpPipe;
 
 	SendInfoPosLvlToGFX(tmpPipe->GetInfoForDisplay());
@@ -150,9 +151,15 @@ void GameEngine::StorePipe()
 
 PipeType GameEngine::GetPipeTypeFromXML()
 {
-	return SPAWN;
+	std::string type_str = GetAttributeValue("type", false);
+	if (type_str == "travel")
+		return TRAVEL;
+	if (type_str == "spawn")
+		return SPAWN;
+	if (type_str == "flower")
+		return FLOWER;
+	assert(false);
 }
-
 
 void GameEngine::StoreFloor()
 {
@@ -177,6 +184,14 @@ std::string GameEngine::GetAttributeValue(const char* _name, bool _optionalAttri
 float GameEngine::GetAttributeValueAsFloat(const char* _name)
 {
 	float ret = m_lvlFile->getAttributeValueAsFloat(_name);
+	if (ret == -1)
+		std::cerr << "Can't read attribute " << _name << std::endl;
+	return ret;
+}
+
+int GameEngine::GetAttributeValueAsInt(const char* _name)
+{
+	int ret = m_lvlFile->getAttributeValueAsInt(_name);
 	if (ret == -1)
 		std::cerr << "Can't read attribute " << _name << std::endl;
 	return ret;

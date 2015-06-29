@@ -1,7 +1,7 @@
 #ifndef BOX_H
 #define BOX_H
 
-#include "DisplayableObject.hpp"
+#include "../DisplayableObject.hpp"
 
 /*
 *	Represents a box that the player can hit.

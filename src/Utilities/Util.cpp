@@ -1,5 +1,5 @@
 #include "Util.hpp"
-#include "DisplayableObject.hpp"
+#include "../DisplayableObject.hpp"
 
 bool Util::isInteger(std::string& _str)
 {
@@ -71,5 +71,3 @@ bool CompareInfoForDisplay::operator()(InfoForDisplay const& _a, InfoForDisplay 
 {
 	return (_a.id < _b.id);
 }
-
-

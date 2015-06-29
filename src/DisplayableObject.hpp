@@ -2,8 +2,8 @@
 #define DISPLAYABLEOBJECT_H
 
 #include <SFML/System/Vector2.hpp>
-#include "Debug.hpp"
-#include "PhysicsConstants.hpp"
+#include "Utilities/Debug.hpp"
+#include "Utilities/PhysicsConstants.hpp"
 
 /*
 *	Information sent from g to gfx for display. The name and state will be used to fetch the correct sprite.

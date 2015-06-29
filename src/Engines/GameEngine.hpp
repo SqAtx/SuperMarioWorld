@@ -2,11 +2,11 @@
 #define GAMEENGINE_H
 
 #include "Engine.hpp"
-#include "Player.hpp"
-#include "Box.hpp"
-#include "Goomba.hpp"
-#include "Pipe.hpp"
-#include "irrXML/irrXML.h"
+#include "../Characters/Player.hpp"
+#include "../Items/Box.hpp"
+#include "../Characters/Goomba.hpp"
+#include "../Items/Pipe.hpp"
+#include "../irrXML/irrXML.h"
 
 /*
     Game engine: Handles the movements of the player, collisions, etc.
@@ -66,6 +66,7 @@ class GameEngine : public Engine
 
 		std::string GetAttributeValue(const char* _name, bool _optionalAttribute = false);
 		float GetAttributeValueAsFloat(const char* _name);
+		int GameEngine::GetAttributeValueAsInt(const char* _name);
 		void SendInfoPosLvlToGFX(InfoForDisplay _info);
 		void GetCoordinatesAndTileName(sf::Vector2f *_coords, std::string *_tileName);
 

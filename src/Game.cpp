@@ -54,5 +54,3 @@ void Game::Stop()
 	m_running = false;
 	m_running_mutex.unlock();
 }
-
-

@@ -1,6 +1,5 @@
 #include "GameEngine.hpp"
-#include "Game.hpp"
-
+#include "../Game.hpp"
 
 GameEngine::GameEngine(Game *_g) : Engine(_g), m_levelStarted(false), m_indexMario(-1)
 {
@@ -97,9 +96,6 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 				EngineEvent playJumpSound(PLAY_SOUND, JUMP_SND);
 				m_engines["s"]->PushEvent(playJumpSound);
 			}
-			break;
-		case sf::Keyboard::N:
-			// Spawn goomba in pipe
 			break;
 		case sf::Keyboard::Escape:
 			if (m_indexMario == -1 && CanRespawnMario())

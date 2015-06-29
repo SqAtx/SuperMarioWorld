@@ -1,4 +1,4 @@
-#include "GameEngine.hpp"
+#include "../Engines/GameEngine.hpp"
 
 void GameEngine::HandleCollisionsWithMapEdges(MovingObject& _obj)
 {
@@ -14,19 +14,11 @@ void GameEngine::HandleCollisionsWithMapEdges(MovingObject& _obj)
 		_obj.UpdateAfterCollisionWithMapEdge(CollisionDirection::LEFT, _obj.GetPosition().x - (512-13));
 	}
 
-	// Debug Fall
-	//if (_obj.GetPosition().y > 432-objCoords.height)
-	//{
-	//	_obj.SetY(432 - objCoords.height);
-	//	_obj.SetVelY(0);
-	//	_obj.SetJumpState(ONFLOOR);	
-	//}
-
-	// Actual fall ;)
 	if (_obj.GetPosition().y > 432)
 		_obj.Kill();
 }
 
+//	Handles collisions between the object and all the DisplayableObjects in m_listForegroundItems: detection and reaction.
 void GameEngine::HandleCollisionsWithLevel(MovingObject& _obj)
 {
 	if (m_listForegroundItems.size() <= 1)

@@ -1,7 +1,7 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include "DisplayableObject.hpp"
+#include "../DisplayableObject.hpp"
 
 /*
 *	A MovingObject can be a player, an enemy, or a moving item, such as a power-up

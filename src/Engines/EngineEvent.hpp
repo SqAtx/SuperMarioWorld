@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include "MovingObject.hpp"
+#include "../Characters/MovingObject.hpp"
 
 typedef enum
 {

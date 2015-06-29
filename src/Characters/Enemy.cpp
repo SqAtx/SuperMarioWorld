@@ -51,4 +51,3 @@ void Enemy::Move(Instruction _inst)
 			break;
 	}
 }
-

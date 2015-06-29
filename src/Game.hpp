@@ -3,9 +3,9 @@
 
 #include <mutex>
 
-#include "GameEngine.hpp"
-#include "GraphicsEngine.hpp"
-#include "SoundEngine.hpp"
+#include "Engines/GameEngine.hpp"
+#include "Engines/GraphicsEngine.hpp"
+#include "Engines/SoundEngine.hpp"
 
 /*
     Base class of the game

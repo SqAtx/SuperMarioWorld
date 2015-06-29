@@ -2,7 +2,7 @@
 	SpriteHandler: All operations from retrieving the textures to deciding which sprites to display
 */
 
-#include "GraphicsEngine.hpp"
+#include "../Engines/GraphicsEngine.hpp"
 
 const int GraphicsEngine::FramesBetweenAnimationChanges = 7;
 const std::string GraphicsEngine::texturesPath = "../assets/sprites/";

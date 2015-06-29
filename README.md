@@ -17,9 +17,10 @@ What has been done:
 - Physics: friction between Mario and the floor / air
 - Sound and music management
 - Level stored in an XML file (background, characters, floor, foreground items). Foreground items can be animated.
-- Collisions (first stable version, to be improved) between the player, the enemies and the foregroud items and approproate reaction
+- Collisions (first stable version, to be improved) between the player, the enemies and the foreground items and appropriate reaction
 
 What next ?
-- Dying animations
+- Enemy spawn in pipes
+- Death animations
 - Scrolling
 - Better graphics ?
