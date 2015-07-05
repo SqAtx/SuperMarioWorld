@@ -4,11 +4,13 @@
 GameEngine::GameEngine(Game *_g) : Engine(_g), m_levelStarted(false), m_indexMario(-1)
 {
 	m_collisionHandler = new CollisionHandler(this);
+	m_levelImporter = new LevelImporter(this);
 }
 
 GameEngine::~GameEngine()
 {
 	delete m_collisionHandler;
+	delete m_levelImporter;
 
 	for (int i = 0; i < m_characters.size(); i++)
 		delete m_characters[i];
@@ -102,7 +104,7 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 			if (m_indexMario == -1 && CanRespawnMario())
 			{
 				Player *mario = new Player("mario", m_initPosMario);
-				m_indexMario = AddCharacterToArray(mario);
+				AddCharacterToArray(mario);
 				m_listForegroundItems[mario->GetID()] = mario;
 
 				EngineEvent playMusic(LEVEL_START);
@@ -148,7 +150,7 @@ void GameEngine::HandleReleasedKey(sf::Keyboard::Key _key)
 
 void GameEngine::StartLevel(std::string _lvlName)
 {
-	LoadLevel(_lvlName);
+	m_levelImporter->LoadLevel(_lvlName);
 
 	EngineEvent startLevel(LEVEL_START);
 	m_engines["s"]->PushEvent(startLevel);
@@ -157,19 +159,28 @@ void GameEngine::StartLevel(std::string _lvlName)
 }
 
 /* Takes the place of the first NULL pointer (= dead character), or is pushed at the end */
-int GameEngine::AddCharacterToArray(MovingObject *_character)
+void GameEngine::AddCharacterToArray(MovingObject *_character)
 {
 	int initialSize = m_characters.size();
+	int indexCharacter = -1;
 	for (int i = 0; i < initialSize; i++)
 	{
 		if (m_characters[i] == NULL)
 		{
-			m_characters[i] = _character;
-			return i;
+			m_characters[i] = _character; // Character takes the spot of a dead character
+			indexCharacter = i;
+			break;
 		}
 	}
-	m_characters.push_back(_character);
-	return initialSize;
+
+	if (indexCharacter == -1)
+	{
+		m_characters.push_back(_character);
+		indexCharacter = initialSize;
+	}
+
+	if (_character->GetName() == "mario")
+		m_indexMario = indexCharacter;
 }
 
 void GameEngine::UpdateCharacterPosition(MovingObject& _character, float _dt)

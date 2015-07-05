@@ -39,6 +39,7 @@ class DisplayableObject
 		ObjectClass GetClass() const { return m_class; };
 		State GetState() const { return m_state; };
 		unsigned int GetID() const { return m_id; };
+		std::string GetName() const { return m_name; };
 		void SetX(const float _x) { m_coord.x = _x; };
 		void SetY(const float _y) { m_coord.y = _y; };
 

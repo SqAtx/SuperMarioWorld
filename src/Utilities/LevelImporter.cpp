@@ -1,18 +1,20 @@
-/*
-Level.cpp: All operations dealing with the XML file representing a level
-*/
-
+#include "LevelImporter.hpp"
 #include "../Engines/GameEngine.hpp"
 
 using namespace irr;
 using namespace io;
 
-const std::string GameEngine::levelsPath = "../assets/levels/";
+const std::string LevelImporter::levelsPath = "../assets/levels/";
 
-bool GameEngine::LoadLevel(std::string _lvlName)
+LevelImporter::LevelImporter(GameEngine *_parent)
+{
+	m_gameEngine = _parent;
+}
+
+bool LevelImporter::LoadLevel(std::string _lvlName)
 {
 	bool fileNotEmpty = false;
-	std::string lvlFullName = GameEngine::levelsPath + _lvlName + ".xml";
+	std::string lvlFullName = LevelImporter::levelsPath + _lvlName + ".xml";
 	m_lvlFile = createIrrXMLReader(lvlFullName.c_str());
 
 	while (m_lvlFile && m_lvlFile->read())
@@ -27,7 +29,7 @@ bool GameEngine::LoadLevel(std::string _lvlName)
 					info.backgroundName = GetAttributeValue("background");
 
 					EngineEvent tmpEvent(INFO_LVL, info);
-					m_engines["gfx"]->PushEvent(tmpEvent);
+					m_gameEngine->TransmitInfoToGFX(tmpEvent);
 				}
 				if (!strcmp("characters", m_lvlFile->getNodeName()))
 					StoreCharactersInitialPositions();
@@ -50,10 +52,8 @@ bool GameEngine::LoadLevel(std::string _lvlName)
 	return true;
 }
 
-void GameEngine::StoreCharactersInitialPositions()
+void LevelImporter::StoreCharactersInitialPositions()
 {
-	sf::Vector2f tmpCoords;
-	InfoForDisplay tmpDisplayInfo;
 	bool foundOneCharacter = false;
 	const char* nodeName;
 
@@ -66,19 +66,21 @@ void GameEngine::StoreCharactersInitialPositions()
 			nodeName = m_lvlFile->getNodeName();
 			if (!strcmp("mario", nodeName))
 			{
-				m_initPosMario.x = GetAttributeValueAsFloat("x");
-				m_initPosMario.y = GetAttributeValueAsFloat("y");
+				sf::Vector2f initPosMario;
+				initPosMario.x = GetAttributeValueAsFloat("x");
+				initPosMario.y = GetAttributeValueAsFloat("y");
+				m_gameEngine->SetMarioInitialPosition(initPosMario);
 
-				Player *mario = new Player("mario", m_initPosMario);
-				m_indexMario = AddCharacterToArray(mario);
-				m_listForegroundItems[mario->GetID()] = mario;
+				Player *mario = new Player("mario", initPosMario);
+				m_gameEngine->AddCharacterToArray(mario);
+				m_gameEngine->AddForegroundItemToArray(mario);
 			}
 			if (!strcmp("goomba", nodeName))
 			{
 				Direction tmpDir = GetAttributeValue("direction", true) == "left" ? DLEFT : DRIGHT; // direction = right if attribute not here
 				Goomba *goomba = new Goomba("goomba", GetAttributeValueAsFloat("x"), GetAttributeValueAsFloat("y"), tmpDir);
-				AddCharacterToArray(goomba);
-				m_listForegroundItems[goomba->GetID()] = goomba;
+				m_gameEngine->AddCharacterToArray(goomba);
+				m_gameEngine->AddForegroundItemToArray(goomba);
 			}
 			break;
 		case EXN_ELEMENT_END:
@@ -91,7 +93,7 @@ void GameEngine::StoreCharactersInitialPositions()
 	}
 }
 
-void GameEngine::StoreListForegroundTileNames()
+void LevelImporter::StoreListForegroundTileNames()
 {
 	bool foundTiles = false;
 	const char* nodeName;
@@ -120,7 +122,7 @@ void GameEngine::StoreListForegroundTileNames()
 	}
 }
 
-void GameEngine::StoreBox()
+void LevelImporter::StoreBox()
 {
 	sf::Vector2f tmpCoords;
 	std::string tmpTileName;
@@ -129,12 +131,12 @@ void GameEngine::StoreBox()
 	State tmpState = GetAttributeValue("state", true) == "empty" ? EMPTY : NORMAL;
 
 	Box *tmpBox = new Box("item_" + tmpTileName, tmpCoords, tmpState);
-	m_listForegroundItems[tmpBox->GetID()] = tmpBox;
+	m_gameEngine->AddForegroundItemToArray(tmpBox);
 
 	SendInfoPosLvlToGFX(tmpBox->GetInfoForDisplay());
 }
 
-void GameEngine::StorePipe()
+void LevelImporter::StorePipe()
 {
 	sf::Vector2f tmpCoords;
 	std::string tmpTileName;
@@ -144,12 +146,12 @@ void GameEngine::StorePipe()
 	int id = GetAttributeValueAsInt("id");
 
 	Pipe *tmpPipe = new Pipe("item_" + tmpTileName, tmpCoords, id, type);
-	m_listForegroundItems[tmpPipe->GetID()] = tmpPipe;
+	m_gameEngine->AddForegroundItemToArray(tmpPipe);
 
 	SendInfoPosLvlToGFX(tmpPipe->GetInfoForDisplay());
 }
 
-PipeType GameEngine::GetPipeTypeFromXML()
+PipeType LevelImporter::GetPipeTypeFromXML()
 {
 	std::string type_str = GetAttributeValue("type", false);
 	if (type_str == "travel")
@@ -161,19 +163,19 @@ PipeType GameEngine::GetPipeTypeFromXML()
 	assert(false);
 }
 
-void GameEngine::StoreFloor()
+void LevelImporter::StoreFloor()
 {
 	sf::Vector2f tmpCoords;
 	std::string tmpTileName;
 	GetCoordinatesAndTileName(&tmpCoords, &tmpTileName);
 
 	DisplayableObject *tmpFloor = new DisplayableObject("floor_" + tmpTileName, tmpCoords, NORMAL);
-	m_listForegroundItems[tmpFloor->GetID()] = tmpFloor;
+	m_gameEngine->AddForegroundItemToArray(tmpFloor);
 
 	SendInfoPosLvlToGFX(tmpFloor->GetInfoForDisplay());
 }
 
-std::string GameEngine::GetAttributeValue(const char* _name, bool _optionalAttribute)
+std::string LevelImporter::GetAttributeValue(const char* _name, bool _optionalAttribute)
 {
 	std::string str(m_lvlFile->getAttributeValueSafe(_name));
 	if (str == "" && !_optionalAttribute)
@@ -181,7 +183,7 @@ std::string GameEngine::GetAttributeValue(const char* _name, bool _optionalAttri
 	return str;
 }
 
-float GameEngine::GetAttributeValueAsFloat(const char* _name)
+float LevelImporter::GetAttributeValueAsFloat(const char* _name)
 {
 	float ret = m_lvlFile->getAttributeValueAsFloat(_name);
 	if (ret == -1)
@@ -189,7 +191,7 @@ float GameEngine::GetAttributeValueAsFloat(const char* _name)
 	return ret;
 }
 
-int GameEngine::GetAttributeValueAsInt(const char* _name)
+int LevelImporter::GetAttributeValueAsInt(const char* _name)
 {
 	int ret = m_lvlFile->getAttributeValueAsInt(_name);
 	if (ret == -1)
@@ -197,13 +199,13 @@ int GameEngine::GetAttributeValueAsInt(const char* _name)
 	return ret;
 }
 
-void GameEngine::SendInfoPosLvlToGFX(InfoForDisplay _info)
+void LevelImporter::SendInfoPosLvlToGFX(InfoForDisplay _info)
 {
 	EngineEvent tmpEvent(INFO_POS_LVL, _info);
-	m_engines["gfx"]->PushEvent(tmpEvent);
+	m_gameEngine->TransmitInfoToGFX(tmpEvent);
 }
 
-void GameEngine::GetCoordinatesAndTileName(sf::Vector2f *_coords, std::string *_tileName)
+void LevelImporter::GetCoordinatesAndTileName(sf::Vector2f *_coords, std::string *_tileName)
 {
 	_coords->x = GetAttributeValueAsFloat("x");
 	_coords->y = GetAttributeValueAsFloat("y");

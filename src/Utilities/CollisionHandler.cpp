@@ -25,14 +25,6 @@ void CollisionHandler::HandleCollisionsWithMapEdges(MovingObject& _obj)
 		_obj.UpdateAfterCollisionWithMapEdge(CollisionDirection::RIGHT, _obj.GetPosition().x - (512-13));
 	}
 
-	// Debug Fall
-	if (_obj.GetPosition().y > 432-objCoords.height)
-	{
-		_obj.SetY(432 - objCoords.height);
-		_obj.SetVelY(0);
-		_obj.SetJumpState(ONFLOOR);	
-	}
-
 	if (_obj.GetPosition().y > 432)
 		_obj.Kill();
 }

@@ -3,10 +3,9 @@
 
 #include "Engine.hpp"
 #include "../Utilities/CollisionHandler.hpp"
+#include "../Utilities/LevelImporter.hpp"
 #include "../Items/Box.hpp"
 #include "../Characters/Goomba.hpp"
-#include "../Items/Pipe.hpp"
-#include "../irrXML/irrXML.h"
 
 /*
     Game engine: Handles the movements of the player, collisions, etc.
@@ -20,8 +19,14 @@ class GameEngine : public Engine
 		void Frame();
 		void Frame(float _dt);
 
-		/* Getters / setters for Collisionhandler */
 		void TransmitInfoToGFX(EngineEvent _event) { return m_engines["gfx"]->PushEvent(_event); };
+
+		/* Getters / setters for LevelImporter */
+		void SetMarioInitialPosition(sf::Vector2f _pos) { m_initPosMario = _pos; };
+		void AddCharacterToArray(MovingObject *_character);
+		void AddForegroundItemToArray(DisplayableObject *_item) { m_listForegroundItems[_item->GetID()] = _item; };
+
+		/* Getters / setters for Collisionhandler */
 		DisplayableObject *GetForegroundItem(unsigned int _id) { return m_listForegroundItems[_id]; };
 		const sf::Vector2f GetCoordinatesOfForegroundItem(unsigned int _id) { return m_listForegroundItems[_id]->GetPosition(); };
 		void UpdateForegroundItem(unsigned int _id, sf::FloatRect& _coords) { m_listForegroundItems[_id]->SetCoordinates(_coords); };
@@ -29,6 +34,7 @@ class GameEngine : public Engine
     private:
 		bool m_levelStarted;
 		CollisionHandler *m_collisionHandler;
+		LevelImporter *m_levelImporter;
 
 		sf::Vector2f m_initPosMario;
 		int m_indexMario; // Index of Mario in m_characters. -1 if he's not in it.
@@ -47,32 +53,10 @@ class GameEngine : public Engine
 		void SendCharacterPosition(int _indexCharacter);
 
 		void StartLevel(std::string _lvlName);
-		int AddCharacterToArray(MovingObject *_character);
 
 		void HandleCollisions(MovingObject& _obj);
 
-		/* 
-		 * XML Level 
-		 */
-		irr::io::IrrXMLReader *m_lvlFile;
-
-		bool LoadLevel(std::string _lvlName);
-		void StoreCharactersInitialPositions();
-		void StoreListForegroundTileNames();
-		void StoreBox();
-		void StorePipe();
-		PipeType GetPipeTypeFromXML();
-		void StoreFloor();
-
-		std::string GetAttributeValue(const char* _name, bool _optionalAttribute = false);
-		float GetAttributeValueAsFloat(const char* _name);
-		int GameEngine::GetAttributeValueAsInt(const char* _name);
-		void SendInfoPosLvlToGFX(InfoForDisplay _info);
-		void GetCoordinatesAndTileName(sf::Vector2f *_coords, std::string *_tileName);
-
 		bool m_deathSoundIsPlaying; // No input is taken into account while this sound is playing [see sound engine]
-
-		static const std::string levelsPath;
 };
 
 #endif // GAMEENGINE_H
