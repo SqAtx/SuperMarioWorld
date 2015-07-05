@@ -28,10 +28,10 @@ void Enemy::UpdateAfterCollisionWithMapEdge(CollisionDirection _dir, float _gap)
 	switch (_dir)
 	{
 		case LEFT: // Enemy on the left (= right hand edge)
-			m_facing = DLEFT;
+			m_facing = DRIGHT;
 			break;
 		case RIGHT:
-			m_facing = DRIGHT;
+			m_facing = DLEFT;
 			break;
 		default:
 			break;

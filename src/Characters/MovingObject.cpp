@@ -40,11 +40,11 @@ void MovingObject::UpdateAfterCollisionWithMapEdge(CollisionDirection _dir, floa
 	switch (_dir)
 	{
 		case LEFT:
-			m_coord.x -= _gap;
+			m_coord.x = 0;
 			m_velocity.x = 0;
 			break;
-		case RIGHT: // MovingObject on the left
-			m_coord.x = 0;
+		case RIGHT:
+			m_coord.x -= _gap;
 			m_velocity.x = 0;
 			break;
 		default:

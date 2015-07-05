@@ -2,7 +2,7 @@
 #define GAMEENGINE_H
 
 #include "Engine.hpp"
-#include "../Characters/Player.hpp"
+#include "../Utilities/CollisionHandler.hpp"
 #include "../Items/Box.hpp"
 #include "../Characters/Goomba.hpp"
 #include "../Items/Pipe.hpp"
@@ -20,8 +20,15 @@ class GameEngine : public Engine
 		void Frame();
 		void Frame(float _dt);
 
+		/* Getters / setters for Collisionhandler */
+		void TransmitInfoToGFX(EngineEvent _event) { return m_engines["gfx"]->PushEvent(_event); };
+		DisplayableObject *GetForegroundItem(unsigned int _id) { return m_listForegroundItems[_id]; };
+		const sf::Vector2f GetCoordinatesOfForegroundItem(unsigned int _id) { return m_listForegroundItems[_id]->GetPosition(); };
+		void UpdateForegroundItem(unsigned int _id, sf::FloatRect& _coords) { m_listForegroundItems[_id]->SetCoordinates(_coords); };
+
     private:
 		bool m_levelStarted;
+		CollisionHandler *m_collisionHandler;
 
 		sf::Vector2f m_initPosMario;
 		int m_indexMario; // Index of Mario in m_characters. -1 if he's not in it.
@@ -34,22 +41,15 @@ class GameEngine : public Engine
 		bool CanRespawnMario();
 		void HandleReleasedKey(sf::Keyboard::Key _key);
 
+		void UpdateCharacterPosition(MovingObject& _character, float _dt);
 		void CheckCharacterDeath(MovingObject& _character);
 		void KillCharacter(MovingObject& _character);
 		void SendCharacterPosition(int _indexCharacter);
 
-		/*
-		 *	Collisions
-		 */
-		void UpdateCharacterPosition(MovingObject& _character, float _dt);
-		void HandleCollisionsWithMapEdges(MovingObject& _obj);
-		void HandleCollisionsWithLevel(MovingObject& _obj);
-		CollisionDirection HandleCollisionWithRect(unsigned int _objId, sf::FloatRect _ref);
-		CollisionDirection DetectCollisionWithRect(unsigned int _objId, sf::FloatRect _ref);
-		void ReactToCollision(unsigned int _objId, sf::FloatRect _ref, CollisionDirection _direction);
-
 		void StartLevel(std::string _lvlName);
 		int AddCharacterToArray(MovingObject *_character);
+
+		void HandleCollisions(MovingObject& _obj);
 
 		/* 
 		 * XML Level 

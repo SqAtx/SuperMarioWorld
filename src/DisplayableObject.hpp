@@ -15,7 +15,7 @@ struct InfoForDisplay
 	std::string currentSprite;
 	State state;		// Idem
 	sf::FloatRect coordinates;
-	bool reverse; // Reverse sprite display (left/right) ?
+	bool reverse;		// Reverse sprite display (left/right) ?
 };
 
 /*

@@ -3,11 +3,13 @@
 
 GameEngine::GameEngine(Game *_g) : Engine(_g), m_levelStarted(false), m_indexMario(-1)
 {
-
+	m_collisionHandler = new CollisionHandler(this);
 }
 
 GameEngine::~GameEngine()
 {
+	delete m_collisionHandler;
+
 	for (int i = 0; i < m_characters.size(); i++)
 		delete m_characters[i];
 	for (int i = 0; i < m_listForegroundItems.size(); i++)
@@ -33,8 +35,7 @@ void GameEngine::Frame(float _dt)
 			if (1 / _dt > 20) // No updating at all if framerate < 20 (usually the first few iterations) because it results in inacurrate updating (like Mario drops 300 pixels at beginning of level)
 				UpdateCharacterPosition(*m_characters[i], _dt);
 
-			HandleCollisionsWithLevel(*m_characters[i]);
-			HandleCollisionsWithMapEdges(*m_characters[i]);
+			HandleCollisions(*m_characters[i]);
 			CheckCharacterDeath(*m_characters[i]);
 			SendCharacterPosition(i);
 		}
@@ -228,4 +229,24 @@ void GameEngine::SendCharacterPosition(int _indexCharacter)
 		m_engines["gfx"]->PushEvent(debugInfo);
 	}
 #endif
+}
+
+//	Handles collisions between the object and all the DisplayableObjects in m_listForegroundItems and with the map edges: detection and reaction.
+void GameEngine::HandleCollisions(MovingObject& _obj)
+{
+	if (m_listForegroundItems.size() <= 1)
+		return;
+
+	CollisionDirection tmpDirection = NO_COL;
+
+	// What happens if there is a collision so _obj is moved and there is another one and _obj is moved again ? The first collision would need to be handled again
+	for (std::map<unsigned int, DisplayableObject*>::iterator it = m_listForegroundItems.begin(); it != m_listForegroundItems.end(); ++it)
+	{
+		tmpDirection = m_collisionHandler->DetectCollisionWithObj(_obj, *(it->second));
+
+		if (tmpDirection != NO_COL)
+			m_collisionHandler->ReactToCollisionsWithObj(_obj, *(m_listForegroundItems[it->first]), tmpDirection);
+	}
+
+	m_collisionHandler->HandleCollisionsWithMapEdges(_obj);
 }
