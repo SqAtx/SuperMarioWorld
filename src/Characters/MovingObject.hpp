@@ -27,6 +27,7 @@ class MovingObject : public DisplayableObject
 		void Kill() { m_isDead = true; };
 		bool IsDead() { return m_isDead; };
 		bool IsInTheAir() { return m_jumpState != ONFLOOR; };
+		bool CanCollide() { return !m_noCollision; };
 
 #ifdef DEBUG_MODE
 		DebugInfo GetDebugInfo();
@@ -52,6 +53,7 @@ class MovingObject : public DisplayableObject
 
 		bool m_isRunning;
 
+		bool m_noCollision; // Character is not affected by any collision (will die when hitting the bottom of the screen)
 		bool m_isDead;
 };
 
