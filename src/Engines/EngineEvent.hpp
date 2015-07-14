@@ -38,15 +38,14 @@ class EngineEvent
 	public:
 
 		EventType m_type;
-		
-		union
-		{
-			sf::Keyboard::Key m_key;
-			struct { // Unnamed struct to fool VS which is being annoying..
-				InfoForDisplay m_infoDisplay;
+
+		struct { // Unnamed struct to fool VS which is being annoying..
+			union {
+				sf::Keyboard::Key m_key;
+				SoundType m_sound;
+				int m_id;
 			};
-			SoundType m_sound;
-			int m_id;
+			InfoForDisplay m_infoDisplay;
 		} data;
 		std::string m_string; // A string can't be inside a union
 		sf::FloatRect m_rect;
@@ -58,7 +57,7 @@ class EngineEvent
 
 		EngineEvent()
 		{
-		
+
 		}
 
 		EngineEvent(EventType _type)

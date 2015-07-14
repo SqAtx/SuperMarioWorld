@@ -17,7 +17,7 @@ class CollisionHandler
 		void HandleCollisionsWithMapEdges(MovingObject& _obj);
 
 		CollisionDirection DetectCollisionWithObj(MovingObject& _obj, DisplayableObject& _ref);
-		void CollisionHandler::ReactToCollisionsWithObj(MovingObject& _obj, DisplayableObject& _ref, CollisionDirection _direction);
+		void ReactToCollisionsWithObj(MovingObject& _obj, DisplayableObject& _ref, CollisionDirection _direction);
 		void SendNewObjectPositionToGFX(DisplayableObject& _obj);
 		CollisionDirection HandleCollisionWithRect(unsigned int _objId, sf::FloatRect _ref);
 		CollisionDirection DetectCollisionWithRect(sf::FloatRect _obj, sf::FloatRect _ref);

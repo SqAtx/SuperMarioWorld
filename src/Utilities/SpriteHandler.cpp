@@ -3,6 +3,7 @@
 */
 
 #include "../Engines/GraphicsEngine.hpp"
+#include "../Util.hpp"
 
 const int GraphicsEngine::FramesBetweenAnimationChanges = 7;
 const std::string GraphicsEngine::texturesPath = "../assets/sprites/";
@@ -224,12 +225,14 @@ int GraphicsEngine::HowManyLoadedTexturesContainThisName(std::string _stateName)
 {
 	// Counts the number of textures that are either exactly _stateName (static), or smth like _stateName + "2" (animation)
 	int nb = 0;
+	std::string frameNumber;
 	for (std::map<std::string, sf::Texture>::iterator it = m_textures.begin(); it != m_textures.end(); ++it)
 	{
 		if (it->first == _stateName)
 			return 1; // Found the exact name, ie a static sprite
 
-		if (it->first.compare(0, _stateName.length(), _stateName) == 0 && Util::isInteger(it->first.substr(_stateName.length())))
+		frameNumber = it->first.substr(_stateName.length());
+		if (it->first.compare(0, _stateName.length(), _stateName) == 0 && Util::isInteger(frameNumber))
 			nb++; // Found the name followed by a number, ie a frame of an animation
 	}
 	return nb == 1 ? 0 : nb; // nb == 1 here means that _stateName == "walk" and there is no "walk" in the map, but rather a "walk1", and this is a problem (this would be an animation with only 1 sprite)

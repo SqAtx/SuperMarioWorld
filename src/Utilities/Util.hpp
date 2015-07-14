@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 #include <SFML/System.hpp>
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 class DisplayableObject;
 struct InfoForDisplay;
@@ -46,7 +46,7 @@ enum Instruction { // From user to player
 
 enum JumpState {
 	JUMPING,
-	REACHINGAPEX, // Phase between the jump and the fall: the object is still rising but without acceleration on the Y axis 
+	REACHINGAPEX, // Phase between the jump and the fall: the object is still rising but without acceleration on the Y axis
 	FALLING,
 	ONFLOOR,
 	NONE	// At the beginning of the level, for example
@@ -108,7 +108,7 @@ class Util
 	public:
 		static bool isInteger(std::string& _str);
 		static std::vector<std::string> Split(std::string _str, char _sep);
-		static bool Util::StringEndsWith(std::string _full, std::string _ending);
+		static bool StringEndsWith(std::string _full, std::string _ending);
 		static CollisionDirection OppositeCollisionDirection(CollisionDirection _dir);
 };
 

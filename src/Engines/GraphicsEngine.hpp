@@ -26,7 +26,7 @@ class GraphicsEngine : public Engine
     private:
 		sf::RenderWindow *m_gameWindow;
 		static const float FramerateLimit;
-		static const int GraphicsEngine::FramesBetweenAnimationChanges;
+		static const int FramesBetweenAnimationChanges;
 
 		std::map<std::string, sf::Texture> m_textures;
 

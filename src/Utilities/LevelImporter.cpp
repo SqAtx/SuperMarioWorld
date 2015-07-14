@@ -1,3 +1,4 @@
+#include <cstring>
 #include "LevelImporter.hpp"
 #include "../Engines/GameEngine.hpp"
 
@@ -106,7 +107,7 @@ void LevelImporter::StoreListForegroundTileNames()
 				foundTiles = true;
 				nodeName = m_lvlFile->getNodeName();
 				if (!strcmp("box", nodeName))
-					StoreBox();				
+					StoreBox();
 				if (!strcmp("pipe", nodeName))
 					StorePipe();
 				if (!strcmp("floor_tile", nodeName))
