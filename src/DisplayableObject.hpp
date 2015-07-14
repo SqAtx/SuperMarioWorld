@@ -2,7 +2,7 @@
 #define DISPLAYABLEOBJECT_H
 
 #include <SFML/System/Vector2.hpp>
-#include "Utilities/Debug.hpp"
+#include "Debug.hpp"
 #include "Utilities/PhysicsConstants.hpp"
 
 /*

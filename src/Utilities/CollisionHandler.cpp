@@ -14,8 +14,6 @@ CollisionHandler::~CollisionHandler()
 
 void CollisionHandler::HandleCollisionsWithMapEdges(MovingObject& _obj)
 {
-	sf::FloatRect objCoords = _obj.GetCoordinates();
-
 	if (_obj.GetPosition().x < 0)
 	{
 		_obj.UpdateAfterCollisionWithMapEdge(CollisionDirection::LEFT, _obj.GetPosition().x);

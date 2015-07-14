@@ -82,7 +82,7 @@ void MovingObject::UpdateAcceleration()
 		/*
 		*	Friction of floor
 		*	P + n + f = ma, with a the acceleration resulting from friction. I removed the "own acceleration" (which should be A = F * const, so the same on both sides of the equation).
-		*	On x axis: 0 + 0 + µN = ma ==> µg = a
+		*	On x axis: 0 + 0 + uN = ma ==> ug = a
 		*/
 		case ONFLOOR:
 			if (m_acceleration.x == 0 && abs(m_velocity.x) >= PhysicsConstants::MinSpeed)
@@ -95,6 +95,10 @@ void MovingObject::UpdateAcceleration()
 		case FALLING:
 			m_acceleration.x -= PhysicsConstants::FrictionPlayerAir * m_velocity.x;
 			m_acceleration.y -= PhysicsConstants::FrictionPlayerAir * m_velocity.y;
+			break;
+
+		case NONE:
+		default:
 			break;
 	}
 }
@@ -114,7 +118,7 @@ void MovingObject::UpdateVelocity(float _dt)
 		m_velocity.x = -maxAbsVel;
 
 	// Make sure the player is not running backwards (which can happen when the friction force creates a big acceleration in the opposite direction)
-	if (!IsInTheAir() && (m_facing == DLEFT && m_velocity.x > 0 || m_facing == DRIGHT && m_velocity.x < 0))
+	if (!IsInTheAir() && ( (m_facing == DLEFT && m_velocity.x > 0) || (m_facing == DRIGHT && m_velocity.x < 0)))
 		m_velocity.x = 0;
 
 	if (abs(m_velocity.x) < PhysicsConstants::MinSpeed)
