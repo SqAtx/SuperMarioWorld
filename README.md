@@ -3,7 +3,7 @@ An amazing 2D Mario game made with C++ and SFML
 
 ## Installation
 
-The Project require SFML 2.x to be compiled. If you don't have it installed yet, you can follow this link or do the commands bellow :
+The project requires SFML 2.x to be compiled. If you don't have it installed yet, you can follow this link or do the commands bellow :
 ```
 git clone git@github.com:SFML/SFML.git SFML
 cd SFML

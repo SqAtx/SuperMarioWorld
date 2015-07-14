@@ -1,1 +1,14 @@
 bin/
+ToDo.txt
+Collisions.xlsx
+Debug/
+Release/
+*.vcxproj
+SuperMario.vcxproj.filters
+*.user
+bugGoomba.png
+assets/sprites/enemies_green_background.png
+assets/sounds/Mario_Death_Sound_Effect.mp3
+*.mp3
+assets/sounds/Devastation's_Doorway_OC_ReMix.ogg
+*.png

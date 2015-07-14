@@ -229,6 +229,9 @@ int GraphicsEngine::HowManyLoadedTexturesContainThisName(std::string _stateName)
 	std::string frameNumber;
 	for (std::map<std::string, sf::Texture>::iterator it = m_textures.begin(); it != m_textures.end(); ++it)
 	{
+		if (it->first.length() < _stateName.length()) // State name longer than texture name: the texture can't be right
+			continue;
+
 		if (it->first == _stateName)
 			return 1; // Found the exact name, ie a static sprite
 
