@@ -1,16 +1,32 @@
 # SuperMarioWorld
 An amazing 2D Mario game made with C++ and SFML
 
-How to run it ?
-The program uses SFML 2.2, you will need the following SFML DLLs in your executable's folder: sfml-audio-d-2.dll, sfml-graphics-d-2.dll, sfml-system-d-2.dll, sfml-window-d-2.dll and libsndfile-1.dll.
+## Installation
 
-Commands:
+The Project require SFML 2.x to be compiled. If you don't have it installed yet, you can follow this link or do the commands bellow :
+```
+git clone git@github.com:SFML/SFML.git SFML
+cd SFML
+cmake . && make && sudo make install
+cd .. && rm -fR SFML
+```
+
+To build the application, you can use `cmake` :
+```
+cd bin
+cmake ..
+make
+```
+
+Then run `./SuperMarioWorld`.
+
+## Commands
 - Left and Right arrows to move Mario
 - C to run
 - Space to jump
 - Escape to bring Mario back from the dead
 
-What has been done:
+## What has been done ?
 - Mario can walk, run, jump, fall, and die if he falls into the hole
 - A debug mode that displays extra information (can be disabled by commenting #define DEBUG_MODE in Debug.hpp)
 - Sprite management: a .rect file indicates which textures to use for static sprites and for animations (with any number of frames)
@@ -19,7 +35,7 @@ What has been done:
 - Level stored in an XML file (background, characters, floor, foreground items). Foreground items can be animated.
 - Collisions (first stable version, to be improved) between the player, the enemies and the foreground items and appropriate reaction
 
-What next ?
+## What next ?
 - Enemy spawn in pipes
 - Death animations
 - Scrolling
