@@ -61,34 +61,34 @@ void LevelImporter::StoreCharactersInitialPositions()
 	{
 		switch (m_lvlFile->getNodeType())
 		{
-		case EXN_ELEMENT:
-			foundOneCharacter = true;
-			nodeName = m_lvlFile->getNodeName();
-			if (!strcmp("mario", nodeName))
-			{
-				sf::Vector2f initPosMario;
-				initPosMario.x = GetAttributeValueAsFloat("x");
-				initPosMario.y = GetAttributeValueAsFloat("y");
-				m_gameEngine->SetMarioInitialPosition(initPosMario);
+			case EXN_ELEMENT:
+				foundOneCharacter = true;
+				nodeName = m_lvlFile->getNodeName();
+				if (!strcmp("mario", nodeName))
+				{
+					sf::Vector2f initPosMario;
+					initPosMario.x = GetAttributeValueAsFloat("x");
+					initPosMario.y = GetAttributeValueAsFloat("y");
+					m_gameEngine->SetMarioInitialPosition(initPosMario);
 
-				Player *mario = new Player("mario", initPosMario);
-				m_gameEngine->AddCharacterToArray(mario);
-				m_gameEngine->AddForegroundItemToArray(mario);
-			}
-			if (!strcmp("goomba", nodeName))
-			{
-				Direction tmpDir = GetAttributeValue("direction", true) == "left" ? DLEFT : DRIGHT; // direction = right if attribute not here
-				Goomba *goomba = new Goomba("goomba", GetAttributeValueAsFloat("x"), GetAttributeValueAsFloat("y"), tmpDir);
-				m_gameEngine->AddCharacterToArray(goomba);
-				m_gameEngine->AddForegroundItemToArray(goomba);
-			}
-			break;
-		case EXN_ELEMENT_END:
-			if (!foundOneCharacter)
-				std::cerr << "No character in level file." << std::endl;
-			return;
-		default:
-			break;
+					Player *mario = new Player("mario", initPosMario);
+					m_gameEngine->AddCharacterToArray(mario);
+					m_gameEngine->AddForegroundItemToArray(mario);
+				}
+				if (!strcmp("goomba", nodeName))
+				{
+					Direction tmpDir = GetAttributeValue("direction", true) == "left" ? DLEFT : DRIGHT; // direction = right if attribute not here
+					Goomba *goomba = new Goomba("goomba", GetAttributeValueAsFloat("x"), GetAttributeValueAsFloat("y"), tmpDir);
+					m_gameEngine->AddCharacterToArray(goomba);
+					m_gameEngine->AddForegroundItemToArray(goomba);
+				}
+				break;
+			case EXN_ELEMENT_END:
+				if (!foundOneCharacter)
+					std::cerr << "No character in level file." << std::endl;
+				return;
+			default:
+				break;
 		}
 	}
 }
