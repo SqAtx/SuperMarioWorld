@@ -1,8 +1,9 @@
 /*
 	SpriteHandler: All operations from retrieving the textures to deciding which sprites to display
 */
-
+#include <exception>
 #include "../Engines/GraphicsEngine.hpp"
+#include "Util.hpp"
 
 const int GraphicsEngine::FramesBetweenAnimationChanges = 7;
 const std::string GraphicsEngine::texturesPath = "../assets/sprites/";
@@ -193,6 +194,7 @@ std::string GraphicsEngine::GetTextureNameFromDisplayInfo(int _id, std::string _
 			else
 				return GetTextureNameFromStateName(_id, fullName);
 	}
+	throw std::exception();
 }
 
 /* Get texture name AND updates the animationStates array: STATIC, ANIMATED or NEW_STATIC */

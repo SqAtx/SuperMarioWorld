@@ -12,9 +12,9 @@ GameEngine::~GameEngine()
 	delete m_collisionHandler;
 	delete m_levelImporter;
 
-	for (int i = 0; i < m_characters.size(); i++)
+	for (unsigned int i = 0; i < m_characters.size(); i++)
 		delete m_characters[i];
-	for (int i = 0; i < m_listForegroundItems.size(); i++)
+	for (unsigned int i = 0; i < m_listForegroundItems.size(); i++)
 		delete m_listForegroundItems[i];
 }
 
@@ -30,7 +30,7 @@ void GameEngine::Frame(float _dt)
 
 	ProcessQueue();
 
-	for (int i = 0; i < m_characters.size(); i++)
+	for (unsigned int i = 0; i < m_characters.size(); i++)
 	{
 		if (m_characters[i] != NULL)
 		{
@@ -202,7 +202,7 @@ void GameEngine::CheckCharacterDeath(MovingObject& _character)
 
 void GameEngine::KillCharacter(MovingObject& _character)
 {
-	for (int i = 0; i < m_characters.size(); i++)
+	for (unsigned int i = 0; i < m_characters.size(); i++)
 	{
 		if (m_characters[i] != NULL && m_characters[i]->GetID() == _character.GetID())
 		{
@@ -211,7 +211,7 @@ void GameEngine::KillCharacter(MovingObject& _character)
 			delete m_characters[i];
 			m_characters[i] = NULL;
 
-			if (i == m_indexMario)
+			if ((int) i == m_indexMario)
 			{
 				m_indexMario = -1;
 

@@ -49,5 +49,7 @@ void Enemy::Move(Instruction _inst)
 		case GO_RIGHT:
 			m_facing = DRIGHT;
 			break;
+		default:
+			break;
 	}
 }

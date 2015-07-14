@@ -94,7 +94,7 @@ void SoundEngine::StartLevelMusic(std::string _lvlName) // Beginning of level
 
 void SoundEngine::ChangeMusic()
 {
-	m_indexCurrentMusic = (m_indexCurrentMusic == m_musicNames.size() - 1) ? 0 : m_indexCurrentMusic + 1;
+	m_indexCurrentMusic = (m_indexCurrentMusic == (int) m_musicNames.size() - 1) ? 0 : m_indexCurrentMusic + 1;
 	PlayMusic(m_musicNames[m_indexCurrentMusic]);
 }
 
