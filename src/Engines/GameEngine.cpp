@@ -250,13 +250,16 @@ void GameEngine::HandleCollisions(MovingObject& _obj)
 
 	CollisionDirection tmpDirection = NO_COL;
 
-	// What happens if there is a collision so _obj is moved and there is another one and _obj is moved again ? The first collision would need to be handled again
-	for (std::map<unsigned int, DisplayableObject*>::iterator it = m_listForegroundItems.begin(); it != m_listForegroundItems.end(); ++it)
+	if (_obj.CanCollide())
 	{
-		tmpDirection = m_collisionHandler->DetectCollisionWithObj(_obj, *(it->second));
+		// What happens if there is a collision so _obj is moved and there is another one and _obj is moved again ? The first collision would need to be handled again
+		for (std::map<unsigned int, DisplayableObject*>::iterator it = m_listForegroundItems.begin(); it != m_listForegroundItems.end(); ++it)
+		{
+			tmpDirection = m_collisionHandler->DetectCollisionWithObj(_obj, *(it->second));
 
-		if (tmpDirection != NO_COL)
-			m_collisionHandler->ReactToCollisionsWithObj(_obj, *(m_listForegroundItems[it->first]), tmpDirection);
+			if (tmpDirection != NO_COL)
+				m_collisionHandler->ReactToCollisionsWithObj(_obj, *(m_listForegroundItems[it->first]), tmpDirection);
+		}
 	}
 
 	m_collisionHandler->HandleCollisionsWithMapEdges(_obj);
