@@ -28,6 +28,7 @@ class MovingObject : public DisplayableObject
 		bool IsDead() { return m_isDead; };
 		bool IsInTheAir() { return m_jumpState != ONFLOOR; };
 		bool CanCollide() { return !m_noCollision; };
+		bool HasBeenHit() { return m_noCollision; }; // m_noCollision has been set to true exactly when character has been hit
 
 #ifdef DEBUG_MODE
 		DebugInfo GetDebugInfo();

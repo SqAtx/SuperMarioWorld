@@ -22,7 +22,8 @@ typedef enum
 {
 	JUMP_SND,
 	COIN_SND,
-	DEATH_SND
+	DEATH_SND,
+	KICK_SND
 } SoundType;
 
 struct LevelInfo

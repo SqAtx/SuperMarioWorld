@@ -25,6 +25,8 @@ void GameEngine::Frame()
 
 void GameEngine::Frame(float _dt)
 {
+	MovingObject *currentCharacter = NULL;
+
 	if (!m_levelStarted)
 		StartLevel("testlvl"); // In the future there will be some sort of level selection so this call will be moved
 
@@ -32,13 +34,15 @@ void GameEngine::Frame(float _dt)
 
 	for (unsigned int i = 0; i < m_characters.size(); i++)
 	{
-		if (m_characters[i] != NULL)
+		currentCharacter = m_characters[i];
+		if (currentCharacter != NULL)
 		{
 			if (1 / _dt > 20) // No updating at all if framerate < 20 (usually the first few iterations) because it results in inacurrate updating (like Mario drops 300 pixels at beginning of level)
-				UpdateCharacterPosition(*m_characters[i], _dt);
+				UpdateCharacterPosition(*currentCharacter, _dt);
 
-			HandleCollisions(*m_characters[i]);
-			CheckCharacterDeath(*m_characters[i]);
+			HandleCollisions(*currentCharacter);
+
+			CheckCharacterDeath(*currentCharacter);
 			SendCharacterPosition(i);
 		}
 	}
@@ -258,7 +262,15 @@ void GameEngine::HandleCollisions(MovingObject& _obj)
 			tmpDirection = m_collisionHandler->DetectCollisionWithObj(_obj, *(it->second));
 
 			if (tmpDirection != NO_COL)
+			{
 				m_collisionHandler->ReactToCollisionsWithObj(_obj, *(m_listForegroundItems[it->first]), tmpDirection);
+
+				if (it->second->GetClass() == ENEMY && ((MovingObject*)it->second)->HasBeenHit()) // If class is ENEMY then it's a MovingObject
+				{
+					EngineEvent playKickSound(PLAY_SOUND, KICK_SND);
+					m_engines["s"]->PushEvent(playKickSound);
+				}
+			}
 		}
 	}
 

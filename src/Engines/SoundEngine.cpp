@@ -51,6 +51,7 @@ void SoundEngine::LoadSounds()
 	LoadSoundFromFile(JUMP_SND, "Jump_Sound_Effect.ogg");
 	LoadSoundFromFile(COIN_SND, "Coin_Sound_Effect.ogg");
 	LoadSoundFromFile(DEATH_SND, "Mario_Death_Sound_Effect.ogg");
+	LoadSoundFromFile(KICK_SND, "Kick_Sound_Effect.ogg");
 }
 
 void SoundEngine::LoadSoundFromFile(SoundType _type, std::string _fileName)
