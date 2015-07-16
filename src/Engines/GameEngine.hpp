@@ -19,12 +19,13 @@ class GameEngine : public Engine
 		void Frame();
 		void Frame(float _dt);
 
-		void TransmitInfoToGFX(EngineEvent _event) { return m_engines["gfx"]->PushEvent(_event); };
+		void TransmitInfoToGFX(EngineEvent _event) { m_engines["gfx"]->PushEvent(_event); };
 
 		/* Getters / setters for LevelImporter */
 		void SetMarioInitialPosition(sf::Vector2f _pos) { m_initPosMario = _pos; };
 		void AddCharacterToArray(MovingObject *_character);
 		void AddForegroundItemToArray(DisplayableObject *_item) { m_listForegroundItems[_item->GetID()] = _item; };
+		void AddPipeToArray(Pipe *_pipe) { m_listPipes[_pipe->GetPipeId()] = _pipe; };
 
 		/* Getters / setters for Collisionhandler */
 		DisplayableObject *GetForegroundItem(unsigned int _id) { return m_listForegroundItems[_id]; };
@@ -41,6 +42,7 @@ class GameEngine : public Engine
 
 		std::vector<MovingObject*> m_characters;
 		std::map<unsigned int, DisplayableObject*> m_listForegroundItems; // Part of the level the characters can be in collision with. Pointers stored to allow polymorphism.
+		std::map<unsigned int, Pipe*> m_listPipes;
 
 		void ProcessEvent(EngineEvent& _event);
 		void HandlePressedKey(sf::Keyboard::Key _key);

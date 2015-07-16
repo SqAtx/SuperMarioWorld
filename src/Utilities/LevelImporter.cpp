@@ -146,10 +146,18 @@ void LevelImporter::StorePipe()
 	PipeType type = GetPipeTypeFromXML();
 	int id = GetAttributeValueAsInt("id");
 
-	Pipe *tmpPipe = new Pipe("item_" + tmpTileName, tmpCoords, id, type);
-	m_gameEngine->AddForegroundItemToArray(tmpPipe);
+	if (std::find(m_pipeIds.begin(), m_pipeIds.end(), id) == m_pipeIds.end())
+	{
+		Pipe *tmpPipe = new Pipe("item_" + tmpTileName, tmpCoords, id, type, m_gameEngine);
+		m_gameEngine->AddForegroundItemToArray(tmpPipe);
+		m_gameEngine->AddPipeToArray(tmpPipe);
 
-	SendInfoPosLvlToGFX(tmpPipe->GetInfoForDisplay());
+		SendInfoPosLvlToGFX(tmpPipe->GetInfoForDisplay());
+
+		m_pipeIds.push_back(id);
+	}
+	else
+		std::cerr << "Another pipe with id " << id << " already exists. New pipe not created." << std::endl;
 }
 
 PipeType LevelImporter::GetPipeTypeFromXML()

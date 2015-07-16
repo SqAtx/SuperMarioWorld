@@ -32,6 +32,13 @@ void GameEngine::Frame(float _dt)
 
 	ProcessQueue();
 
+	// Spawn enemies from pipes
+	for (std::map<unsigned int, Pipe*>::iterator it = m_listPipes.begin(); it != m_listPipes.end(); ++it)
+	{
+		if (it->second->GetPipeType() == SPAWN)
+			it->second->HandleSpawnEnemies(_dt);
+	}
+
 	for (unsigned int i = 0; i < m_characters.size(); i++)
 	{
 		currentCharacter = m_characters[i];
@@ -228,7 +235,7 @@ void GameEngine::KillCharacter(MovingObject& _character)
 	}
 }
 
-// Send Mario's position to gfx
+// Send character's position to gfx
 void GameEngine::SendCharacterPosition(int _indexCharacter)
 {
 	MovingObject *character = m_characters[_indexCharacter];

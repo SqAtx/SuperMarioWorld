@@ -29,6 +29,8 @@ class LevelImporter
 		GameEngine *m_gameEngine;
 		irr::io::IrrXMLReader *m_lvlFile;
 
+		std::vector<int> m_pipeIds; // This is used to check that no 2 pipes have the same ID
+
 		std::string GetAttributeValue(const char* _name, bool _optionalAttribute = false);
 		float GetAttributeValueAsFloat(const char* _name);
 		int GetAttributeValueAsInt(const char* _name);
