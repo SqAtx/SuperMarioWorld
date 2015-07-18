@@ -31,6 +31,17 @@ DisplayableObject::~DisplayableObject()
 
 }
 
+void DisplayableObject::Slide(sf::Vector2f _vec)
+{
+	Slide(_vec.x, _vec.y);
+}
+
+void DisplayableObject::Slide(float _x, float _y)
+{
+	m_coord.x += _x;
+	m_coord.y += _y;
+}
+
 InfoForDisplay DisplayableObject::GetInfoForDisplay()
 {
 	InfoForDisplay info;

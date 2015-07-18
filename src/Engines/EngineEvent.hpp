@@ -12,6 +12,7 @@ typedef enum
 	KEY_RELEASED,			// gfx to g
 	INFO_POS_CHAR,			// g to gfx during game: character (Mario or enemy) position
 	INFO_POS_LVL,			// gfx <-> g: position of a foreground sprite
+	REMOVE_LVL_BLOC,		// to gfx
 	INFO_LVL,				// g to gfx when loading level: basing info about level
 	PLAY_SOUND,
 	DEATH_SOUND_STARTED,	// s to g

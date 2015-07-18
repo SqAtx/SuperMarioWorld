@@ -42,6 +42,9 @@ void GraphicsEngine::ProcessEvent(EngineEvent& _event)
 		case INFO_POS_LVL:
 			UpdateForegroundItem(_event.data.m_infoDisplay);
 			break;
+		case REMOVE_LVL_BLOC:
+			m_listForegroundItems.erase(_event.data.m_id);
+			break;
 		case INFO_POS_CHAR:
 			SetDisplayableObjectToDraw(_event.data.m_infoDisplay);
 			break;

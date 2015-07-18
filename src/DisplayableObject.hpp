@@ -43,6 +43,9 @@ class DisplayableObject
 		void SetX(const float _x) { m_coord.x = _x; };
 		void SetY(const float _y) { m_coord.y = _y; };
 
+		void Slide(sf::Vector2f _vec);
+		void Slide(float _x, float _y);
+
 	protected:
 		int m_id; // Unique identifier for each object
 		std::string m_name;

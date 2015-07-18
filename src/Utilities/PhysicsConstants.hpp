@@ -15,6 +15,8 @@ namespace PhysicsConstants
 	const float PlayerMaxSpeed_Run_X = 150;
 	const float	GoombaMaxSpeed_Walk_X = 50;
 
+	const float	EnemySpeedInPipe = 25; // X or Y
+
 	const float MinSpeed = 1;	// If character's speed is less than this on any axis, it's considered to be 0
 	const float InitialYVelForJump = 160;
 	const float MaxYVelForJump = 230;

@@ -25,13 +25,14 @@ class Pipe : public DisplayableObject
 		unsigned int m_pipeId;
 		PipeType m_type;
 
-		Enemy *m_enemyBeingSpawned; // One enemy at a time can be spawed and controlled by the pipe
+		DisplayableObject *m_enemyBeingSpawned; // One enemy at a time can be spawed and controlled by the pipe
 		sf::Clock m_spawnTimer;
 
 		GameEngine *m_gameEngine;
 
 		void MoveEnemyBeingSpawned(float _dt);
 		void SpawnEnemyIfTimeElapsed();
+		void SendEnemyBeingSpawnedToGFX();
 		void SendEnemyToGameEngine();
 
 		static const int milisecondsBetweenSpawns;
