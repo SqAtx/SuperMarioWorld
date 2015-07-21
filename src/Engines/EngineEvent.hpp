@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "../Characters/MovingObject.hpp"
+#include "../Items/Pipe.hpp"
 
 typedef enum
 {
@@ -12,6 +13,9 @@ typedef enum
 	KEY_RELEASED,			// gfx to g
 	INFO_POS_CHAR,			// g to gfx during game: character (Mario or enemy) position
 	INFO_POS_LVL,			// gfx <-> g: position of a foreground sprite
+	NEW_CHARACTER,			// to g
+	NEW_FOREGROUND_ITEM,	// to g
+	NEW_PIPE,				// to g
 	REMOVE_LVL_BLOC,		// to gfx
 	INFO_LVL,				// g to gfx when loading level: basing info about level
 	PLAY_SOUND,
@@ -52,6 +56,9 @@ class EngineEvent
 		std::string m_string; // A string can't be inside a union
 		sf::FloatRect m_rect;
 		LevelInfo m_levelInfo;
+		DisplayableObject *m_displayable;
+		MovingObject *m_moving;
+		Pipe *m_pipe;
 
 #ifdef DEBUG_MODE
 		DebugInfo m_debugInfo;
@@ -121,6 +128,36 @@ class EngineEvent
 		{
 			m_type = _type;
 			m_levelInfo = _info;
+		}
+
+		EngineEvent(EventType _type, DisplayableObject *_displayable)
+		{
+			set(_type, _displayable);
+		}
+		void set(EventType _type, DisplayableObject *_displayable)
+		{
+			m_type = _type;
+			m_displayable = _displayable;
+		}
+
+		EngineEvent(EventType _type, MovingObject *_moving)
+		{
+			set(_type, _moving);
+		}
+		void set(EventType _type, MovingObject *_moving)
+		{
+			m_type = _type;
+			m_moving = _moving;
+		}
+
+		EngineEvent(EventType _type, Pipe *_pipe)
+		{
+			set(_type, _pipe);
+		}
+		void set(EventType _type, Pipe *_pipe)
+		{
+			m_type = _type;
+			m_pipe = _pipe;
 		}
 
 #ifdef DEBUG_MODE

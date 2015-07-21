@@ -72,6 +72,17 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 				m_listForegroundItems[_event.data.m_id]->SetCoordinates(_event.m_rect);
 			break;
 		}
+		case NEW_FOREGROUND_ITEM:
+			AddForegroundItemToArray(_event.m_displayable);
+			break;
+		case NEW_CHARACTER:
+			AddCharacterToArray(_event.m_moving);
+			AddForegroundItemToArray(_event.m_moving);
+			break;
+		case NEW_PIPE:
+			AddPipeToArray(_event.m_pipe);
+			AddForegroundItemToArray(_event.m_pipe);
+			break;
 		case DEATH_SOUND_STARTED:
 			m_deathSoundIsPlaying = true;
 			break;
@@ -196,6 +207,17 @@ void GameEngine::AddCharacterToArray(MovingObject *_character)
 	if (_character->GetName() == "mario")
 		m_indexMario = indexCharacter;
 }
+
+void GameEngine::AddForegroundItemToArray(DisplayableObject *_item)
+{
+	m_listForegroundItems[_item->GetID()] = _item;
+}
+
+void GameEngine::AddPipeToArray(Pipe *_pipe)
+{
+	m_listPipes[_pipe->GetPipeId()] = _pipe; 
+};
+
 
 void GameEngine::UpdateCharacterPosition(MovingObject& _character, float _dt)
 {

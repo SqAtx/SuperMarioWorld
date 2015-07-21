@@ -73,15 +73,15 @@ void LevelImporter::StoreCharactersInitialPositions()
 					m_gameEngine->SetMarioInitialPosition(initPosMario);
 
 					Player *mario = new Player("mario", initPosMario);
-					m_gameEngine->AddCharacterToArray(mario);
-					m_gameEngine->AddForegroundItemToArray(mario);
+					EngineEvent newMario(NEW_CHARACTER, mario);
+					m_gameEngine->PushEvent(newMario);
 				}
 				if (!strcmp("goomba", nodeName))
 				{
 					Direction tmpDir = GetAttributeValue("direction", true) == "left" ? DLEFT : DRIGHT; // direction = right if attribute not here
 					Goomba *goomba = new Goomba("goomba", GetAttributeValueAsFloat("x"), GetAttributeValueAsFloat("y"), tmpDir);
-					m_gameEngine->AddCharacterToArray(goomba);
-					m_gameEngine->AddForegroundItemToArray(goomba);
+					EngineEvent newGoomba(NEW_CHARACTER, goomba);
+					m_gameEngine->PushEvent(newGoomba);
 				}
 				break;
 			case EXN_ELEMENT_END:
@@ -132,7 +132,8 @@ void LevelImporter::StoreBox()
 	State tmpState = GetAttributeValue("state", true) == "empty" ? EMPTY : NORMAL;
 
 	Box *tmpBox = new Box("item_" + tmpTileName, tmpCoords, tmpState);
-	m_gameEngine->AddForegroundItemToArray(tmpBox);
+	EngineEvent newBox(NEW_FOREGROUND_ITEM, tmpBox);
+	m_gameEngine->PushEvent(newBox);
 
 	SendInfoPosLvlToGFX(tmpBox->GetInfoForDisplay());
 }
@@ -149,8 +150,8 @@ void LevelImporter::StorePipe()
 	if (std::find(m_pipeIds.begin(), m_pipeIds.end(), id) == m_pipeIds.end())
 	{
 		Pipe *tmpPipe = new Pipe("item_" + tmpTileName, tmpCoords, id, type, m_gameEngine);
-		m_gameEngine->AddForegroundItemToArray(tmpPipe);
-		m_gameEngine->AddPipeToArray(tmpPipe);
+		EngineEvent newPipe(NEW_PIPE, tmpPipe);
+		m_gameEngine->PushEvent(newPipe);
 
 		SendInfoPosLvlToGFX(tmpPipe->GetInfoForDisplay());
 
@@ -179,7 +180,8 @@ void LevelImporter::StoreFloor()
 	GetCoordinatesAndTileName(&tmpCoords, &tmpTileName);
 
 	DisplayableObject *tmpFloor = new DisplayableObject("floor_" + tmpTileName, tmpCoords, NORMAL);
-	m_gameEngine->AddForegroundItemToArray(tmpFloor);
+	EngineEvent newFloor(NEW_FOREGROUND_ITEM, tmpFloor);
+	m_gameEngine->PushEvent(newFloor);
 
 	SendInfoPosLvlToGFX(tmpFloor->GetInfoForDisplay());
 }

@@ -36,6 +36,7 @@ class Pipe : public DisplayableObject
 		void MoveEnemyBeingSpawned(float _dt);
 		void SpawnEnemyIfTimeElapsed();
 		void SendEnemyBeingSpawnedToGFX();
+
 		void SendEnemyToGameEngine();
 
 		static const int milisecondsBetweenSpawns;

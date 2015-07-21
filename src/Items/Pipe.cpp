@@ -35,8 +35,7 @@ void Pipe::SpawnEnemyIfTimeElapsed()
 {
 	if (m_enemyBeingSpawned == NULL && m_spawnTimer.getElapsedTime().asMilliseconds() > Pipe::milisecondsBetweenSpawns)
 	{
-		//m_enemyBeingSpawned = new Goomba("goomba", m_coord.x + 8, m_coord.y + 8, DLEFT);
-		m_enemyBeingSpawned = new DisplayableObject("goomba_fall", m_coord.x + 8, m_coord.y + 8); // Game is for gfx to pick the right sprite name: needs to be the full name as it is in the .rect file
+		m_enemyBeingSpawned = new DisplayableObject("goomba_fall", m_coord.x + 8, m_coord.y + 8); // Name is for gfx to pick the right sprite name: needs to be the full name as it is in the .rect file
 
 		m_spawnTimer.restart();
 	}
@@ -63,8 +62,8 @@ void Pipe::SendEnemyToGameEngine()
 
 		/*  and send the actual Enemy to G */
 		Goomba *goombaJustSpawned = new Goomba("goomba", m_enemyBeingSpawned->GetPosition(), DLEFT);
-		m_gameEngine->AddCharacterToArray(goombaJustSpawned);
-		m_gameEngine->AddForegroundItemToArray(goombaJustSpawned);
+		EngineEvent newGoomba(NEW_CHARACTER, goombaJustSpawned);
+		m_gameEngine->PushEvent(newGoomba);
 
 		goombaJustSpawned = NULL;
 		delete m_enemyBeingSpawned;
