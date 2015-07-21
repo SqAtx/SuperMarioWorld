@@ -122,6 +122,9 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 				m_engines["s"]->PushEvent(playMusic);
 			}
 			break;
+		case sf::Keyboard::N:
+			m_listPipes[1]->ToggleSpawn();
+			break;
 		default:
 			break;
 	}

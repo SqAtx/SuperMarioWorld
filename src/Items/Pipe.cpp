@@ -5,6 +5,7 @@ const int Pipe::milisecondsBetweenSpawns = 3000;
 
 Pipe::Pipe(std::string _name, sf::Vector2f _coord, int _pipeId, PipeType _type, GameEngine *_g) : DisplayableObject(_name, _coord, NORMAL), m_pipeId(_pipeId), m_type(_type), m_gameEngine(_g)
 {
+	m_spawnIsOn = true;
 	m_enemyBeingSpawned = NULL;
 	m_spawnTimer.restart();
 }
@@ -17,7 +18,8 @@ Pipe::~Pipe()
 
 void Pipe::HandleSpawnEnemies(float _dt)
 {
-	SpawnEnemyIfTimeElapsed();
+	if (m_spawnIsOn)
+		SpawnEnemyIfTimeElapsed();
 
 	if (m_enemyBeingSpawned != NULL)
 	{
@@ -55,7 +57,7 @@ void Pipe::SendEnemyToGameEngine()
 {
 	if (m_enemyBeingSpawned != NULL)
 	{
-		/* The enemy used to be a mere displayableObject (as seen by GFX), we remove that... */
+		/* The enemy used to be a mere displayableObject (as seen by GFX), we remove it... */
 		EngineEvent removeEnemyBeingSpawned(REMOVE_LVL_BLOC, m_enemyBeingSpawned->GetID());
 		m_gameEngine->TransmitInfoToGFX(removeEnemyBeingSpawned);
 

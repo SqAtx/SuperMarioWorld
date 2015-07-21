@@ -40,6 +40,7 @@ class GraphicsEngine : public Engine
 
 		// List of all the foreground tiles in the current level and their coordinates
 		std::map<unsigned int, InfoForDisplay> m_listForegroundItems;
+		std::map<unsigned int, InfoForDisplay> m_listPipes; // The pipes are special because they need to be displayed last in order to hide whatever they contain
 		void UpdateForegroundItem(InfoForDisplay _info);
 
 		std::map<int, std::string> m_spritesCurrentlyDisplayed; // Contains id of displayable object and which sprite (name from RECT file) is displayed ATM
