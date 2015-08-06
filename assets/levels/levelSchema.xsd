@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<!-- http://www.w3schools.com/schema/schema_example.asp -->
+
+	<!-- Generic definition for sprite elements -->
+	<xs:complexType name="sprite_type">
+		<xs:attribute name="x" type="xs:nonNegativeInteger"/>
+		<xs:attribute name="y" type="xs:nonNegativeInteger"/>
+		<xs:attribute name="sprite" type="xs:string"/>
+	</xs:complexType>
+
+	<!-- Definition of base elements -->
+	<xs:element name="mario">
+		<xs:complexType>
+			<xs:attribute name="x" type="xs:nonNegativeInteger"/>
+			<xs:attribute name="y" type="xs:nonNegativeInteger"/>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="goomba">
+		<xs:complexType>
+			<xs:attribute name="x" type="xs:nonNegativeInteger"/>
+			<xs:attribute name="y" type="xs:nonNegativeInteger"/>
+			<xs:attribute name="direction" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="box" type="sprite_type"/>
+
+	<xs:element name="pipe">
+		<xs:complexType>
+			<xs:attribute name="x" type="xs:nonNegativeInteger"/>
+			<xs:attribute name="y" type="xs:nonNegativeInteger"/>
+			<xs:attribute name="sprite" type="xs:string"/>
+			<xs:attribute name="type" type="xs:string"/>
+			<xs:attribute name="id" type="xs:positiveInteger"/>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="floor_tile" type="sprite_type"/>
+
+	<!-- Definition of complex elements -->
+	<xs:element name="level">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="characters">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="mario" minOccurs="1" maxOccurs="1"/>
+							<xs:element ref="goomba" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				
+				<xs:element name="foreground">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="pipe" minOccurs="0" maxOccurs="1"/>
+							<xs:element ref="box" minOccurs="0" maxOccurs="unbounded"/>
+							<xs:element ref="floor_tile" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			
+			<xs:attribute name="height" type="xs:positiveInteger"/>
+			<xs:attribute name="width" type="xs:positiveInteger"/>
+			<xs:attribute name="background" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
