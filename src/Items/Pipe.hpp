@@ -29,6 +29,7 @@ class Pipe : public DisplayableObject
 
 		bool m_spawnIsOn;
 		DisplayableObject *m_enemyBeingSpawned; // One enemy at a time can be spawed and controlled by the pipe
+		bool m_justFinishedSpawn;
 		sf::Clock m_spawnTimer;
 
 		GameEngine *m_gameEngine;
@@ -38,6 +39,7 @@ class Pipe : public DisplayableObject
 		void SendEnemyBeingSpawnedToGFX();
 
 		void SendEnemyToGameEngine();
+		void RemoveEnemyBeingSpawned();
 
 		static const int milisecondsBetweenSpawns;
 };

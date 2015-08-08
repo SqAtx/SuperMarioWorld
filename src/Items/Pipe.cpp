@@ -7,6 +7,7 @@ Pipe::Pipe(std::string _name, sf::Vector2f _coord, int _pipeId, PipeType _type, 
 {
 	m_spawnIsOn = true;
 	m_enemyBeingSpawned = NULL;
+	m_justFinishedSpawn = false;
 	m_spawnTimer.restart();
 }
 
@@ -26,8 +27,19 @@ void Pipe::HandleSpawnEnemies(float _dt)
 		MoveEnemyBeingSpawned(_dt);
 		SendEnemyBeingSpawnedToGFX();
 
-		if (m_enemyBeingSpawned->GetPosition().x < m_coord.x - 16)
+		if (m_justFinishedSpawn)
+		{
+			RemoveEnemyBeingSpawned();
+			m_justFinishedSpawn = false;
+		}
+
+		if (m_enemyBeingSpawned != NULL && m_enemyBeingSpawned->GetPosition().x < m_coord.x - 16)
+		{
 			SendEnemyToGameEngine();
+			// RemoveEnemyBeingSpawned should be called here but then the enemy will be missing when gfx.Frame() is called, causing the enemy to flicker.
+			// So it's called at the next frame, which requires a flag.
+			m_justFinishedSpawn = true;
+		}
 	}
 }
 
@@ -56,17 +68,20 @@ void Pipe::SendEnemyToGameEngine()
 {
 	if (m_enemyBeingSpawned != NULL)
 	{
-		/* The enemy used to be a mere displayableObject (as seen by GFX), we remove it... */
-		EngineEvent removeEnemyBeingSpawned(REMOVE_LVL_BLOC, m_enemyBeingSpawned->GetID());
-		m_gameEngine->TransmitInfoToGFX(removeEnemyBeingSpawned);
-
-		/*  and send the actual Enemy to G */
 		Goomba *goombaJustSpawned = new Goomba("goomba", m_enemyBeingSpawned->GetPosition(), DLEFT);
 		EngineEvent newGoomba(NEW_CHARACTER, goombaJustSpawned);
 		m_gameEngine->PushEvent(newGoomba);
 
 		goombaJustSpawned = NULL;
-		delete m_enemyBeingSpawned;
-		m_enemyBeingSpawned = NULL;
 	}
+}
+
+void Pipe::RemoveEnemyBeingSpawned()
+{
+	/* The enemy used to be a mere displayableObject (as seen by GFX), we remove it... */
+	EngineEvent removeEnemyBeingSpawned(REMOVE_LVL_BLOC, m_enemyBeingSpawned->GetID());
+	m_gameEngine->TransmitInfoToGFX(removeEnemyBeingSpawned);
+
+	delete m_enemyBeingSpawned;
+	m_enemyBeingSpawned = NULL;
 }
