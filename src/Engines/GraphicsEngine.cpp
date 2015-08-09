@@ -89,8 +89,6 @@ void GraphicsEngine::ProcessWindowEvents()
 
 void GraphicsEngine::DisplayWindow()
 {
-	sf::Clock clock;
-
 	SetBackgroundToDraw();
 	SetForegroundToDraw();
 
@@ -110,8 +108,8 @@ void GraphicsEngine::DrawGame()
 		m_gameWindow->draw(m_backgroundToDraw[i]);
 	for (unsigned int i = 0; i < m_levelStructureToDraw.size(); i++)
 		m_gameWindow->draw(m_levelStructureToDraw[i]);
-	for (unsigned int i = 0; i < m_displayableObjectsToDraw.size(); i++)
-		m_gameWindow->draw(m_displayableObjectsToDraw[i]);
+	for (std::map<unsigned int, sf::Sprite>::iterator it = m_displayableObjectsToDraw.begin(); it != m_displayableObjectsToDraw.end(); ++it)
+		m_gameWindow->draw(it->second);
 }
 
 void GraphicsEngine::StoreLevelInfo(LevelInfo _info)
