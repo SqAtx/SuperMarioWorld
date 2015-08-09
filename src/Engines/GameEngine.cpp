@@ -254,8 +254,6 @@ void GameEngine::KillCharacter(MovingObject& _character)
 				EngineEvent deathSound(PLAY_SOUND, DEATH_SND);
 				m_engines["s"]->PushEvent(deathSound);
 			}
-
-			std::cout << "Character #" << i << " died" << std::endl;
 		}
 	}
 }
