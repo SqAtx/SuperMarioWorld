@@ -34,9 +34,9 @@ Then run `./SuperMarioWorld`.
 - Sound and music management
 - Level stored in an XML file (background, characters, floor, foreground items). Foreground items can be animated.
 - Collisions (first stable version, to be improved) between the player, the enemies and the foreground items and appropriate reaction
+- Enemies spawn automatically inside the pipe
 
 ## What next ?
-- Enemy spawn in pipes
 - Death animations
 - Scrolling
 - Better graphics ?

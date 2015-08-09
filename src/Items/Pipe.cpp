@@ -68,7 +68,7 @@ void Pipe::SendEnemyToGameEngine()
 {
 	if (m_enemyBeingSpawned != NULL)
 	{
-		Goomba *goombaJustSpawned = new Goomba("goomba", m_enemyBeingSpawned->GetPosition(), DLEFT);
+		Goomba *goombaJustSpawned = new Goomba("goomba", m_enemyBeingSpawned->GetPosition(), DLEFT); // Will be deleted by game engine when character dies
 		EngineEvent newGoomba(NEW_CHARACTER, goombaJustSpawned);
 		m_gameEngine->PushEvent(newGoomba);
 
