@@ -66,10 +66,11 @@ CollisionDirection CollisionHandler::HandleCollisionWithRect(unsigned int _objId
 	return direction;
 }
 
+/* The result is with respect to the reference: if the object is on its right then the result will be RIGHT */
 CollisionDirection CollisionHandler::DetectCollisionWithRect(sf::FloatRect _objRect, sf::FloatRect _refRect)
 {
 	CollisionDirection direction = NO_COL;
-	float minGap = 2; // Minimum gap, in pixels, for the function to consider there can be a collision.
+	float minGap = 5; // Minimum gap, in pixels, for the function to consider there can be a collision.
 
 	/* Clarity */
 	float objTop = _objRect.top;
