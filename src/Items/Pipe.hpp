@@ -2,7 +2,7 @@
 #define PIPE_H
 
 #include "../DisplayableObject.hpp"
-#include <SFML\System\Clock.hpp>
+#include <SFML/System/Clock.hpp>
 
 class GameEngine;
 class Enemy;
@@ -15,7 +15,7 @@ class Pipe : public DisplayableObject
 	public:
 		Pipe(std::string _name, sf::Vector2f _coord, int _pipeId, PipeType _type, GameEngine *_g);
 		~Pipe();
-		
+
 		void HandleSpawnEnemies(float _dt);
 
 		unsigned int GetPipeId() { return m_pipeId; };
