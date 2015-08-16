@@ -2,6 +2,7 @@
 #define GRAPHICSENGINE_H
 
 #include "Engine.hpp"
+#include "../Utilities/SpriteHandler.hpp"
 
 #include <fstream>
 
@@ -25,10 +26,8 @@ class GraphicsEngine : public Engine
 
     private:
 		sf::RenderWindow *m_gameWindow;
+		SpriteHandler *m_spriteHandler;
 		static const float FramerateLimit;
-		static const int FramesBetweenAnimationChanges;
-
-		std::map<std::string, sf::Texture> m_textures;
 
 		sf::Sprite* m_tmpSprite;
 		std::string m_currentBackgroundName;
@@ -43,13 +42,14 @@ class GraphicsEngine : public Engine
 		std::map<unsigned int, InfoForDisplay> m_listPipes; // The pipes are special because they need to be displayed last in order to hide whatever they contain
 		void UpdateForegroundItem(InfoForDisplay _info);
 
-		std::map<int, std::string> m_spritesCurrentlyDisplayed; // Contains id of displayable object and which sprite (name from RECT file) is displayed ATM
+		std::map<unsigned int, std::string> m_spritesCurrentlyDisplayed; // Contains id of displayable object and which sprite (name from RECT file) is displayed ATM
+		std::map<unsigned int, Sprite::StaticOrAnimated> m_animationStates; // One for each DisplayableObject
 
 		void ProcessEvent(EngineEvent& _event);
 		void ProcessWindowEvents();
 
-		void LoadTextures(); // Load all textures at beginning of level
-		void LoadTexturesFromFile(std::string _fileName);
+		std::string GetTextureName(unsigned int _id, std::string _name, State _state);
+		void UpdateAnimationStates(unsigned int _id, std::string _stateFullName, int nbTextures);
 
 		void ResetSpritesToDraw();
 
@@ -61,20 +61,11 @@ class GraphicsEngine : public Engine
 		void SetListOfDisplayablesToDraw(std::map<unsigned int, InfoForDisplay>& _list);
 		void SetDisplayableObjectToDraw(InfoForDisplay _info);
 
-		std::map<unsigned int, Sprite::StaticOrAnimated> m_animationStates; // One for each DisplayableObject
-
-		std::string GetTextureNameFromDisplayInfo(int _id, std::string _name, State _state);
-		std::string GetTextureNameFromStateName(int _id, std::string _name);
-		int HowManyLoadedTexturesContainThisName(std::string _name);
-		std::string FindNextTextureName(int _id, std::string _name, int _nbTextures);
-
 		void DrawGame();
 
 		void StoreLevelInfo(LevelInfo _info);
 
 		void ResetTmpSprite();
-
-		static const std::string texturesPath;
 
 #ifdef DEBUG_MODE
 		sf::Clock m_clock;

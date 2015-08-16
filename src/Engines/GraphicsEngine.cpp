@@ -5,8 +5,11 @@ const float GraphicsEngine::FramerateLimit = 60;
 GraphicsEngine::GraphicsEngine(Game *_g): Engine (_g)
 {
 	m_gameWindow = new sf::RenderWindow(sf::VideoMode(WIN_WIDTH, WIN_HEIGHT, 32), "Super Mario !", sf::Style::Titlebar | sf::Style::Close);
+
+	m_spriteHandler = new SpriteHandler();
+	m_spriteHandler->LoadTextures();
+
 	m_tmpSprite = new sf::Sprite();
-	LoadTextures();
 
 #ifdef DEBUG_MODE
 	m_font.loadFromFile("arial.ttf");
@@ -18,6 +21,7 @@ GraphicsEngine::GraphicsEngine(Game *_g): Engine (_g)
 
 GraphicsEngine::~GraphicsEngine()
 {
+	delete m_spriteHandler;
 	delete m_gameWindow;
 }
 
@@ -56,6 +60,15 @@ void GraphicsEngine::ProcessEvent(EngineEvent& _event)
 		default:
 			break;
 	}
+}
+
+void GraphicsEngine::ResetSpritesToDraw()
+{
+	while (!m_backgroundToDraw.empty())
+		m_backgroundToDraw.pop_back();
+	while (!m_levelStructureToDraw.empty())
+		m_levelStructureToDraw.pop_back();
+	m_displayableObjectsToDraw.clear();
 }
 
 // Process windows events that have happened since the last loop iteration (sent by SFML)
@@ -101,6 +114,139 @@ void GraphicsEngine::DisplayWindow()
 	m_gameWindow->display();
 }
 
+void GraphicsEngine::SetBackgroundToDraw()
+{
+	ResetTmpSprite();
+	m_tmpSprite->setTexture(m_spriteHandler->GetTexture("background_" + m_currentBackgroundName));
+	m_backgroundToDraw.push_back(*m_tmpSprite);
+}
+
+void GraphicsEngine::SetForegroundToDraw()
+{
+	SetListOfDisplayablesToDraw(m_listForegroundItems);
+	SetListOfDisplayablesToDraw(m_listPipes);
+}
+
+/* Keeping this function even if called only in one place, in case I add another layer between foreground and background */
+void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<unsigned int, InfoForDisplay>& _list)
+{
+	unsigned int id;
+	sf::Vector2f tmpCoords;
+	std::string spriteName;
+
+	for (std::map<unsigned int, InfoForDisplay>::iterator it = _list.begin(); it != _list.end(); ++it)
+	{
+		ResetTmpSprite();
+
+		id = it->first;
+		tmpCoords.x = it->second.coordinates.left;
+		tmpCoords.y = it->second.coordinates.top;
+
+		spriteName = GetTextureName(id, it->second.name, it->second.state);
+
+		m_tmpSprite->setTexture(m_spriteHandler->GetTexture(spriteName));
+		m_tmpSprite->setPosition(tmpCoords);
+		m_levelStructureToDraw.push_back(*m_tmpSprite);
+
+		// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions
+		EngineEvent tmpEvent(INFO_POS_LVL, id, m_tmpSprite->getGlobalBounds());
+		m_engines["g"]->PushEvent(tmpEvent);
+	}
+}
+
+void GraphicsEngine::UpdateForegroundItem(InfoForDisplay _info)
+{
+	if (_info.name.find("pipe_") == std::string::npos)
+		m_listForegroundItems[_info.id] = _info;
+	else
+		m_listPipes[_info.id] = _info;
+}
+
+void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
+{
+	ResetTmpSprite();
+
+	std::string spriteName = GetTextureName(_info.id, _info.name, _info.state);
+	m_tmpSprite->setTexture(m_spriteHandler->GetTexture(spriteName));
+
+	m_tmpSprite->setPosition(sf::Vector2f(_info.coordinates.left, _info.coordinates.top));
+	if (_info.reverse)
+	{
+		float height = m_tmpSprite->getGlobalBounds().height;
+		float width = m_tmpSprite->getGlobalBounds().width;
+		m_tmpSprite->setTextureRect(sf::IntRect(width, 0, -width, height));
+	}
+
+	/*	gfx can receive the information to display a character several times (if it has been hit for exemple, info is sent fron g to gfx right after the hit)
+	Only the last one received will be displayed */
+	m_displayableObjectsToDraw[_info.id] = *m_tmpSprite;
+
+	// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions
+	EngineEvent tmpEvent(INFO_POS_LVL, _info.id, m_tmpSprite->getGlobalBounds());
+	m_engines["g"]->PushEvent(tmpEvent);
+
+#ifdef DEBUG_MODE
+	if (_info.name == "mario")
+	{
+		m_posMario.x = _info.coordinates.left;
+		m_posMario.y = _info.coordinates.top;
+	}
+#endif
+}
+
+/* Figures out which sprite to display, ie the name of the sprite in the RECT file. The name is fetched only if it's an animation or if the state has changed. */
+std::string GraphicsEngine::GetTextureName(unsigned int _id, std::string _name, State _state)
+{
+	std::string newTextureName, oldTextureName;
+	std::string fullStateName = m_spriteHandler->GetFullStateName(_name, _state);
+	int nbTextures = m_spriteHandler->HowManyLoadedTexturesContainThisName(fullStateName);
+
+	assert(nbTextures > 0);
+
+	if (m_animationStates.find(_id) == m_animationStates.end()) // If id doesn't exist in the map, create entry as UNKNOWN
+		m_animationStates[_id] = Sprite::UNKNOWN;
+
+	if (m_spritesCurrentlyDisplayed.find(_id) != m_spritesCurrentlyDisplayed.end())
+		oldTextureName = m_spritesCurrentlyDisplayed[_id];
+	else
+		oldTextureName = "";
+
+	switch (m_animationStates[_id])
+	{
+		case Sprite::UNKNOWN:
+		case Sprite::ANIMATED:
+		case Sprite::NEW_STATIC:
+			newTextureName = m_spriteHandler->GetTextureNameFromStateName(fullStateName, oldTextureName, nbTextures);
+			break;
+		case Sprite::STATIC:
+			if (fullStateName == m_spritesCurrentlyDisplayed[_id]) // Sprite same as previous
+				newTextureName = fullStateName;
+			else
+				newTextureName = m_spriteHandler->GetTextureNameFromStateName(fullStateName, oldTextureName, nbTextures);
+			break;
+		default:
+			throw std::exception();
+	}
+
+	m_spritesCurrentlyDisplayed[_id] = newTextureName;
+	return newTextureName;
+}
+
+void GraphicsEngine::UpdateAnimationStates(unsigned int _id, std::string _stateFullName, int nbTextures)
+{
+	if (nbTextures == 1)			// Static
+	{
+		m_animationStates[_id] = Sprite::STATIC;
+
+		if (_stateFullName != m_spritesCurrentlyDisplayed[_id])
+			m_animationStates[_id] = Sprite::NEW_STATIC;
+	}
+	else							// Animation
+	{
+		m_animationStates[_id] = Sprite::ANIMATED;
+	}
+}
+
 // Draw the 3 layers in the correct order
 void GraphicsEngine::DrawGame()
 {
@@ -115,6 +261,12 @@ void GraphicsEngine::DrawGame()
 void GraphicsEngine::StoreLevelInfo(LevelInfo _info)
 {
 	m_currentBackgroundName = _info.backgroundName;
+}
+
+void GraphicsEngine::ResetTmpSprite()
+{
+	delete m_tmpSprite;
+	m_tmpSprite = new sf::Sprite();
 }
 
 #ifdef DEBUG_MODE

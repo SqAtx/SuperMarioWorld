@@ -3,12 +3,17 @@
 */
 #include <exception>
 #include "../Engines/GraphicsEngine.hpp"
-#include "Util.hpp"
+#include "SpriteHandler.hpp"
 
-const int GraphicsEngine::FramesBetweenAnimationChanges = 7;
-const std::string GraphicsEngine::texturesPath = "../assets/sprites/";
+const int SpriteHandler::FramesBetweenAnimationChanges = 7;
+const std::string SpriteHandler::texturesPath = "../assets/sprites/";
 
-void GraphicsEngine::LoadTextures()
+SpriteHandler::SpriteHandler()
+{
+
+}
+
+void SpriteHandler::LoadTextures()
 {
 	LoadTexturesFromFile("background");
 	LoadTexturesFromFile("floor");
@@ -17,7 +22,7 @@ void GraphicsEngine::LoadTextures()
 	LoadTexturesFromFile("item");
 }
 
-void GraphicsEngine::LoadTexturesFromFile(std::string _fileName)
+void SpriteHandler::LoadTexturesFromFile(std::string _fileName)
 {
 	/* Each line looks like "state 00 00 00 00 " with the numbers being left top right bottom */
 	std::string buffer;
@@ -25,8 +30,8 @@ void GraphicsEngine::LoadTexturesFromFile(std::string _fileName)
 	std::string tmpStateName;
 	sf::IntRect tmpCoordinates;
 
-	std::string imgFileName = GraphicsEngine::texturesPath + _fileName + ".png";
-	std::string rectFileName = GraphicsEngine::texturesPath + _fileName + ".rect";
+	std::string imgFileName = SpriteHandler::texturesPath + _fileName + ".png";
+	std::string rectFileName = SpriteHandler::texturesPath + _fileName + ".rect";
 
 	std::ifstream rectFile;
 	rectFile.open(rectFileName);
@@ -51,7 +56,7 @@ void GraphicsEngine::LoadTexturesFromFile(std::string _fileName)
 			tmpCoordinates.top = std::stoi(splittedBuffer[2]);
 			tmpCoordinates.width = std::stoi(splittedBuffer[3]) - tmpCoordinates.left;
 			tmpCoordinates.height = std::stoi(splittedBuffer[4]) - tmpCoordinates.top;
-			m_textures[_fileName + "_" + tmpStateName].loadFromFile(texturesPath + _fileName + ".png", tmpCoordinates);
+			m_textures[_fileName + "_" + tmpStateName].loadFromFile(SpriteHandler::texturesPath + _fileName + ".png", tmpCoordinates);
 		}
 		catch (std::invalid_argument err)
 		{
@@ -62,171 +67,42 @@ void GraphicsEngine::LoadTexturesFromFile(std::string _fileName)
 	rectFile.close();
 }
 
-void GraphicsEngine::ResetSpritesToDraw()
+sf::Texture& SpriteHandler::GetTexture(std::string _name)
 {
-	while (!m_backgroundToDraw.empty())
-		m_backgroundToDraw.pop_back();
-	while (!m_levelStructureToDraw.empty())
-		m_levelStructureToDraw.pop_back();
-	m_displayableObjectsToDraw.clear();
-}
-
-void GraphicsEngine::SetBackgroundToDraw()
-{
-	ResetTmpSprite();
-	m_tmpSprite->setTexture(m_textures["background_" + m_currentBackgroundName]);
-	m_backgroundToDraw.push_back(*m_tmpSprite);
-}
-
-void GraphicsEngine::SetForegroundToDraw()
-{
-	SetListOfDisplayablesToDraw(m_listForegroundItems);
-	SetListOfDisplayablesToDraw(m_listPipes);
-}
-
-/* Keeping this function even if called only in one place, in case I add another layer between foreground and background */
-void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<unsigned int, InfoForDisplay>& _list)
-{
-	unsigned int id;
-	sf::Vector2f tmpCoords;
-	std::string spriteName;
-
-	for (std::map<unsigned int, InfoForDisplay>::iterator it = _list.begin(); it != _list.end(); ++it)
-	{
-		ResetTmpSprite();
-
-		id = it->first;
-		tmpCoords.x = it->second.coordinates.left;
-		tmpCoords.y = it->second.coordinates.top;
-
-		spriteName = GetTextureNameFromDisplayInfo(id, it->second.name, it->second.state);
-
-		m_tmpSprite->setTexture(m_textures[spriteName]);
-		m_tmpSprite->setPosition(tmpCoords);
-		m_levelStructureToDraw.push_back(*m_tmpSprite);
-
-		// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions
-		EngineEvent tmpEvent (INFO_POS_LVL, id, m_tmpSprite->getGlobalBounds());
-		m_engines["g"]->PushEvent(tmpEvent);
-	}
-}
-
-void GraphicsEngine::UpdateForegroundItem(InfoForDisplay _info)
-{
-	if (_info.name.find("pipe_") == std::string::npos)
-		m_listForegroundItems[_info.id] = _info;
-	else
-		m_listPipes[_info.id] = _info;
-}
-
-void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
-{
-	ResetTmpSprite();
-
-	std::string spriteName = GetTextureNameFromDisplayInfo(_info.id, _info.name, _info.state);
-	m_tmpSprite->setTexture(m_textures[spriteName]);
-
-	m_tmpSprite->setPosition(sf::Vector2f(_info.coordinates.left, _info.coordinates.top));
-	if (_info.reverse)
-	{
-		float height = m_tmpSprite->getGlobalBounds().height;
-		float width = m_tmpSprite->getGlobalBounds().width;
-		m_tmpSprite->setTextureRect(sf::IntRect(width, 0, -width, height));
-	}
-
-	/*	gfx can receive the information to display a character several times (if it has been hit for exemple, info is sent fron g to gfx right after the hit)
-		Only the last one received will be displayed */
-	m_displayableObjectsToDraw[_info.id] = *m_tmpSprite;
-
-	// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions
-	EngineEvent tmpEvent(INFO_POS_LVL, _info.id, m_tmpSprite->getGlobalBounds());
-	m_engines["g"]->PushEvent(tmpEvent);
-
-#ifdef DEBUG_MODE
-	if (_info.name == "mario")
-	{
-		m_posMario.x = _info.coordinates.left;
-		m_posMario.y = _info.coordinates.top;
-	}
-#endif
+	return m_textures[_name];
 }
 
 /* Figures out which sprite to display, ie the name of the sprite in the RECT file */
-std::string GraphicsEngine::GetTextureNameFromDisplayInfo(int _id, std::string _name, State _state)
+std::string SpriteHandler::GetFullStateName(std::string _name, State _state)
 {
-	std::string fullName;
 	switch (_state)
 	{
 		case STATIC:
-			fullName = _name + "_static";
-			break;
+			return _name + "_static";
 		case RUN:
 		case WALK:
-			fullName = _name + "_walk";
-			break;
+			return _name + "_walk";
 		case JUMP:
-			fullName = _name + "_jump";
-			break;
+			return _name + "_jump";
 		case FALL:
-			fullName = _name + "_fall";
-			break;
+			return _name + "_fall";
 		case EMPTY:
-			fullName = _name + "_empty";
-			break;
+			return _name + "_empty";
 		case UNKNOWN:
 		case NORMAL:
-			fullName = _name;
-			break;
+			return _name;
 		default:
 			assert(false);
 			return NULL;
 	}
-
-	/* Optimisation: The name is fetched only if it's an animation or if the state has changed */
-	if (m_animationStates.find(_id) == m_animationStates.end()) // If id doesn't exist in the map
-		m_animationStates[_id] = Sprite::UNKNOWN;
-
-	switch (m_animationStates[_id])
-	{
-		case Sprite::UNKNOWN:
-		case Sprite::ANIMATED:
-		case Sprite::NEW_STATIC:
-			return GetTextureNameFromStateName(_id, fullName);
-		case Sprite::STATIC:
-			if (fullName == m_spritesCurrentlyDisplayed[_id]) // Sprite same as previous
-				return fullName;
-			else
-				return GetTextureNameFromStateName(_id, fullName);
-	}
-	throw std::exception();
 }
 
-/* Get texture name AND updates the animationStates array: STATIC, ANIMATED or NEW_STATIC */
-std::string GraphicsEngine::GetTextureNameFromStateName(int _id, std::string _stateName)
+std::string SpriteHandler::GetTextureNameFromStateName(std::string _stateFullName, std::string _currentTextureName, int _nbTextures)
 {
-	std::string textureName;
-	int nbTextures = HowManyLoadedTexturesContainThisName(_stateName);
-	assert(nbTextures > 0);
-
-	if (nbTextures == 1)			// Static
-	{
-		textureName = _stateName;
-		m_animationStates[_id] = Sprite::STATIC;
-
-		if (textureName != m_spritesCurrentlyDisplayed[_id])
-			m_animationStates[_id] = Sprite::NEW_STATIC;
-	}
-	else							// Animation
-	{
-		textureName = FindNextTextureName(_id, _stateName, nbTextures);
-		m_animationStates[_id] = Sprite::ANIMATED;
-	}
-
-	m_spritesCurrentlyDisplayed[_id] = textureName;
-	return textureName;
+	return _nbTextures == 1 ? _stateFullName : FindNextTextureName(_stateFullName, _currentTextureName, _nbTextures);
 }
 
-int GraphicsEngine::HowManyLoadedTexturesContainThisName(std::string _stateName)
+int SpriteHandler::HowManyLoadedTexturesContainThisName(std::string _stateName)
 {
 	// Counts the number of textures that are either exactly _stateName (static), or smth like _stateName + "2" (animation)
 	int nb = 0;
@@ -246,29 +122,22 @@ int GraphicsEngine::HowManyLoadedTexturesContainThisName(std::string _stateName)
 	return nb == 1 ? 0 : nb; // nb == 1 here means that _stateName == "walk" and there is no "walk" in the map, but rather a "walk1", and this is a problem (this would be an animation with only 1 sprite)
 }
 
-std::string GraphicsEngine::FindNextTextureName(int _id, std::string _stateName, int _nbTextures)
+std::string SpriteHandler::FindNextTextureName(std::string _stateName, std::string _currentTextureName, int _nbTextures)
 {
 	static int framesSinceLastChange = 0;
 
-	std::string currentTextureName = m_spritesCurrentlyDisplayed[_id];
-	if (currentTextureName == "" || currentTextureName.find(_stateName) == std::string::npos) // If it's the first time we are displaying this id OR if we are beginning the animation
+	if (_currentTextureName == "" || _currentTextureName.find(_stateName) == std::string::npos) // If it's the first time we are displaying this id OR if we are beginning the animation
 		return _stateName + "1";
 
 	assert(HowManyLoadedTexturesContainThisName(_stateName) > 1);
 
 	// We are now ready to display the next sprite of the animation but we can't display a new sprite at every frame, that's too fast. So we use FramesBetweenAnimationChanges.
 	framesSinceLastChange++;
-	if (framesSinceLastChange % GraphicsEngine::FramesBetweenAnimationChanges != 0)
-		return currentTextureName;
+	if (framesSinceLastChange % SpriteHandler::FramesBetweenAnimationChanges != 0)
+		return _currentTextureName;
 	else
 		framesSinceLastChange = 0;
 
-	int nbCurrentFrame = std::stoi(currentTextureName.substr(_stateName.length())); // currentTextureName is like mario_walk2 and _stateName is like mario_walk ==> we get the 2
+	int nbCurrentFrame = std::stoi(_currentTextureName.substr(_stateName.length())); // currentTextureName is like mario_walk2 and _stateName is like mario_walk ==> we get the 2
 	return _stateName + (nbCurrentFrame == _nbTextures ? "1" : std::to_string(++nbCurrentFrame));
-}
-
-void GraphicsEngine::ResetTmpSprite()
-{
-	delete m_tmpSprite;
-	m_tmpSprite = new sf::Sprite();
 }
