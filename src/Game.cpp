@@ -36,7 +36,7 @@ void Game::Run()
 		clock.restart();
 		m_gfx->Frame();
         m_s->Frame();
-		
+
         m_running_mutex.lock();
         running = m_running;
         m_running_mutex.unlock();

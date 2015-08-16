@@ -23,7 +23,7 @@ class GameEngine : public Engine
 
 		/* Getters / setters for LevelImporter */
 		void SetMarioInitialPosition(sf::Vector2f _pos) { m_initPosMario = _pos; };
-		
+
 		/* Getters / setters for Collisionhandler */
 		DisplayableObject *GetForegroundItem(unsigned int _id) { return m_listForegroundItems[_id]; };
 		const sf::Vector2f GetCoordinatesOfForegroundItem(unsigned int _id) { return m_listForegroundItems[_id]->GetPosition(); };

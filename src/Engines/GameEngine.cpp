@@ -186,6 +186,7 @@ void GameEngine::StartLevel(std::string _lvlName)
 /* Takes the place of the first NULL pointer (= dead character), or is pushed at the end */
 void GameEngine::AddCharacterToArray(MovingObject *_character)
 {
+	// premature optimization ?
 	int initialSize = m_characters.size();
 	int indexCharacter = -1;
 	for (int i = 0; i < initialSize; i++)
@@ -215,7 +216,7 @@ void GameEngine::AddForegroundItemToArray(DisplayableObject *_item)
 
 void GameEngine::AddPipeToArray(Pipe *_pipe)
 {
-	m_listPipes[_pipe->GetPipeId()] = _pipe; 
+	m_listPipes[_pipe->GetPipeId()] = _pipe;
 };
 
 
