@@ -1,13 +1,20 @@
 #include "Game.hpp"
+#include "System/Listener/CloseRequestListener.hpp"
 
 Game::Game()
 {
     m_running = true;
 
+    m_eventEngine = new EventEngine();
+
     // Creating engines
-    m_g = new GameEngine (this);
-    m_gfx = new GraphicsEngine (this);
-    m_s = new SoundEngine (this);
+    m_g = new GameEngine (m_eventEngine);
+    m_gfx = new GraphicsEngine (m_eventEngine);
+    m_s = new SoundEngine (m_eventEngine);
+
+    CloseRequestListener* closeRequestListener = new CloseRequestListener(this);
+    m_eventEngine->addListener("graphics.stop_request", closeRequestListener);
+    m_createdListeners.push_back(closeRequestListener);
 
     // Creating links between engines
     m_g->Attach_Engine ("gfx", m_gfx);
@@ -23,6 +30,9 @@ Game::~Game()
     delete m_g;
     delete m_gfx;
     delete m_s;
+    for (unsigned int i = 0; i < m_createdListeners.size(); i++) {
+        delete m_createdListeners[i];
+    }
 }
 
 void Game::Run()

@@ -2,7 +2,7 @@
 
 const std::string SoundEngine::soundsPath = "../assets/sounds/";
 
-SoundEngine::SoundEngine(Game *_g) : Engine(_g), m_indexCurrentMusic(-1)
+SoundEngine::SoundEngine(EventEngine* _eventEngine) : Engine(_eventEngine), m_indexCurrentMusic(-1)
 {
 	m_soundBeingPlayed = new sf::Sound();
 	m_currentMusic = new sf::Music();

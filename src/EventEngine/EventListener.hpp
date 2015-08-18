@@ -12,6 +12,8 @@ class EventListener
 {
     public:
 
+        virtual ~EventListener(){};
+
         /**
          * Called when an event is dispached
          * @param string eventType Type of received event

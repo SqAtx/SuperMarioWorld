@@ -13,7 +13,7 @@
 class GameEngine : public Engine
 {
     public:
-        GameEngine(Game *_g);
+        GameEngine(EventEngine*);
         ~GameEngine();
 
 		void Frame();

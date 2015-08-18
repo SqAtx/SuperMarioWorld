@@ -1,7 +1,7 @@
 #include "GameEngine.hpp"
 #include "../Game.hpp"
 
-GameEngine::GameEngine(Game *_g) : Engine(_g), m_levelStarted(false), m_indexMario(-1)
+GameEngine::GameEngine(EventEngine *_eventEngine) : Engine(_eventEngine), m_levelStarted(false), m_indexMario(-1)
 {
 	m_collisionHandler = new CollisionHandler(this);
 	m_levelImporter = new LevelImporter(this);
@@ -88,9 +88,6 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 			break;
 		case DEATH_SOUND_STOPPED:
 			m_deathSoundIsPlaying = false;
-			break;
-		case GAME_STOPPED:
-			m_parent->Stop();
 			break;
 		default:
 			break;

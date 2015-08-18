@@ -1,6 +1,5 @@
 #include "EventEngine.hpp"
 
-
 void EventEngine::addListener(EventListener* _listener)
 {
     m_generalsListeners.push_back(_listener);
@@ -18,7 +17,7 @@ void EventEngine::addListener(const std::string &_eventName, EventListener* _lis
 void EventEngine::dispach(const std::string &_eventName, Event* _event)
 {
     // If some performance issue, we can think about sending the event in a new thread
-    if (m_specificListeners.count(_eventName) == 0) {
+    if (m_specificListeners.count(_eventName) != 0) {
         for (unsigned int i = 0; i < m_specificListeners[_eventName].size(); i++) {
             m_specificListeners[_eventName][i]->onEvent(_eventName, _event);
         }
