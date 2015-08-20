@@ -24,7 +24,7 @@ class EventEngine
 
         /**
          * Add an Event lister to the Engine
-         * which will be call for one type of event only
+         * which will be called for one type of event only
          * @param string _eventNme Event to listen
          * @param EventListener* _listener
          */
@@ -35,7 +35,7 @@ class EventEngine
          * @param string _eventType Name of the event
          * @param Event* _event The event object
          */
-        void dispach(const std::string &_eventType, Event* _event);
+        void dispatch(const std::string &_eventType, Event* _event);
 
     private:
         std::map<std::string, std::vector<EventListener*>> m_specificListeners;

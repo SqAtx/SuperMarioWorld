@@ -30,9 +30,11 @@ Game::~Game()
     delete m_g;
     delete m_gfx;
     delete m_s;
-    for (unsigned int i = 0; i < m_createdListeners.size(); i++) {
+    for (unsigned int i = 0; i < m_createdListeners.size(); i++)
+	{
         delete m_createdListeners[i];
     }
+	delete m_eventEngine;
 }
 
 void Game::Run()

@@ -93,7 +93,7 @@ void GraphicsEngine::ProcessWindowEvents()
 				break;
 			case sf::Event::Closed:
 				Event event;
-				m_eventEngine->dispach(GAME_STOP_REQUEST, &event);
+				m_eventEngine->dispatch(GAME_STOP_REQUEST, &event);
 				break;
 			default:
 				break;
