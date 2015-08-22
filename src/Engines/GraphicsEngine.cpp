@@ -13,7 +13,7 @@ GraphicsEngine::GraphicsEngine(Game *_g): Engine (_g)
 
 	// Temporarily hard-coded: should come from GameEngine when the level is imported
 	m_levelSize.x = WIN_WIDTH * 2;
-	m_levelSize.y = WIN_HEIGHT;
+	m_levelSize.y = WIN_HEIGHT + 32;
 
 	m_cameraPosition.x = 0;
 	m_cameraPosition.y = m_levelSize.y - WIN_HEIGHT;
@@ -90,6 +90,29 @@ void GraphicsEngine::ProcessWindowEvents()
 			case sf::Event::KeyPressed:
 				engineEvent.set(KEY_PRESSED, windowEvent.key.code);
 				m_engines["g"]->PushEvent(engineEvent);
+
+				// TEMPORARY
+				switch (windowEvent.key.code)
+				{
+					case sf::Keyboard::Z:
+						if (m_cameraPosition.y > 0)
+							m_cameraPosition.y -= 2;
+						break;
+					case sf::Keyboard::Q:
+						if (m_cameraPosition.x > 0)
+							m_cameraPosition.x -= 2;
+						break;
+					case sf::Keyboard::S:
+						if (m_cameraPosition.y < m_levelSize.y - WIN_HEIGHT)
+							m_cameraPosition.y += 2;
+						break;
+					case sf::Keyboard::D:
+						if (m_cameraPosition.x < m_levelSize.x - WIN_WIDTH)
+							m_cameraPosition.x += 2;
+						break;
+					default:
+						break;
+				}
 				break;
 			case sf::Event::KeyReleased:
 				engineEvent.set(KEY_RELEASED, windowEvent.key.code);
@@ -149,12 +172,13 @@ void GraphicsEngine::SetLevelStructureObjectToDraw(InfoForDisplay _info)
 {
 	ResetTmpSprite();
 	_info.name = GetTextureName(_info.id, _info.name, _info.state);
+	_info.coordinates = AbsoluteToRelative(_info.coordinates);
 	m_spriteHandler->SetDisplayInfoOnSprite(_info, m_tmpSprite);
 
 	m_levelStructureToDraw.push_back(*m_tmpSprite);
 
 	// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions (the sprite size might have changed)
-	EngineEvent tmpEvent(INFO_POS_LVL, _info.id, m_tmpSprite->getGlobalBounds());
+	EngineEvent tmpEvent(INFO_POS_LVL, _info.id, RelativeToAbsolute(m_tmpSprite->getGlobalBounds()));
 	m_engines["g"]->PushEvent(tmpEvent);
 }
 
@@ -170,6 +194,7 @@ void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
 {
 	ResetTmpSprite();
 	_info.name = GetTextureName(_info.id, _info.name, _info.state);
+	_info.coordinates = AbsoluteToRelative(_info.coordinates);
 	m_spriteHandler->SetDisplayInfoOnSprite(_info, m_tmpSprite);
 
 	/*	gfx can receive the information to display a character several times (if it has been hit for exemple, info is sent fron g to gfx right after the hit)
@@ -177,7 +202,7 @@ void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
 	m_displayableObjectsToDraw[_info.id] = *m_tmpSprite;
 
 	// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions (the sprite size might have changed)
-	EngineEvent tmpEvent(INFO_POS_LVL, _info.id, m_tmpSprite->getGlobalBounds());
+	EngineEvent tmpEvent(INFO_POS_LVL, _info.id, RelativeToAbsolute(m_tmpSprite->getGlobalBounds()));
 	m_engines["g"]->PushEvent(tmpEvent);
 
 #ifdef DEBUG_MODE
@@ -288,4 +313,31 @@ void GraphicsEngine::DrawDebugInfo()
 float GraphicsEngine::GetFramerateLimit()
 {
 	return GraphicsEngine::FramerateLimit;
+}
+
+sf::Vector2f GraphicsEngine::RelativeToAbsolute(sf::Vector2f _rel)
+{
+	sf::Vector2f abs(_rel.x + m_cameraPosition.x, _rel.y + m_cameraPosition.y);
+	return abs;
+}
+
+sf::FloatRect GraphicsEngine::RelativeToAbsolute(sf::FloatRect _rel)
+{
+	_rel.left += m_cameraPosition.x;
+	_rel.top += m_cameraPosition.y;
+	return _rel;
+}
+
+
+sf::Vector2f GraphicsEngine::AbsoluteToRelative(sf::Vector2f _abs)
+{
+	sf::Vector2f rel(_abs.x + m_cameraPosition.x, _abs.y + m_cameraPosition.y);
+	return rel;
+}
+
+sf::FloatRect GraphicsEngine::AbsoluteToRelative(sf::FloatRect _abs)
+{
+	_abs.left -= m_cameraPosition.x;
+	_abs.top -= m_cameraPosition.y;
+	return _abs;
 }

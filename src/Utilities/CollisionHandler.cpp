@@ -18,12 +18,12 @@ void CollisionHandler::HandleCollisionsWithMapEdges(MovingObject& _obj)
 	{
 		_obj.UpdateAfterCollisionWithMapEdge(CollisionDirection::LEFT, _obj.GetPosition().x);
 	}
-	if (_obj.GetPosition().x > 512 - 13)
+	if (_obj.GetPosition().x > 1024 - 13) // TODO Shouldn't be hardcoded !
 	{
 		_obj.UpdateAfterCollisionWithMapEdge(CollisionDirection::RIGHT, _obj.GetPosition().x - (512-13));
 	}
 
-	if (_obj.GetPosition().y > 432)
+	if (_obj.GetPosition().y > 464)
 		_obj.Kill();
 }
 

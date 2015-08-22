@@ -71,6 +71,11 @@ class GraphicsEngine : public Engine
 
 		void ResetTmpSprite();
 
+		sf::Vector2f RelativeToAbsolute(sf::Vector2f _rel);
+		sf::FloatRect RelativeToAbsolute(sf::FloatRect _rel);
+		sf::Vector2f AbsoluteToRelative(sf::Vector2f _abs);
+		sf::FloatRect AbsoluteToRelative(sf::FloatRect _abs);
+
 #ifdef DEBUG_MODE
 		sf::Clock m_clock;
 
