@@ -28,8 +28,12 @@ bool LevelImporter::LoadLevel(std::string _lvlName)
 				{
 					LevelInfo info;
 					info.backgroundName = GetAttributeValue("background");
+					info.size.x = GetAttributeValueAsFloat("width");
+					info.size.y = GetAttributeValueAsFloat("height");
 
+					// And that's exactly why you need listeners
 					EngineEvent tmpEvent(INFO_LVL, info);
+					m_gameEngine->PushEvent(tmpEvent);
 					m_gameEngine->TransmitInfoToGFX(tmpEvent);
 				}
 				if (!strcmp("characters", m_lvlFile->getNodeName()))

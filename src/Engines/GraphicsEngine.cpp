@@ -11,12 +11,6 @@ GraphicsEngine::GraphicsEngine(Game *_g): Engine (_g)
 
 	m_tmpSprite = new sf::Sprite();
 
-	// Temporarily hard-coded: should come from GameEngine when the level is imported
-	m_levelSize.x = WIN_WIDTH * 2;
-	m_levelSize.y = WIN_HEIGHT + 32;
-
-	m_cameraPosition.x = 0;
-	m_cameraPosition.y = m_levelSize.y - WIN_HEIGHT;
 #ifdef DEBUG_MODE
 	m_font.loadFromFile("arial.ttf");
 	m_debugText.setFont(m_font);
@@ -48,6 +42,8 @@ void GraphicsEngine::ProcessEvent(EngineEvent& _event)
 	{
 		case INFO_LVL:
 			StoreLevelInfo(_event.m_levelInfo);
+			m_cameraPosition.x = 0;
+			m_cameraPosition.y = _event.m_levelInfo.size.y - WIN_HEIGHT;
 			break;
 		case INFO_POS_LVL:
 			UpdateForegroundItem(_event.data.m_infoDisplay);
@@ -96,19 +92,19 @@ void GraphicsEngine::ProcessWindowEvents()
 				{
 					case sf::Keyboard::Z:
 						if (m_cameraPosition.y > 0)
-							m_cameraPosition.y -= 2;
+							m_cameraPosition.y -= 4;
 						break;
 					case sf::Keyboard::Q:
 						if (m_cameraPosition.x > 0)
-							m_cameraPosition.x -= 2;
+							m_cameraPosition.x -= 4;
 						break;
 					case sf::Keyboard::S:
 						if (m_cameraPosition.y < m_levelSize.y - WIN_HEIGHT)
-							m_cameraPosition.y += 2;
+							m_cameraPosition.y += 4;
 						break;
 					case sf::Keyboard::D:
 						if (m_cameraPosition.x < m_levelSize.x - WIN_WIDTH)
-							m_cameraPosition.x += 2;
+							m_cameraPosition.x += 4;
 						break;
 					default:
 						break;
@@ -281,6 +277,7 @@ void GraphicsEngine::DrawGame()
 void GraphicsEngine::StoreLevelInfo(LevelInfo _info)
 {
 	m_currentBackgroundName = _info.backgroundName;
+	m_levelSize = _info.size;
 }
 
 void GraphicsEngine::ResetTmpSprite()

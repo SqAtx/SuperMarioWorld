@@ -23,7 +23,12 @@ class CollisionHandler
 		CollisionDirection DetectCollisionWithRect(sf::FloatRect _obj, sf::FloatRect _ref);
 		void ReactToCollision(DisplayableObject& _obj, sf::FloatRect _refRect, CollisionDirection _direction);
 
+		// Getters / setters
+		void SetLevelSize(sf::Vector2f _size) { m_levelSize = _size; };
+
 	private:
 		GameEngine *m_gameEngine;
+
+		sf::Vector2f m_levelSize;
 };
 #endif

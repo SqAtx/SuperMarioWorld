@@ -40,12 +40,39 @@ xsi:noNamespaceSchemaLocation="levelSchema.xsd">
 		<floor_tile x="432" y="448" sprite="middle"/>
 		<floor_tile x="448" y="432" sprite="middle"/>
 		<floor_tile x="464" y="416" sprite="middle"/>
-		<floor_tile x="480" y="448" sprite="middle"/>
+		<floor_tile x="480" y="448" sprite="left"/>
 		<floor_tile x="496" y="448" sprite="middle"/>
 		<floor_tile x="512" y="448" sprite="middle"/>
 		<floor_tile x="528" y="448" sprite="middle"/>
 		<floor_tile x="544" y="448" sprite="middle"/>
 		<floor_tile x="560" y="448" sprite="middle"/>
-		<floor_tile x="576" y="448" sprite="right"/>
+		<floor_tile x="576 " y="448" sprite="middle"/>
+		<floor_tile x="592 " y="448" sprite="middle"/>
+		<floor_tile x="608 " y="448" sprite="middle"/>
+		<floor_tile x="624 " y="448" sprite="middle"/>
+		<floor_tile x="640 " y="448" sprite="middle"/>
+		<floor_tile x="656 " y="448" sprite="middle"/>
+		<floor_tile x="672 " y="448" sprite="middle"/>
+		<floor_tile x="688 " y="448" sprite="middle"/>
+		<floor_tile x="704 " y="448" sprite="middle"/>
+		<floor_tile x="720 " y="448" sprite="middle"/>
+		<floor_tile x="736 " y="448" sprite="middle"/>
+		<floor_tile x="752 " y="448" sprite="middle"/>
+		<floor_tile x="768 " y="448" sprite="middle"/>
+		<floor_tile x="784 " y="448" sprite="middle"/>
+		<floor_tile x="800 " y="448" sprite="middle"/>
+		<floor_tile x="816 " y="448" sprite="middle"/>
+		<floor_tile x="832 " y="448" sprite="middle"/>
+		<floor_tile x="848 " y="448" sprite="middle"/>
+		<floor_tile x="864 " y="448" sprite="middle"/>
+		<floor_tile x="880 " y="448" sprite="middle"/>
+		<floor_tile x="896 " y="448" sprite="middle"/>
+		<floor_tile x="912 " y="448" sprite="middle"/>
+		<floor_tile x="928 " y="448" sprite="middle"/>
+		<floor_tile x="944 " y="448" sprite="middle"/>
+		<floor_tile x="960 " y="448" sprite="middle"/>
+		<floor_tile x="976 " y="448" sprite="middle"/>
+		<floor_tile x="992 " y="448" sprite="middle"/>
+		<floor_tile x="1008" y="448" sprite="right"/>
 	</foreground>
 </level>

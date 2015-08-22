@@ -65,6 +65,9 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 		case KEY_RELEASED:
 			HandleReleasedKey(_event.data.m_key);
 			break;
+		case INFO_LVL:
+			m_collisionHandler->SetLevelSize(_event.m_levelInfo.size);
+			break;
 		case INFO_POS_LVL:
 		{
 			auto DOtoUpdate = m_listForegroundItems.find(_event.data.m_id);
