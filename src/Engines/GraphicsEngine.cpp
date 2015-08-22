@@ -1,8 +1,9 @@
 #include "GraphicsEngine.hpp"
+#include "../Graphics/GraphicsEvents.hpp"
 
 const float GraphicsEngine::FramerateLimit = 60;
 
-GraphicsEngine::GraphicsEngine(Game *_g): Engine (_g)
+GraphicsEngine::GraphicsEngine(EventEngine *_eventEngine): Engine (_eventEngine)
 {
 	m_gameWindow = new sf::RenderWindow(sf::VideoMode(WIN_WIDTH, WIN_HEIGHT, 32), "Super Mario !", sf::Style::Titlebar | sf::Style::Close);
 
@@ -22,6 +23,7 @@ GraphicsEngine::GraphicsEngine(Game *_g): Engine (_g)
 GraphicsEngine::~GraphicsEngine()
 {
 	delete m_spriteHandler;
+	m_gameWindow->close();
 	delete m_gameWindow;
 }
 
@@ -94,9 +96,8 @@ void GraphicsEngine::ProcessWindowEvents()
 				m_engines["g"]->PushEvent(engineEvent);
 				break;
 			case sf::Event::Closed:
-				engineEvent.set(GAME_STOPPED);
-				m_engines["g"]->PushEvent(engineEvent);
-				m_gameWindow->close();
+				Event event;
+				m_eventEngine->dispatch(GAME_STOP_REQUEST, &event);
 				break;
 			default:
 				break;

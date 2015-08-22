@@ -1,8 +1,8 @@
 #include "Engine.hpp"
 
-Engine::Engine (Game* _parent)
+Engine::Engine (EventEngine* _eventEngine)
 {
-    m_parent = _parent;
+    m_eventEngine = _eventEngine;
 }
 
 Engine::~Engine()

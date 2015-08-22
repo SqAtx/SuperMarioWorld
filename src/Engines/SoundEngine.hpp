@@ -10,7 +10,7 @@
 class SoundEngine : public Engine
 {
     public:
-        SoundEngine(Game *_g);
+        SoundEngine(EventEngine*);
         ~SoundEngine();
 
         void Frame();

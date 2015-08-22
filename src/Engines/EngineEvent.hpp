@@ -2,6 +2,9 @@
 #include "../Characters/MovingObject.hpp"
 #include "../Items/Pipe.hpp"
 
+/**
+ * @deprecated Use EventEngine instead
+ */
 typedef enum
 {
 #ifdef DEBUG_MODE

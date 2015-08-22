@@ -6,6 +6,7 @@
 #include <queue>
 
 #include "EngineEvent.hpp"
+#include "../EventEngine/EventEngine.hpp"
 
 // Game needs Engine and Engine needs Game, we solve that problem with a forward declaration
 class Game;
@@ -17,7 +18,7 @@ class Game;
 class Engine
 {
     public:
-        Engine (Game* _parent);
+        Engine (EventEngine*);
 		virtual ~Engine();
 
 		void Attach_Engine (std::string _name, Engine* _engine);
@@ -28,7 +29,7 @@ class Engine
         virtual void Frame() = 0;
 
     protected:
-        Game* m_parent;
+        EventEngine* m_eventEngine;
         std::map <std::string, Engine *> m_engines; // g for GameEngine, gfx for GraphicsEngine, s for SoundEngine
 
 		std::queue<EngineEvent> m_eventsQueue; // A queue of events to deal with

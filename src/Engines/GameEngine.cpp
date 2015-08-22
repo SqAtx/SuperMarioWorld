@@ -1,7 +1,7 @@
 #include "GameEngine.hpp"
 #include "../Game.hpp"
 
-GameEngine::GameEngine(Game *_g) : Engine(_g), m_levelStarted(false), m_indexMario(-1)
+GameEngine::GameEngine(EventEngine *_eventEngine) : Engine(_eventEngine), m_levelStarted(false), m_indexMario(-1)
 {
 	m_collisionHandler = new CollisionHandler(this);
 	m_levelImporter = new LevelImporter(this);
@@ -91,9 +91,6 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 			break;
 		case DEATH_SOUND_STOPPED:
 			m_deathSoundIsPlaying = false;
-			break;
-		case GAME_STOPPED:
-			m_parent->Stop();
 			break;
 		default:
 			break;
@@ -189,6 +186,7 @@ void GameEngine::StartLevel(std::string _lvlName)
 /* Takes the place of the first NULL pointer (= dead character), or is pushed at the end */
 void GameEngine::AddCharacterToArray(MovingObject *_character)
 {
+	// premature optimization ?
 	int initialSize = m_characters.size();
 	int indexCharacter = -1;
 	for (int i = 0; i < initialSize; i++)
@@ -218,7 +216,7 @@ void GameEngine::AddForegroundItemToArray(DisplayableObject *_item)
 
 void GameEngine::AddPipeToArray(Pipe *_pipe)
 {
-	m_listPipes[_pipe->GetPipeId()] = _pipe; 
+	m_listPipes[_pipe->GetPipeId()] = _pipe;
 };
 
 

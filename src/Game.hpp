@@ -2,10 +2,13 @@
 #define GAME_H
 
 #include <mutex>
+#include <vector>
 
 #include "Engines/GameEngine.hpp"
 #include "Engines/GraphicsEngine.hpp"
 #include "Engines/SoundEngine.hpp"
+#include "EventEngine/EventEngine.hpp"
+#include "EventEngine/EventListener.hpp"
 
 /*
     Base class of the game
@@ -27,6 +30,8 @@ class Game
         GameEngine *m_g;
         GraphicsEngine *m_gfx;
         SoundEngine *m_s;
+        EventEngine *m_eventEngine;
+        std::vector<EventListener*> m_createdListeners;
 };
 
 #endif // GAME_H

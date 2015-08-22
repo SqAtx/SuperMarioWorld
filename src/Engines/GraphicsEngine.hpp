@@ -18,7 +18,7 @@
 class GraphicsEngine : public Engine
 {
     public:
-        GraphicsEngine(Game *_g);
+        GraphicsEngine(EventEngine*);
         ~GraphicsEngine();
 
         void Frame();
