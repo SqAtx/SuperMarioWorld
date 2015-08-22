@@ -28,7 +28,7 @@ void GameEngine::Frame(float _dt)
 	MovingObject *currentCharacter = NULL;
 
 	if (!m_levelStarted)
-		StartLevel("testlvl"); // In the future there will be some sort of level selection so this call will be moved
+		StartLevel("biglvl"); // In the future there will be some sort of level selection so this call will be moved
 
 	ProcessQueue();
 

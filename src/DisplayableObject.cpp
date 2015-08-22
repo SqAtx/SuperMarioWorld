@@ -24,6 +24,8 @@ DisplayableObject::DisplayableObject(std::string _name, float _x, float _y, Stat
 
 	m_class = LEVEL_BLOCK; // May be overwritten by constructors in children
 	m_state = _state;
+
+	m_reverseSprite = false;
 }
 
 DisplayableObject::~DisplayableObject()

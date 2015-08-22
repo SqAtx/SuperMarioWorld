@@ -72,6 +72,19 @@ sf::Texture& SpriteHandler::GetTexture(std::string _name)
 	return m_textures[_name];
 }
 
+void SpriteHandler::SetDisplayInfoOnSprite(InfoForDisplay _info, sf::Sprite *_sprite)
+{
+	_sprite->setTexture(m_textures[_info.name]);
+	_sprite->setPosition(sf::Vector2f(_info.coordinates.left, _info.coordinates.top));
+
+	if (_info.reverse)
+	{
+		float height = _sprite->getGlobalBounds().height;
+		float width = _sprite->getGlobalBounds().width;
+		_sprite->setTextureRect(sf::IntRect(width, 0, -width, height));
+	}
+}
+
 /* Figures out which sprite to display, ie the name of the sprite in the RECT file */
 std::string SpriteHandler::GetFullStateName(std::string _name, State _state)
 {

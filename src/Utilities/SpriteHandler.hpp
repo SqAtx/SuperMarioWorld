@@ -16,6 +16,8 @@ class SpriteHandler
 		void LoadTextures(); // Load all textures at beginning of level
 		sf::Texture& GetTexture(std::string _name);
 
+		void SetDisplayInfoOnSprite(InfoForDisplay _info, sf::Sprite *_sprite);
+
 		std::string GetFullStateName(std::string _name, State _state);
 		std::string GetTextureNameFromStateName(std::string _stateFullName, std::string _currentTextureName, int _nbTextures);
 		int HowManyLoadedTexturesContainThisName(std::string _name);

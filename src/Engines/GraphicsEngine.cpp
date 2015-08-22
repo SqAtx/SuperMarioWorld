@@ -11,6 +11,12 @@ GraphicsEngine::GraphicsEngine(Game *_g): Engine (_g)
 
 	m_tmpSprite = new sf::Sprite();
 
+	// Temporarily hard-coded: should come from GameEngine when the level is imported
+	m_levelSize.x = WIN_WIDTH * 2;
+	m_levelSize.y = WIN_HEIGHT;
+
+	m_cameraPosition.x = 0;
+	m_cameraPosition.y = m_levelSize.y - WIN_HEIGHT;
 #ifdef DEBUG_MODE
 	m_font.loadFromFile("arial.ttf");
 	m_debugText.setFont(m_font);
@@ -127,7 +133,6 @@ void GraphicsEngine::SetForegroundToDraw()
 	SetListOfDisplayablesToDraw(m_listPipes);
 }
 
-/* Keeping this function even if called only in one place, in case I add another layer between foreground and background */
 void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<unsigned int, InfoForDisplay>& _list)
 {
 	unsigned int id;
@@ -136,22 +141,21 @@ void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<unsigned int, InfoForD
 
 	for (std::map<unsigned int, InfoForDisplay>::iterator it = _list.begin(); it != _list.end(); ++it)
 	{
-		ResetTmpSprite();
-
-		id = it->first;
-		tmpCoords.x = it->second.coordinates.left;
-		tmpCoords.y = it->second.coordinates.top;
-
-		spriteName = GetTextureName(id, it->second.name, it->second.state);
-
-		m_tmpSprite->setTexture(m_spriteHandler->GetTexture(spriteName));
-		m_tmpSprite->setPosition(tmpCoords);
-		m_levelStructureToDraw.push_back(*m_tmpSprite);
-
-		// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions
-		EngineEvent tmpEvent(INFO_POS_LVL, id, m_tmpSprite->getGlobalBounds());
-		m_engines["g"]->PushEvent(tmpEvent);
+		SetLevelStructureObjectToDraw(it->second);
 	}
+}
+
+void GraphicsEngine::SetLevelStructureObjectToDraw(InfoForDisplay _info)
+{
+	ResetTmpSprite();
+	_info.name = GetTextureName(_info.id, _info.name, _info.state);
+	m_spriteHandler->SetDisplayInfoOnSprite(_info, m_tmpSprite);
+
+	m_levelStructureToDraw.push_back(*m_tmpSprite);
+
+	// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions (the sprite size might have changed)
+	EngineEvent tmpEvent(INFO_POS_LVL, _info.id, m_tmpSprite->getGlobalBounds());
+	m_engines["g"]->PushEvent(tmpEvent);
 }
 
 void GraphicsEngine::UpdateForegroundItem(InfoForDisplay _info)
@@ -165,23 +169,14 @@ void GraphicsEngine::UpdateForegroundItem(InfoForDisplay _info)
 void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
 {
 	ResetTmpSprite();
-
-	std::string spriteName = GetTextureName(_info.id, _info.name, _info.state);
-	m_tmpSprite->setTexture(m_spriteHandler->GetTexture(spriteName));
-
-	m_tmpSprite->setPosition(sf::Vector2f(_info.coordinates.left, _info.coordinates.top));
-	if (_info.reverse)
-	{
-		float height = m_tmpSprite->getGlobalBounds().height;
-		float width = m_tmpSprite->getGlobalBounds().width;
-		m_tmpSprite->setTextureRect(sf::IntRect(width, 0, -width, height));
-	}
+	_info.name = GetTextureName(_info.id, _info.name, _info.state);
+	m_spriteHandler->SetDisplayInfoOnSprite(_info, m_tmpSprite);
 
 	/*	gfx can receive the information to display a character several times (if it has been hit for exemple, info is sent fron g to gfx right after the hit)
 	Only the last one received will be displayed */
 	m_displayableObjectsToDraw[_info.id] = *m_tmpSprite;
 
-	// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions
+	// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions (the sprite size might have changed)
 	EngineEvent tmpEvent(INFO_POS_LVL, _info.id, m_tmpSprite->getGlobalBounds());
 	m_engines["g"]->PushEvent(tmpEvent);
 

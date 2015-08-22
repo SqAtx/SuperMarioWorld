@@ -29,6 +29,9 @@ class GraphicsEngine : public Engine
 		SpriteHandler *m_spriteHandler;
 		static const float FramerateLimit;
 
+		sf::Vector2f m_levelSize;
+		sf::Vector2f m_cameraPosition;
+
 		sf::Sprite* m_tmpSprite;
 		std::string m_currentBackgroundName;
 
@@ -59,6 +62,7 @@ class GraphicsEngine : public Engine
 		void SetBackgroundToDraw();
 		void SetForegroundToDraw();
 		void SetListOfDisplayablesToDraw(std::map<unsigned int, InfoForDisplay>& _list);
+		void SetLevelStructureObjectToDraw(InfoForDisplay _info);
 		void SetDisplayableObjectToDraw(InfoForDisplay _info);
 
 		void DrawGame();
