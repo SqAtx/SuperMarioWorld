@@ -71,6 +71,8 @@ class GraphicsEngine : public Engine
 
 		void ResetTmpSprite();
 
+		void MoveCameraOnMario(sf::FloatRect _coordsMario);
+
 		sf::Vector2f RelativeToAbsolute(sf::Vector2f _rel);
 		sf::FloatRect RelativeToAbsolute(sf::FloatRect _rel);
 		sf::Vector2f AbsoluteToRelative(sf::Vector2f _abs);

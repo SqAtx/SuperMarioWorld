@@ -53,6 +53,8 @@ void GraphicsEngine::ProcessEvent(EngineEvent& _event)
 			break;
 		case INFO_POS_CHAR:
 			SetDisplayableObjectToDraw(_event.data.m_infoDisplay);
+			if (_event.data.m_infoDisplay.name == "mario")
+				MoveCameraOnMario(_event.data.m_infoDisplay.coordinates);
 			break;
 #ifdef DEBUG_MODE
 		case INFO_DEBUG:
@@ -86,29 +88,6 @@ void GraphicsEngine::ProcessWindowEvents()
 			case sf::Event::KeyPressed:
 				engineEvent.set(KEY_PRESSED, windowEvent.key.code);
 				m_engines["g"]->PushEvent(engineEvent);
-
-				// TEMPORARY
-				switch (windowEvent.key.code)
-				{
-					case sf::Keyboard::Z:
-						if (m_cameraPosition.y > 0)
-							m_cameraPosition.y -= 4;
-						break;
-					case sf::Keyboard::Q:
-						if (m_cameraPosition.x > 0)
-							m_cameraPosition.x -= 4;
-						break;
-					case sf::Keyboard::S:
-						if (m_cameraPosition.y < m_levelSize.y - WIN_HEIGHT)
-							m_cameraPosition.y += 4;
-						break;
-					case sf::Keyboard::D:
-						if (m_cameraPosition.x < m_levelSize.x - WIN_WIDTH)
-							m_cameraPosition.x += 4;
-						break;
-					default:
-						break;
-				}
 				break;
 			case sf::Event::KeyReleased:
 				engineEvent.set(KEY_RELEASED, windowEvent.key.code);
@@ -285,6 +264,26 @@ void GraphicsEngine::ResetTmpSprite()
 	delete m_tmpSprite;
 	m_tmpSprite = new sf::Sprite();
 }
+
+void GraphicsEngine::MoveCameraOnMario(sf::FloatRect _coordsMario)
+{
+	float newCameraX = _coordsMario.left - WIN_WIDTH / 2;
+	if (newCameraX < 0)
+		m_cameraPosition.x = 0;
+	else if (newCameraX > m_levelSize.x - WIN_WIDTH)
+		m_cameraPosition.x = m_levelSize.x - WIN_WIDTH;
+	else
+		m_cameraPosition.x = newCameraX;
+
+	float newCameraY = _coordsMario.top - WIN_HEIGHT / 2;
+	if (newCameraY < 0)
+		m_cameraPosition.y = 0;
+	else if (newCameraY > m_levelSize.y - WIN_HEIGHT)
+		m_cameraPosition.y = m_levelSize.y - WIN_HEIGHT;
+	else
+		m_cameraPosition.y = newCameraY;
+}
+
 
 #ifdef DEBUG_MODE
 void GraphicsEngine::DrawDebugInfo()
