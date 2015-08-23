@@ -31,7 +31,7 @@ class Game
         GraphicsEngine *m_gfx;
         SoundEngine *m_s;
         EventEngine *m_eventEngine;
-        std::vector<EventListener*> m_createdListeners;
+        std::vector<EventListener*> m_createdListeners; // This list is kept so the pointers are deleted in the destructor
 };
 
 #endif // GAME_H

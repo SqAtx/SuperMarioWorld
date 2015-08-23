@@ -174,7 +174,7 @@ PipeType LevelImporter::GetPipeTypeFromXML()
 		return SPAWN;
 	if (type_str == "flower")
 		return FLOWER;
-	assert(false);
+	assert(false); // TODO Should throw some sort of NotImplementedException ?
 }
 
 void LevelImporter::StoreFloor()

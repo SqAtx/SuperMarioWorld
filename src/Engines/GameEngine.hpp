@@ -19,6 +19,9 @@ class GameEngine : public Engine
 		void Frame();
 		void Frame(float _dt);
 
+		void HandlePressedKey(sf::Keyboard::Key _key);
+		void HandleReleasedKey(sf::Keyboard::Key _key);
+
 		void TransmitInfoToGFX(EngineEvent _event) { m_engines["gfx"]->PushEvent(_event); };
 
 		/* Getters / setters for LevelImporter */
@@ -46,9 +49,7 @@ class GameEngine : public Engine
 		void AddPipeToArray(Pipe *_pipe);
 
 		void ProcessEvent(EngineEvent& _event);
-		void HandlePressedKey(sf::Keyboard::Key _key);
 		bool CanRespawnMario();
-		void HandleReleasedKey(sf::Keyboard::Key _key);
 
 		void UpdateCharacterPosition(MovingObject& _character, float _dt);
 		void CheckCharacterDeath(MovingObject& _character);
@@ -60,6 +61,8 @@ class GameEngine : public Engine
 		void HandleCollisions(MovingObject& _obj);
 
 		bool m_deathSoundIsPlaying; // No input is taken into account while this sound is playing [see sound engine]
+
+		std::vector<EventListener*> m_createdListeners;
 };
 
 #endif // GAMEENGINE_H

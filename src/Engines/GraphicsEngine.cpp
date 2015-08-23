@@ -88,17 +88,18 @@ void GraphicsEngine::ProcessWindowEvents()
 		switch (windowEvent.type)
 		{
 			case sf::Event::KeyPressed:
-				engineEvent.set(KEY_PRESSED, windowEvent.key.code);
-				m_engines["g"]->PushEvent(engineEvent);
-				break;
 			case sf::Event::KeyReleased:
-				engineEvent.set(KEY_RELEASED, windowEvent.key.code);
-				m_engines["g"]->PushEvent(engineEvent);
+			{
+				KeyboardEvent event(windowEvent);
+				m_eventEngine->dispatch(KEY_EVENT, &event);
 				break;
+			}
 			case sf::Event::Closed:
+			{
 				Event event;
 				m_eventEngine->dispatch(GAME_STOP_REQUEST, &event);
 				break;
+			}
 			default:
 				break;
 		}
@@ -134,10 +135,6 @@ void GraphicsEngine::SetForegroundToDraw()
 
 void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<unsigned int, InfoForDisplay>& _list)
 {
-	unsigned int id;
-	sf::Vector2f tmpCoords;
-	std::string spriteName;
-
 	for (std::map<unsigned int, InfoForDisplay>::iterator it = _list.begin(); it != _list.end(); ++it)
 	{
 		SetLevelStructureObjectToDraw(it->second);

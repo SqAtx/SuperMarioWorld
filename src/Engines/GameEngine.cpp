@@ -1,10 +1,15 @@
 #include "GameEngine.hpp"
 #include "../Game.hpp"
+#include "../System/Listener/KeyboardListener.hpp"
 
 GameEngine::GameEngine(EventEngine *_eventEngine) : Engine(_eventEngine), m_levelStarted(false), m_indexMario(-1)
 {
 	m_collisionHandler = new CollisionHandler(this);
 	m_levelImporter = new LevelImporter(this);
+
+	KeyboardListener* keyboardListener = new KeyboardListener(this);
+	m_eventEngine->addListener("graphics.key_event", keyboardListener);
+	m_createdListeners.push_back(keyboardListener);
 }
 
 GameEngine::~GameEngine()
@@ -16,6 +21,9 @@ GameEngine::~GameEngine()
 		delete m_characters[i];
 	for (unsigned int i = 0; i < m_listForegroundItems.size(); i++)
 		delete m_listForegroundItems[i];
+
+	for (unsigned int i = 0; i < m_createdListeners.size(); i++)
+		delete m_createdListeners[i];
 }
 
 void GameEngine::Frame()
@@ -59,12 +67,6 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 {
 	switch (_event.m_type)
 	{
-		case KEY_PRESSED:
-			HandlePressedKey(_event.data.m_key);
-			break;
-		case KEY_RELEASED:
-			HandleReleasedKey(_event.data.m_key);
-			break;
 		case INFO_LVL:
 			m_collisionHandler->SetLevelSize(_event.m_levelInfo.size);
 			break;
@@ -186,7 +188,6 @@ void GameEngine::StartLevel(std::string _lvlName)
 /* Takes the place of the first NULL pointer (= dead character), or is pushed at the end */
 void GameEngine::AddCharacterToArray(MovingObject *_character)
 {
-	// premature optimization ?
 	int initialSize = m_characters.size();
 	int indexCharacter = -1;
 	for (int i = 0; i < initialSize; i++)

@@ -1,7 +1,7 @@
 #ifndef EVENT_ENGINE_H
 #define EVENT_ENGINE_H
 
-#include "Event.hpp"
+#include "KeyboardEvent.hpp"
 #include "EventListener.hpp"
 #include <map>
 #include <iostream>
@@ -31,7 +31,7 @@ class EventEngine
         void addListener(const std::string &_eventName, EventListener* _listener);
 
         /**
-         * send a new Event
+         * Send a new Event
          * @param string _eventType Name of the event
          * @param Event* _event The event object
          */
