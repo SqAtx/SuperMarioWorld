@@ -55,14 +55,15 @@ void MovingObject::UpdateAfterCollisionWithMapEdge(CollisionDirection _dir, floa
 
 void MovingObject::UpdatePosition(float _dt)
 {
+	/* Before velocity calculation, not after, otherwise the character (when walking) will be falling before its collision with the ground is handled again */
+	if (m_velocity.y > 0)
+		m_jumpState = FALLING;
+	
 	UpdateAcceleration();
 	UpdateVelocity(_dt);
 
 	if (m_acceleration.x == 0)
 		m_state = STATIC;
-
-	if (m_velocity.y > 0 && m_jumpState != ONFLOOR) // Can't go from ONFLOOR to FALLING (character would be FALLING before collision handling otherwise)
-		m_jumpState = FALLING;
 
 	m_coord = {
 		m_coord.x += m_velocity.x * _dt,

@@ -40,7 +40,7 @@ void CollisionHandler::ReactToCollisionsWithObj(MovingObject& _obj, DisplayableO
 {
 	ReactToCollision(_obj, _ref.GetCoordinates(), _direction);
 
-	_obj.UpdateAfterCollision(Util::OppositeCollisionDirection(_direction), _ref.GetClass()); // Updates the state of the object, not its coordinates
+	_obj.UpdateAfterCollision(Util::OppositeCollisionDirection(_direction), _ref.GetClass()); // Updates the state and velocity of the object, not its coordinates
 	_obj.SetPosition(m_gameEngine->GetCoordinatesOfForegroundItem(_obj.GetID()));
 
 	_ref.UpdateAfterCollision(_direction, _obj.GetClass());
