@@ -41,6 +41,8 @@ class Pipe : public DisplayableObject
 		void SendEnemyToGameEngine();
 		void RemoveEnemyBeingSpawned();
 
+		bool Pipe::IsEnemyReadyToLeavePipe();
+
 		static const int milisecondsBetweenSpawns;
 };
 

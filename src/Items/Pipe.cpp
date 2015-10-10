@@ -33,7 +33,7 @@ void Pipe::HandleSpawnEnemies(float _dt)
 			m_justFinishedSpawn = false;
 		}
 
-		if (m_enemyBeingSpawned != NULL && m_enemyBeingSpawned->GetPosition().x < m_coord.x - 16)
+		if (m_enemyBeingSpawned != NULL && IsEnemyReadyToLeavePipe())
 		{
 			SendEnemyToGameEngine();
 			// RemoveEnemyBeingSpawned should be called here but then the enemy will be missing when gfx.Frame() is called, causing the enemy to flicker.
@@ -84,4 +84,9 @@ void Pipe::RemoveEnemyBeingSpawned()
 
 	delete m_enemyBeingSpawned;
 	m_enemyBeingSpawned = NULL;
+}
+
+bool Pipe::IsEnemyReadyToLeavePipe()
+{
+	return m_enemyBeingSpawned->GetCoordinates().left < m_coord.x - 16;
 }
