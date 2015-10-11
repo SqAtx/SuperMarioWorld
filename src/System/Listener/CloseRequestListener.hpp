@@ -16,7 +16,7 @@ class CloseRequestListener : public EventListener
         CloseRequestListener(Game* _game);
 
         /**
-         * Called when an CloseRequestEvent is dispached
+         * Called when an CloseRequestEvent is dispatched
          * @param string eventType Type of received event
          * @param Event* event
          */

@@ -1,6 +1,7 @@
 #include "GameEngine.hpp"
 #include "../Game.hpp"
 #include "../System/Listener/KeyboardListener.hpp"
+#include "../Game/GameEvents.hpp"
 
 GameEngine::GameEngine(EventEngine *_eventEngine) : Engine(_eventEngine), m_levelStarted(false), m_indexMario(-1)
 {
@@ -120,8 +121,8 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 		case sf::Keyboard::Space:
 			if (mario != NULL && mario->Jump())
 			{
-				EngineEvent playJumpSound(PLAY_SOUND, JUMP_SND);
-				m_engines["s"]->PushEvent(playJumpSound);
+				Event event;
+				m_eventEngine->dispatch(MARIO_JUMP, &event);
 			}
 			break;
 		case sf::Keyboard::Escape:

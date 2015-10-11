@@ -16,7 +16,7 @@ public:
 	KeyboardListener(GameEngine* _gameEngine);
 
 	/**
-	* Called when an CloseRequestEvent is dispached
+	* Called when a KeyboardEvent is dispached
 	* @param string eventType Type of received event
 	* @param Event* event
 	*/

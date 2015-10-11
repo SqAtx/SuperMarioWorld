@@ -2,6 +2,7 @@
 #define SOUNDENGINE_H
 
 #include "Engine.hpp"
+
 #include <SFML/Audio.hpp>
 
 /*
@@ -14,6 +15,8 @@ class SoundEngine : public Engine
         ~SoundEngine();
 
         void Frame();
+
+		void PlaySound(SoundType _type);
 
     private:
 		std::map<SoundType, sf::SoundBuffer> m_soundBuffers;
@@ -28,12 +31,13 @@ class SoundEngine : public Engine
 
 		void LoadSounds();
 		void LoadSoundFromFile(SoundType _type, std::string _name);
-		void PlaySound(SoundType _type);
 
 		void StoreMusicNames();
 		void StartLevelMusic(std::string _lvlName);
 		void ChangeMusic();
 		void PlayMusic(std::string _musicName);
+
+		std::vector<EventListener*> m_createdListeners;
 
 		static const std::string soundsPath;
 };

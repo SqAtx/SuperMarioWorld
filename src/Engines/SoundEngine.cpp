@@ -1,4 +1,5 @@
 #include "SoundEngine.hpp"
+#include "../System/Listener/MarioJumpListener.hpp"
 
 const std::string SoundEngine::soundsPath = "../assets/sounds/";
 
@@ -8,12 +9,19 @@ SoundEngine::SoundEngine(EventEngine* _eventEngine) : Engine(_eventEngine), m_in
 	m_currentMusic = new sf::Music();
 	LoadSounds();
 	StoreMusicNames();
+
+	MarioJumpListener* marioJumpListener = new MarioJumpListener(this);
+	_eventEngine->addListener("game.mario_jump", marioJumpListener);
+	m_createdListeners.push_back(marioJumpListener);
 }
 
 SoundEngine::~SoundEngine()
 {
 	delete m_soundBeingPlayed;
 	delete m_currentMusic;
+
+	for (unsigned int i = 0; i < m_createdListeners.size(); i++)
+		delete m_createdListeners[i];
 }
 
 void SoundEngine::Frame()
