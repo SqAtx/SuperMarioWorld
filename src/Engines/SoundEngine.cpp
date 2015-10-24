@@ -1,4 +1,5 @@
 #include "SoundEngine.hpp"
+#include "../System/Listener/MarioDeathListener.hpp"
 #include "../System/Listener/MarioJumpListener.hpp"
 #include "../System/Listener/LevelStartListener.hpp"
 
@@ -19,6 +20,10 @@ void SoundEngine::CreateListeners()
 	LevelStartListener* levelStartListener = new LevelStartListener(this);
 	m_eventEngine->addListener("game.level_start", levelStartListener);
 	m_createdListeners.push_back(levelStartListener);
+
+	MarioDeathListener* marioDeathListener = new MarioDeathListener(this);
+	m_eventEngine->addListener("game.mario_death", marioDeathListener);
+	m_createdListeners.push_back(marioDeathListener);
 
 	MarioJumpListener* marioJumpListener = new MarioJumpListener(this);
 	m_eventEngine->addListener("game.mario_jump", marioJumpListener);

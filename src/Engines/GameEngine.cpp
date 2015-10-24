@@ -255,8 +255,8 @@ void GameEngine::KillCharacter(MovingObject& _character)
 			{
 				m_indexMario = -1;
 
-				EngineEvent deathSound(PLAY_SOUND, DEATH_SND);
-				m_engines["s"]->PushEvent(deathSound);
+				Event death;
+				m_eventEngine->dispatch(MARIO_DEATH, &death);
 			}
 		}
 	}
