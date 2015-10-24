@@ -35,8 +35,9 @@ Then run `./SuperMarioWorld`.
 - Level stored in an XML file (background, characters, floor, foreground items). Foreground items can be animated.
 - Collisions (first stable version, to be improved) between the player, the enemies and the foreground items and appropriate reaction
 - Enemies spawn automatically inside the pipe
+- Scrolling
 
 ## What next ?
 - Death animations
-- Scrolling
+- Level editor
 - Better graphics ?
