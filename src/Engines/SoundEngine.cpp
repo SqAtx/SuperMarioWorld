@@ -1,5 +1,6 @@
 #include "SoundEngine.hpp"
 #include "../System/Listener/MarioJumpListener.hpp"
+#include "../System/Listener/LevelStartListener.hpp"
 
 const std::string SoundEngine::soundsPath = "../assets/sounds/";
 
@@ -10,8 +11,17 @@ SoundEngine::SoundEngine(EventEngine* _eventEngine) : Engine(_eventEngine), m_in
 	LoadSounds();
 	StoreMusicNames();
 
+	CreateListeners();
+}
+
+void SoundEngine::CreateListeners()
+{
+	LevelStartListener* levelStartListener = new LevelStartListener(this);
+	m_eventEngine->addListener("game.level_start", levelStartListener);
+	m_createdListeners.push_back(levelStartListener);
+
 	MarioJumpListener* marioJumpListener = new MarioJumpListener(this);
-	_eventEngine->addListener("game.mario_jump", marioJumpListener);
+	m_eventEngine->addListener("game.mario_jump", marioJumpListener);
 	m_createdListeners.push_back(marioJumpListener);
 }
 
@@ -43,9 +53,6 @@ void SoundEngine::ProcessEvent(EngineEvent& _event)
 {
 	switch (_event.m_type)
 	{
-		case LEVEL_START:
-			StartLevelMusic(_event.m_string);
-			break;
 		case PLAY_SOUND:
 			PlaySound(_event.data.m_sound);
 			break;

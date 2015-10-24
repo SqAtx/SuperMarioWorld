@@ -33,7 +33,6 @@ class GameEngine : public Engine
 		void UpdateForegroundItem(unsigned int _id, sf::FloatRect& _coords) { m_listForegroundItems[_id]->SetCoordinates(_coords); };
 
     private:
-		bool m_levelStarted;
 		CollisionHandler *m_collisionHandler;
 		LevelImporter *m_levelImporter;
 
@@ -57,6 +56,8 @@ class GameEngine : public Engine
 		void SendCharacterPosition(int _indexCharacter);
 
 		void StartLevel(std::string _lvlName);
+		std::string m_currentLevelName;
+		bool m_levelStarted;
 
 		void HandleCollisions(MovingObject& _obj);
 

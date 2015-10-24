@@ -102,6 +102,7 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 
 void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 {
+	Event tmpEvent;
 	Player *mario = m_indexMario != -1 ? (Player*)m_characters[m_indexMario] : NULL; // Clarity
 
 	switch (_key)
@@ -121,8 +122,7 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 		case sf::Keyboard::Space:
 			if (mario != NULL && mario->Jump())
 			{
-				Event event;
-				m_eventEngine->dispatch(MARIO_JUMP, &event);
+				m_eventEngine->dispatch(MARIO_JUMP, &tmpEvent);
 			}
 			break;
 		case sf::Keyboard::Escape:
@@ -132,8 +132,8 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 				AddCharacterToArray(mario);
 				m_listForegroundItems[mario->GetID()] = mario;
 
-				EngineEvent playMusic(LEVEL_START);
-				m_engines["s"]->PushEvent(playMusic);
+				tmpEvent.SetString(m_currentLevelName);
+				m_eventEngine->dispatch(LEVEL_START, &tmpEvent);
 			}
 			break;
 		case sf::Keyboard::N:
@@ -179,9 +179,10 @@ void GameEngine::HandleReleasedKey(sf::Keyboard::Key _key)
 void GameEngine::StartLevel(std::string _lvlName)
 {
 	m_levelImporter->LoadLevel(_lvlName);
+	m_currentLevelName = _lvlName;
 
-	EngineEvent startLevel(LEVEL_START);
-	m_engines["s"]->PushEvent(startLevel);
+	Event startLevel(_lvlName);
+	m_eventEngine->dispatch(LEVEL_START, &startLevel);
 
 	m_levelStarted = true;
 }

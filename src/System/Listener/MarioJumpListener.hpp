@@ -7,7 +7,7 @@
 #include <string>
 
 /**
-* @author Kevin Guillaumond <kevin.guillaumon@gmail.com>
+* @author Kevin Guillaumond <kevin.guillaumond@gmail.com>
 */
 class MarioJumpListener : public EventListener
 {
@@ -22,7 +22,7 @@ class MarioJumpListener : public EventListener
 		void onEvent(const std::string &_eventType, Event* _event);
 
 	private:
-		SoundEngine* m__soundEngine;
+		SoundEngine* m_soundEngine;
 };
 
 #endif // MARIO_JUMP_LISTENER_H

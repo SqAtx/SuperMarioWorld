@@ -3,10 +3,10 @@
 
 MarioJumpListener::MarioJumpListener(SoundEngine* _soundEngine)
 {
-	m__soundEngine = _soundEngine;
+	m_soundEngine = _soundEngine;
 }
 
 void MarioJumpListener::onEvent(const std::string &_eventType, Event* _event)
 {
-	m__soundEngine->PlaySound(JUMP_SND);
+	m_soundEngine->PlaySound(JUMP_SND);
 }

@@ -16,9 +16,12 @@ class SoundEngine : public Engine
 
         void Frame();
 
+		void StartLevelMusic(std::string _lvlName);
 		void PlaySound(SoundType _type);
 
     private:
+		void CreateListeners();
+
 		std::map<SoundType, sf::SoundBuffer> m_soundBuffers;
 		sf::Sound *m_soundBeingPlayed;
 		bool m_deathSoundIsPlaying; // This sound is particular because it stops the music and no input is possible while it's playing
@@ -33,7 +36,6 @@ class SoundEngine : public Engine
 		void LoadSoundFromFile(SoundType _type, std::string _name);
 
 		void StoreMusicNames();
-		void StartLevelMusic(std::string _lvlName);
 		void ChangeMusic();
 		void PlayMusic(std::string _musicName);
 

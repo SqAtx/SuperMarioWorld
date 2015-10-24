@@ -10,7 +10,6 @@ typedef enum
 #ifdef DEBUG_MODE
 	INFO_DEBUG,
 #endif
-	LEVEL_START,			// g to s
 	INFO_POS_CHAR,			// g to gfx during game: character (Mario or enemy) position
 	INFO_POS_LVL,			// gfx <-> g: position of a foreground sprite
 	NEW_CHARACTER,			// to g
