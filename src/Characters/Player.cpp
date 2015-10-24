@@ -13,6 +13,7 @@ Player::Player(std::string _name, float _x, float _y, State _state) : MovingObje
 void Player::Init()
 {
 	m_class = PLAYER;
+	m_state = STATIC;
 	m_previousState = STATIC; // In case player is falling at the beginning of the level
 	m_facing = DRIGHT;
 	m_isRunning = false;
