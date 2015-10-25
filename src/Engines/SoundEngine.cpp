@@ -1,6 +1,7 @@
 #include "SoundEngine.hpp"
 #include "../System/Listener/MarioDeathListener.hpp"
 #include "../System/Listener/MarioJumpListener.hpp"
+#include "../System/Listener/MarioKickedEnemyListener.hpp"
 #include "../System/Listener/LevelStartListener.hpp"
 
 const std::string SoundEngine::soundsPath = "../assets/sounds/";
@@ -28,6 +29,10 @@ void SoundEngine::CreateListeners()
 	MarioJumpListener* marioJumpListener = new MarioJumpListener(this);
 	m_eventEngine->addListener("game.mario_jump", marioJumpListener);
 	m_createdListeners.push_back(marioJumpListener);
+
+	MarioKickedEnemyListener* marioKickedEnemyListener = new MarioKickedEnemyListener(this);
+	m_eventEngine->addListener("game.mario_kicked_enemy", marioKickedEnemyListener);
+	m_createdListeners.push_back(marioKickedEnemyListener);
 }
 
 SoundEngine::~SoundEngine()
@@ -56,14 +61,7 @@ void SoundEngine::Frame()
 
 void SoundEngine::ProcessEvent(EngineEvent& _event)
 {
-	switch (_event.m_type)
-	{
-		case PLAY_SOUND:
-			PlaySound(_event.data.m_sound);
-			break;
-		default:
-			break;
-	}
+	// To be removed with EngineEvent
 }
 
 void SoundEngine::LoadSounds()

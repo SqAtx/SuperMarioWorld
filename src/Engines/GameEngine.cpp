@@ -301,8 +301,8 @@ void GameEngine::HandleCollisions(MovingObject& _obj)
 
 				if (it->second->GetClass() == ENEMY && ((MovingObject*)it->second)->HasBeenHit()) // If class is ENEMY then it's a MovingObject
 				{
-					EngineEvent playKickSound(PLAY_SOUND, KICK_SND);
-					m_engines["s"]->PushEvent(playKickSound);
+					Event event;
+					m_eventEngine->dispatch(MARIO_KICKED_ENEMY, &event);
 				}
 			}
 		}

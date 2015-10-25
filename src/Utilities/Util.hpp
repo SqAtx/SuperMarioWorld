@@ -21,7 +21,8 @@ enum ObjectClass
 	LEVEL_BLOCK
 };
 
-enum State {
+enum State 
+{
 	UNKNOWN,
 	STATIC,
 	WALK,
@@ -32,19 +33,22 @@ enum State {
 	EMPTY		// ? Boxes
 };
 
-enum Direction {
+enum Direction 
+{
 	DLEFT,
 	DRIGHT
 };
 
-enum Instruction { // From user to player
+enum Instruction // From user to player
+{
 	GO_LEFT,
 	GO_RIGHT,
 	STOP_LEFT,
 	STOP_RIGHT
 };
 
-enum JumpState {
+enum JumpState
+{
 	JUMPING,
 	REACHINGAPEX, // Phase between the jump and the fall: the object is still rising but without acceleration on the Y axis
 	FALLING,
@@ -52,7 +56,8 @@ enum JumpState {
 	NONE	// At the beginning of the level, for example
 };
 
-enum CollisionDirection {
+enum CollisionDirection 
+{
 	TOP,
 	BOTTOM,
 	LEFT,
@@ -60,10 +65,19 @@ enum CollisionDirection {
 	NO_COL
 };
 
-enum PipeType {
+enum PipeType
+{
 	TRAVEL,		// Mario can travel through the pipe
 	SPAWN,		// The pipe is used to spawn enemies
 	FLOWER		// Flower in a pipe, classic enemy
+};
+
+enum SoundType
+{
+	JUMP_SND,
+	COIN_SND,
+	DEATH_SND,
+	KICK_SND
 };
 
 
@@ -77,7 +91,6 @@ namespace Sprite
 		UNKNOWN
 	} StaticOrAnimated;
 }
-
 
 #ifdef DEBUG_MODE
 namespace Debug

@@ -17,18 +17,9 @@ typedef enum
 	NEW_PIPE,				// to g
 	REMOVE_LVL_BLOC,		// to gfx
 	INFO_LVL,				// g to gfx when loading level: basing info about level
-	PLAY_SOUND,
 	DEATH_SOUND_STARTED,	// s to g
 	DEATH_SOUND_STOPPED		// s to g
 } EventType;
-
-typedef enum
-{
-	JUMP_SND,
-	COIN_SND,
-	DEATH_SND,
-	KICK_SND
-} SoundType;
 
 struct LevelInfo
 {
