@@ -1,5 +1,6 @@
 #include "GraphicsEngine.hpp"
 #include "../Graphics/GraphicsEvents.hpp"
+#include "../System/Listener/GotLevelInfoListener.hpp"
 
 const float GraphicsEngine::FramerateLimit = 60;
 
@@ -12,12 +13,21 @@ GraphicsEngine::GraphicsEngine(EventEngine *_eventEngine): Engine (_eventEngine)
 
 	m_tmpSprite = new sf::Sprite();
 
+	CreateListeners();
 #ifdef DEBUG_MODE
 	m_font.loadFromFile("arial.ttf");
 	m_debugText.setFont(m_font);
 	m_debugText.setCharacterSize(15);
 	m_debugText.setColor(sf::Color::Red);
 #endif
+
+}
+
+void GraphicsEngine::CreateListeners()
+{
+	GotLevelInfoListener* gotLevelInfoListener = new GotLevelInfoListener(this);
+	m_eventEngine->addListener("game.got_level_info", gotLevelInfoListener);
+	m_createdListeners.push_back(gotLevelInfoListener);
 }
 
 GraphicsEngine::~GraphicsEngine()
@@ -42,11 +52,6 @@ void GraphicsEngine::ProcessEvent(EngineEvent& _event)
 {
 	switch (_event.m_type)
 	{
-		case INFO_LVL:
-			StoreLevelInfo(_event.m_levelInfo);
-			m_cameraPosition.x = 0;
-			m_cameraPosition.y = _event.m_levelInfo.size.y - WIN_HEIGHT;
-			break;
 		case INFO_POS_LVL:
 			UpdateForegroundItem(_event.data.m_infoDisplay);
 			break;
@@ -251,10 +256,22 @@ void GraphicsEngine::DrawGame()
 		m_gameWindow->draw(it->second);
 }
 
+void GraphicsEngine::RceiveLevelInfo(LevelInfo _info)
+{
+	StoreLevelInfo(_info);
+	InitCameraPosition(_info.size.y);
+}
+
 void GraphicsEngine::StoreLevelInfo(LevelInfo _info)
 {
 	m_currentBackgroundName = _info.backgroundName;
 	m_levelSize = _info.size;
+}
+
+void GraphicsEngine::InitCameraPosition(float _levelHeight)
+{
+	m_cameraPosition.x = 0;
+	m_cameraPosition.y = _levelHeight - WIN_HEIGHT;
 }
 
 void GraphicsEngine::ResetTmpSprite()

@@ -19,6 +19,8 @@ class GameEngine : public Engine
 		void Frame();
 		void Frame(float _dt);
 
+		void StoreLevelInfo(LevelInfo _info);
+
 		void HandlePressedKey(sf::Keyboard::Key _key);
 		void HandleReleasedKey(sf::Keyboard::Key _key);
 
@@ -33,6 +35,8 @@ class GameEngine : public Engine
 		void UpdateForegroundItem(unsigned int _id, sf::FloatRect& _coords) { m_listForegroundItems[_id]->SetCoordinates(_coords); };
 
     private:
+		virtual void CreateListeners();
+
 		CollisionHandler *m_collisionHandler;
 		LevelImporter *m_levelImporter;
 
@@ -62,8 +66,6 @@ class GameEngine : public Engine
 		void HandleCollisions(MovingObject& _obj);
 
 		bool m_deathSoundIsPlaying; // No input is taken into account while this sound is playing [see sound engine]
-
-		std::vector<EventListener*> m_createdListeners;
 };
 
 #endif // GAMEENGINE_H

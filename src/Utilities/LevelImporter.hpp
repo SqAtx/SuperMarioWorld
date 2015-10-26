@@ -5,6 +5,7 @@
 #include "../irrXML/irrXML.h"
 #include "../Items/Pipe.hpp"
 #include "Util.hpp"
+#include "../EventEngine/EventEngine.hpp"
 
 class GameEngine;
 
@@ -15,7 +16,7 @@ class GameEngine;
 class LevelImporter
 {
 	public:
-		LevelImporter(GameEngine *_parent);
+		LevelImporter(GameEngine *_parent, EventEngine *_eventEngine);
 
 		bool LoadLevel(std::string _lvlName);
 		void StoreCharactersInitialPositions();
@@ -26,7 +27,8 @@ class LevelImporter
 		void StoreFloor();
 
 	private:
-		GameEngine *m_gameEngine;
+		GameEngine *m_gameEngine; // TODO remove after refactor
+		EventEngine *m_eventEngine;
 		irr::io::IrrXMLReader *m_lvlFile;
 
 		std::vector<int> m_pipeIds; // This is used to check that no 2 pipes have the same ID

@@ -20,7 +20,7 @@ class SoundEngine : public Engine
 		void PlaySound(SoundType _type);
 
     private:
-		void CreateListeners();
+		virtual void CreateListeners();
 
 		std::map<SoundType, sf::SoundBuffer> m_soundBuffers;
 		sf::Sound *m_soundBeingPlayed;
@@ -38,8 +38,6 @@ class SoundEngine : public Engine
 		void StoreMusicNames();
 		void ChangeMusic();
 		void PlayMusic(std::string _musicName);
-
-		std::vector<EventListener*> m_createdListeners;
 
 		static const std::string soundsPath;
 };

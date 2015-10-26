@@ -1,12 +1,21 @@
 #include "GameEngine.hpp"
 #include "../Game.hpp"
 #include "../System/Listener/KeyboardListener.hpp"
+#include "../System/Listener/GotLevelInfoListener.hpp"
 #include "../Game/GameEvents.hpp"
 
 GameEngine::GameEngine(EventEngine *_eventEngine) : Engine(_eventEngine), m_levelStarted(false), m_indexMario(-1)
 {
 	m_collisionHandler = new CollisionHandler(this);
-	m_levelImporter = new LevelImporter(this);
+	m_levelImporter = new LevelImporter(this, _eventEngine);
+	CreateListeners();
+}
+
+void GameEngine::CreateListeners()
+{
+	GotLevelInfoListener* gotLevelInfoListener = new GotLevelInfoListener(this);
+	m_eventEngine->addListener(GOT_LVL_INFO, gotLevelInfoListener);
+	m_createdListeners.push_back(gotLevelInfoListener);
 
 	KeyboardListener* keyboardListener = new KeyboardListener(this);
 	m_eventEngine->addListener("graphics.key_event", keyboardListener);
@@ -68,9 +77,6 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 {
 	switch (_event.m_type)
 	{
-		case INFO_LVL:
-			m_collisionHandler->SetLevelSize(_event.m_levelInfo.size);
-			break;
 		case INFO_POS_LVL:
 		{
 			auto DOtoUpdate = m_listForegroundItems.find(_event.data.m_id);
@@ -174,6 +180,11 @@ void GameEngine::HandleReleasedKey(sf::Keyboard::Key _key)
 		default:
 			break;
 	}
+}
+
+void GameEngine::StoreLevelInfo(LevelInfo _info)
+{
+	m_collisionHandler->SetLevelSize(_info.size);
 }
 
 void GameEngine::StartLevel(std::string _lvlName)

@@ -16,17 +16,9 @@ typedef enum
 	NEW_FOREGROUND_ITEM,	// to g
 	NEW_PIPE,				// to g
 	REMOVE_LVL_BLOC,		// to gfx
-	INFO_LVL,				// g to gfx when loading level: basing info about level
 	DEATH_SOUND_STARTED,	// s to g
 	DEATH_SOUND_STOPPED		// s to g
 } EventType;
-
-struct LevelInfo
-{
-	std::string name;
-	std::string backgroundName;
-	sf::Vector2f size;
-};
 
 /* This class represents a message sent from an engine to another */
 class EngineEvent

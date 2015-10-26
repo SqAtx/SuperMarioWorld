@@ -9,6 +9,7 @@
 #include <vector>
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
+#include "../Debug.hpp"
 
 class DisplayableObject;
 struct InfoForDisplay;
@@ -80,6 +81,12 @@ enum SoundType
 	KICK_SND
 };
 
+struct LevelInfo
+{
+	std::string name;
+	std::string backgroundName;
+	sf::Vector2f size;
+};
 
 namespace Sprite
 {

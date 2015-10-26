@@ -24,7 +24,11 @@ class GraphicsEngine : public Engine
         void Frame();
 		float GetFramerateLimit();
 
+		void RceiveLevelInfo(LevelInfo _info);
+
     private:
+		virtual void CreateListeners();
+
 		sf::RenderWindow *m_gameWindow;
 		SpriteHandler *m_spriteHandler;
 		static const float FramerateLimit;
@@ -68,6 +72,8 @@ class GraphicsEngine : public Engine
 		void DrawGame();
 
 		void StoreLevelInfo(LevelInfo _info);
+
+		void InitCameraPosition(float _levelHeight);
 
 		void ResetTmpSprite();
 

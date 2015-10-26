@@ -34,8 +34,11 @@ class Engine
 
 		std::queue<EngineEvent> m_eventsQueue; // A queue of events to deal with
 
+		std::vector<EventListener*> m_createdListeners;
+
 	private:
 		virtual void ProcessEvent(EngineEvent& _event) = 0;
+		virtual void CreateListeners() = 0;
 };
 
 #endif // ENGINE_H

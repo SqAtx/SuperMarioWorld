@@ -1,15 +1,17 @@
 #include <cstring>
 #include "LevelImporter.hpp"
 #include "../Engines/GameEngine.hpp"
+#include "../Game/GameEvents.hpp"
 
 using namespace irr;
 using namespace io;
 
 const std::string LevelImporter::levelsPath = "../assets/levels/";
 
-LevelImporter::LevelImporter(GameEngine *_parent)
+LevelImporter::LevelImporter(GameEngine *_parent, EventEngine *_eventEngine)
 {
 	m_gameEngine = _parent;
+	m_eventEngine = _eventEngine;
 }
 
 bool LevelImporter::LoadLevel(std::string _lvlName)
@@ -31,10 +33,8 @@ bool LevelImporter::LoadLevel(std::string _lvlName)
 					info.size.x = GetAttributeValueAsFloat("width");
 					info.size.y = GetAttributeValueAsFloat("height");
 
-					// And that's exactly why you need listeners
-					EngineEvent tmpEvent(INFO_LVL, info);
-					m_gameEngine->PushEvent(tmpEvent);
-					m_gameEngine->TransmitInfoToGFX(tmpEvent);
+					Event gotLvlInfo(info);
+					m_eventEngine->dispatch(GOT_LVL_INFO, &gotLvlInfo);
 				}
 				if (!strcmp("characters", m_lvlFile->getNodeName()))
 					StoreCharactersInitialPositions();

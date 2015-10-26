@@ -3,6 +3,7 @@
 /*
 * List of events sent by the Game Components
 */
+#define GOT_LVL_INFO "game.got_level_info"
 #define LEVEL_START "game.level_start"
 #define MARIO_DEATH "game.mario_death"
 #define MARIO_JUMP "game.mario_jump"
