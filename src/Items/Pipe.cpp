@@ -35,7 +35,7 @@ void Pipe::HandleSpawnEnemies(float _dt)
 
 		if (m_enemyBeingSpawned != NULL && IsEnemyReadyToLeavePipe())
 		{
-			SendEnemyToGameEngine();
+			PublishEnemyCreation();
 			// RemoveEnemyBeingSpawned should be called here but then the enemy will be missing when gfx.Frame() is called, causing the enemy to flicker.
 			// So it's called at the next frame, which requires a flag.
 			m_justFinishedSpawn = true;
@@ -64,7 +64,7 @@ void Pipe::SendEnemyBeingSpawnedToGFX()
 	m_gameEngine->TransmitInfoToGFX(tmpEvent);
 }
 
-void Pipe::SendEnemyToGameEngine()
+void Pipe::PublishEnemyCreation()
 {
 	if (m_enemyBeingSpawned != NULL)
 	{

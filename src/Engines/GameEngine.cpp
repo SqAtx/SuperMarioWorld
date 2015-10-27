@@ -4,6 +4,7 @@
 #include "../System/Listener/KeyboardListener.hpp"
 #include "../System/Listener/NewCharacterReadListener.hpp"
 #include "../System/Listener/NewForegroundItemReadListener.hpp"
+#include "../System/Listener/NewPipeReadListener.hpp"
 #include "../Game/GameEvents.hpp"
 
 GameEngine::GameEngine(EventEngine *_eventEngine) : Engine(_eventEngine), m_levelStarted(false), m_indexMario(-1)
@@ -30,6 +31,10 @@ void GameEngine::CreateListeners()
 	NewForegroundItemReadListener* newForegroundItemReadListener = new NewForegroundItemReadListener(this);
 	m_eventEngine->addListener(NEW_FOREGROUND_ITEM_READ, newForegroundItemReadListener);
 	m_createdListeners.push_back(newForegroundItemReadListener);
+
+	NewPipeReadListener* newPipeReadListener = new NewPipeReadListener(this);
+	m_eventEngine->addListener(NEW_PIPE_READ, newPipeReadListener);
+	m_createdListeners.push_back(newPipeReadListener);
 }
 
 GameEngine::~GameEngine()
@@ -94,10 +99,6 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 				m_listForegroundItems[_event.data.m_id]->SetCoordinates(_event.m_rect);
 			break;
 		}
-		case NEW_PIPE:
-			AddPipeToArray(_event.m_pipe);
-			AddForegroundItemToArray(_event.m_pipe);
-			break;
 		case DEATH_SOUND_STARTED:
 			m_deathSoundIsPlaying = true;
 			break;

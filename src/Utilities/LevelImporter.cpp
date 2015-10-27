@@ -154,8 +154,8 @@ void LevelImporter::StorePipe()
 	if (std::find(m_pipeIds.begin(), m_pipeIds.end(), id) == m_pipeIds.end())
 	{
 		Pipe *tmpPipe = new Pipe("item_" + tmpTileName, tmpCoords, id, type, m_gameEngine, m_eventEngine);
-		EngineEvent newPipe(NEW_PIPE, tmpPipe);
-		m_gameEngine->PushEvent(newPipe);
+		Event newPipe(tmpPipe);
+		m_eventEngine->dispatch("game.new_pipe_read", &newPipe);
 
 		SendInfoPosLvlToGFX(tmpPipe->GetInfoForDisplay());
 

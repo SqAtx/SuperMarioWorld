@@ -40,7 +40,7 @@ class Pipe : public DisplayableObject
 		void SpawnEnemyIfTimeElapsed();
 		void SendEnemyBeingSpawnedToGFX();
 
-		void SendEnemyToGameEngine();
+		void PublishEnemyCreation();
 		void RemoveEnemyBeingSpawned();
 
 		bool Pipe::IsEnemyReadyToLeavePipe();
