@@ -3,6 +3,7 @@
 #include "../System/Listener/GotLevelInfoListener.hpp"
 #include "../System/Listener/KeyboardListener.hpp"
 #include "../System/Listener/NewCharacterReadListener.hpp"
+#include "../System/Listener/NewForegroundItemReadListener.hpp"
 #include "../Game/GameEvents.hpp"
 
 GameEngine::GameEngine(EventEngine *_eventEngine) : Engine(_eventEngine), m_levelStarted(false), m_indexMario(-1)
@@ -25,6 +26,10 @@ void GameEngine::CreateListeners()
 	NewCharacterReadListener* newCharacterReadListener = new NewCharacterReadListener(this);
 	m_eventEngine->addListener(NEW_CHARACTER_READ, newCharacterReadListener);
 	m_createdListeners.push_back(newCharacterReadListener);
+
+	NewForegroundItemReadListener* newForegroundItemReadListener = new NewForegroundItemReadListener(this);
+	m_eventEngine->addListener(NEW_FOREGROUND_ITEM_READ, newForegroundItemReadListener);
+	m_createdListeners.push_back(newForegroundItemReadListener);
 }
 
 GameEngine::~GameEngine()
@@ -89,9 +94,6 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 				m_listForegroundItems[_event.data.m_id]->SetCoordinates(_event.m_rect);
 			break;
 		}
-		case NEW_FOREGROUND_ITEM:
-			AddForegroundItemToArray(_event.m_displayable);
-			break;
 		case NEW_PIPE:
 			AddPipeToArray(_event.m_pipe);
 			AddForegroundItemToArray(_event.m_pipe);

@@ -12,7 +12,6 @@ typedef enum
 #endif
 	INFO_POS_CHAR,			// g to gfx during game: character (Mario or enemy) position
 	INFO_POS_LVL,			// gfx <-> g: position of a foreground sprite
-	NEW_FOREGROUND_ITEM,	// to g
 	NEW_PIPE,				// to g
 	REMOVE_LVL_BLOC,		// to gfx
 	DEATH_SOUND_STARTED,	// s to g

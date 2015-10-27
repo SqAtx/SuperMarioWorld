@@ -33,7 +33,7 @@ bool LevelImporter::LoadLevel(std::string _lvlName)
 					info.size.x = GetAttributeValueAsFloat("width");
 					info.size.y = GetAttributeValueAsFloat("height");
 
-					Event gotLvlInfo(info);
+					Event gotLvlInfo(&info);
 					m_eventEngine->dispatch(GOT_LVL_INFO, &gotLvlInfo);
 				}
 				if (!strcmp("characters", m_lvlFile->getNodeName()))
@@ -136,8 +136,8 @@ void LevelImporter::StoreBox()
 	State tmpState = GetAttributeValue("state", true) == "empty" ? EMPTY : NORMAL;
 
 	Box *tmpBox = new Box("item_" + tmpTileName, tmpCoords, tmpState);
-	EngineEvent newBox(NEW_FOREGROUND_ITEM, tmpBox);
-	m_gameEngine->PushEvent(newBox);
+	Event newBox(tmpBox);
+	m_eventEngine->dispatch("game.new_foreground_item_read", &newBox);
 
 	SendInfoPosLvlToGFX(tmpBox->GetInfoForDisplay());
 }
@@ -184,8 +184,8 @@ void LevelImporter::StoreFloor()
 	GetCoordinatesAndTileName(&tmpCoords, &tmpTileName);
 
 	DisplayableObject *tmpFloor = new DisplayableObject("floor_" + tmpTileName, tmpCoords, NORMAL);
-	EngineEvent newFloor(NEW_FOREGROUND_ITEM, tmpFloor);
-	m_gameEngine->PushEvent(newFloor);
+	Event newFloor(tmpFloor);
+	m_eventEngine->dispatch("game.new_foreground_item_read", &newFloor);
 
 	SendInfoPosLvlToGFX(tmpFloor->GetInfoForDisplay());
 }
