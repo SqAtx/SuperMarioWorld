@@ -77,15 +77,15 @@ void LevelImporter::StoreCharactersInitialPositions()
 					m_gameEngine->SetMarioInitialPosition(initPosMario);
 
 					Player *mario = new Player("mario", initPosMario);
-					EngineEvent newMario(NEW_CHARACTER, mario);
-					m_gameEngine->PushEvent(newMario);
+					Event newMario(mario);
+					m_eventEngine->dispatch(NEW_CHARACTER_READ, &newMario);
 				}
 				if (!strcmp("goomba", nodeName))
 				{
 					Direction tmpDir = GetAttributeValue("direction", true) == "left" ? DLEFT : DRIGHT; // direction = right if attribute not here
 					Goomba *goomba = new Goomba("goomba", GetAttributeValueAsFloat("x"), GetAttributeValueAsFloat("y"), tmpDir);
-					EngineEvent newGoomba(NEW_CHARACTER, goomba);
-					m_gameEngine->PushEvent(newGoomba);
+					Event newGoomba(goomba);
+					m_eventEngine->dispatch(NEW_CHARACTER_READ, &newGoomba);
 				}
 				break;
 			case EXN_ELEMENT_END:
@@ -153,7 +153,7 @@ void LevelImporter::StorePipe()
 
 	if (std::find(m_pipeIds.begin(), m_pipeIds.end(), id) == m_pipeIds.end())
 	{
-		Pipe *tmpPipe = new Pipe("item_" + tmpTileName, tmpCoords, id, type, m_gameEngine);
+		Pipe *tmpPipe = new Pipe("item_" + tmpTileName, tmpCoords, id, type, m_gameEngine, m_eventEngine);
 		EngineEvent newPipe(NEW_PIPE, tmpPipe);
 		m_gameEngine->PushEvent(newPipe);
 

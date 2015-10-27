@@ -1,7 +1,8 @@
 #include "GameEngine.hpp"
 #include "../Game.hpp"
-#include "../System/Listener/KeyboardListener.hpp"
 #include "../System/Listener/GotLevelInfoListener.hpp"
+#include "../System/Listener/KeyboardListener.hpp"
+#include "../System/Listener/NewCharacterReadListener.hpp"
 #include "../Game/GameEvents.hpp"
 
 GameEngine::GameEngine(EventEngine *_eventEngine) : Engine(_eventEngine), m_levelStarted(false), m_indexMario(-1)
@@ -20,6 +21,10 @@ void GameEngine::CreateListeners()
 	KeyboardListener* keyboardListener = new KeyboardListener(this);
 	m_eventEngine->addListener("graphics.key_event", keyboardListener);
 	m_createdListeners.push_back(keyboardListener);
+
+	NewCharacterReadListener* newCharacterReadListener = new NewCharacterReadListener(this);
+	m_eventEngine->addListener(NEW_CHARACTER_READ, newCharacterReadListener);
+	m_createdListeners.push_back(newCharacterReadListener);
 }
 
 GameEngine::~GameEngine()
@@ -86,10 +91,6 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 		}
 		case NEW_FOREGROUND_ITEM:
 			AddForegroundItemToArray(_event.m_displayable);
-			break;
-		case NEW_CHARACTER:
-			AddCharacterToArray(_event.m_moving);
-			AddForegroundItemToArray(_event.m_moving);
 			break;
 		case NEW_PIPE:
 			AddPipeToArray(_event.m_pipe);
@@ -182,7 +183,7 @@ void GameEngine::HandleReleasedKey(sf::Keyboard::Key _key)
 	}
 }
 
-void GameEngine::StoreLevelInfo(LevelInfo _info)
+void GameEngine::StoreLevelInfo(LevelInfo& _info)
 {
 	m_collisionHandler->SetLevelSize(_info.size);
 }
@@ -232,7 +233,6 @@ void GameEngine::AddPipeToArray(Pipe *_pipe)
 {
 	m_listPipes[_pipe->GetPipeId()] = _pipe;
 };
-
 
 void GameEngine::UpdateCharacterPosition(MovingObject& _character, float _dt)
 {

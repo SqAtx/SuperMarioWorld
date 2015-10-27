@@ -2,6 +2,7 @@
 #define PIPE_H
 
 #include "../DisplayableObject.hpp"
+#include "../EventEngine/EventEngine.hpp"
 #include <SFML/System/Clock.hpp>
 
 class GameEngine;
@@ -13,7 +14,7 @@ class Enemy;
 class Pipe : public DisplayableObject
 {
 	public:
-		Pipe(std::string _name, sf::Vector2f _coord, int _pipeId, PipeType _type, GameEngine *_g);
+		Pipe(std::string _name, sf::Vector2f _coord, int _pipeId, PipeType _type, GameEngine *_g, EventEngine *_eventEngine);
 		~Pipe();
 
 		void HandleSpawnEnemies(float _dt);
@@ -32,7 +33,8 @@ class Pipe : public DisplayableObject
 		bool m_justFinishedSpawn;
 		sf::Clock m_spawnTimer;
 
-		GameEngine *m_gameEngine;
+		GameEngine *m_gameEngine; // TODO will be obsolete after refactor
+		EventEngine *m_eventEngine;
 
 		void MoveEnemyBeingSpawned(float _dt);
 		void SpawnEnemyIfTimeElapsed();

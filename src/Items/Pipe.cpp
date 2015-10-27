@@ -3,7 +3,7 @@
 
 const int Pipe::milisecondsBetweenSpawns = 3000;
 
-Pipe::Pipe(std::string _name, sf::Vector2f _coord, int _pipeId, PipeType _type, GameEngine *_g) : DisplayableObject(_name, _coord, NORMAL), m_pipeId(_pipeId), m_type(_type), m_gameEngine(_g)
+Pipe::Pipe(std::string _name, sf::Vector2f _coord, int _pipeId, PipeType _type, GameEngine *_g, EventEngine *_eventEngine) : DisplayableObject(_name, _coord, NORMAL), m_pipeId(_pipeId), m_type(_type), m_gameEngine(_g), m_eventEngine(_eventEngine)
 {
 	m_spawnIsOn = true;
 	m_enemyBeingSpawned = NULL;
@@ -69,8 +69,8 @@ void Pipe::SendEnemyToGameEngine()
 	if (m_enemyBeingSpawned != NULL)
 	{
 		Goomba *goombaJustSpawned = new Goomba("goomba", m_enemyBeingSpawned->GetPosition(), DLEFT); // Will be deleted by game engine when character dies
-		EngineEvent newGoomba(NEW_CHARACTER, goombaJustSpawned);
-		m_gameEngine->PushEvent(newGoomba);
+		Event newGoomba(goombaJustSpawned);
+		m_eventEngine->dispatch("game.new_character_read", &newGoomba);
 
 		goombaJustSpawned = NULL;
 	}

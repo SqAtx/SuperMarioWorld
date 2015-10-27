@@ -8,5 +8,6 @@
 #define MARIO_DEATH "game.mario_death"
 #define MARIO_JUMP "game.mario_jump"
 #define MARIO_KICKED_ENEMY "game.mario_kicked_enemy"
+#define NEW_CHARACTER_READ "game.new_character_read"
 
 #endif // GAME_EVENTS_H

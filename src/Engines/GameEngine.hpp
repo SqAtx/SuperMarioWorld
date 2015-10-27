@@ -19,7 +19,11 @@ class GameEngine : public Engine
 		void Frame();
 		void Frame(float _dt);
 
-		void StoreLevelInfo(LevelInfo _info);
+		void StoreLevelInfo(LevelInfo& _info);
+
+		void AddCharacterToArray(MovingObject *_character);
+		void AddForegroundItemToArray(DisplayableObject *_item);
+		void AddPipeToArray(Pipe *_pipe);
 
 		void HandlePressedKey(sf::Keyboard::Key _key);
 		void HandleReleasedKey(sf::Keyboard::Key _key);
@@ -46,10 +50,6 @@ class GameEngine : public Engine
 		std::vector<MovingObject*> m_characters;
 		std::map<unsigned int, DisplayableObject*> m_listForegroundItems; // Part of the level the characters can be in collision with. Pointers stored to allow polymorphism.
 		std::map<unsigned int, Pipe*> m_listPipes;
-
-		void AddCharacterToArray(MovingObject *_character);
-		void AddForegroundItemToArray(DisplayableObject *_item);
-		void AddPipeToArray(Pipe *_pipe);
 
 		void ProcessEvent(EngineEvent& _event);
 		bool CanRespawnMario();
