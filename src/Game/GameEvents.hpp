@@ -3,9 +3,10 @@
 /*
 * List of events sent by the Game Components
 */
+#define CHARACTER_DIED "game.character_died"
+#define CHAR_POS_UPDATED "game.character_position_updated"
 #define GOT_LVL_INFO "game.got_level_info"
 #define LEVEL_START "game.level_start"
-#define MARIO_DEATH "game.mario_death"
 #define MARIO_JUMP "game.mario_jump"
 #define MARIO_KICKED_ENEMY "game.mario_kicked_enemy"
 #define NEW_CHARACTER_READ "game.new_character_read"

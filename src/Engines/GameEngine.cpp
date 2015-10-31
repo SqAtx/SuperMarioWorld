@@ -9,7 +9,7 @@
 
 GameEngine::GameEngine(EventEngine *_eventEngine) : Engine(_eventEngine), m_levelStarted(false), m_indexMario(-1)
 {
-	m_collisionHandler = new CollisionHandler(this);
+	m_collisionHandler = new CollisionHandler(this, m_eventEngine);
 	m_levelImporter = new LevelImporter(this, _eventEngine);
 	CreateListeners();
 }
@@ -186,9 +186,9 @@ void GameEngine::HandleReleasedKey(sf::Keyboard::Key _key)
 	}
 }
 
-void GameEngine::StoreLevelInfo(LevelInfo& _info)
+void GameEngine::StoreLevelInfo(LevelInfo* _info)
 {
-	m_collisionHandler->SetLevelSize(_info.size);
+	m_collisionHandler->SetLevelSize(_info->size);
 }
 
 void GameEngine::StartLevel(std::string _lvlName)
@@ -260,18 +260,17 @@ void GameEngine::KillCharacter(MovingObject& _character)
 	{
 		if (m_characters[i] != NULL && m_characters[i]->GetID() == _character.GetID())
 		{
+			InfoForDisplay character_info = _character.GetInfoForDisplay();
+			Event death(&character_info);
+			m_eventEngine->dispatch(CHARACTER_DIED, &death);
+
 			m_listForegroundItems.erase(m_characters[i]->GetID());
 
 			delete m_characters[i];
 			m_characters[i] = NULL;
 
 			if ((int) i == m_indexMario)
-			{
 				m_indexMario = -1;
-
-				Event death;
-				m_eventEngine->dispatch(MARIO_DEATH, &death);
-			}
 		}
 	}
 }
@@ -283,8 +282,9 @@ void GameEngine::SendCharacterPosition(int _indexCharacter)
 	if (character == NULL)
 		return;
 
-	EngineEvent posInfo(INFO_POS_CHAR, character->GetInfoForDisplay());
-	m_engines["gfx"]->PushEvent(posInfo);
+	InfoForDisplay info = character->GetInfoForDisplay();
+	Event posInfo(&info);
+	m_eventEngine->dispatch(CHAR_POS_UPDATED, &posInfo);
 #ifdef DEBUG_MODE
 	if (_indexCharacter == m_indexMario)
 	{

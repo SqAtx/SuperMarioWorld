@@ -16,7 +16,7 @@ GotLevelInfoListener::GotLevelInfoListener(GraphicsEngine* _graphicsEngine)
 void GotLevelInfoListener::onEvent(const std::string &_eventType, Event* _event)
 {
 	if (m_gameEngine != NULL)
-		m_gameEngine->StoreLevelInfo(*(_event->GetLevelInfo()));
+		m_gameEngine->StoreLevelInfo(_event->GetLevelInfo());
 	if (m_graphicsEngine != NULL)
-		m_graphicsEngine->RceiveLevelInfo(*(_event->GetLevelInfo()));
+		m_graphicsEngine->RceiveLevelInfo(_event->GetLevelInfo());
 }

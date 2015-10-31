@@ -4,6 +4,7 @@
 #include "../Characters/Player.hpp"
 
 class GameEngine;
+class EventEngine;
 
 /*
  * Collision handler
@@ -11,7 +12,7 @@ class GameEngine;
 class CollisionHandler
 {
 	public:
-		CollisionHandler(GameEngine *_parent);
+		CollisionHandler(GameEngine *_parent, EventEngine *_eventEngine);
 		~CollisionHandler();
 
 		void HandleCollisionsWithMapEdges(MovingObject& _obj);
@@ -27,7 +28,8 @@ class CollisionHandler
 		void SetLevelSize(sf::Vector2f _size) { m_levelSize = _size; };
 
 	private:
-		GameEngine *m_gameEngine;
+		GameEngine *m_gameEngine; // TODO obsolete after refactor
+		EventEngine *m_eventEngine;
 
 		sf::Vector2f m_levelSize;
 };

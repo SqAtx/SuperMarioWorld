@@ -1,5 +1,7 @@
 #include "GraphicsEngine.hpp"
 #include "../Graphics/GraphicsEvents.hpp"
+#include "../System/Listener/CharacterDiedListener.hpp"
+#include "../System/Listener/CharacterPositionUpdateListener.hpp"
 #include "../System/Listener/GotLevelInfoListener.hpp"
 
 const float GraphicsEngine::FramerateLimit = 60;
@@ -25,6 +27,14 @@ GraphicsEngine::GraphicsEngine(EventEngine *_eventEngine): Engine (_eventEngine)
 
 void GraphicsEngine::CreateListeners()
 {
+	CharacterDiedListener* characterDiedListener = new CharacterDiedListener(this);
+	m_eventEngine->addListener("game.character_died", characterDiedListener);
+	m_createdListeners.push_back(characterDiedListener);
+
+	CharacterPositionUpdateListener* characterPositionUpdateListener = new CharacterPositionUpdateListener(this);
+	m_eventEngine->addListener("game.character_position_updated", characterPositionUpdateListener);
+	m_createdListeners.push_back(characterPositionUpdateListener);
+
 	GotLevelInfoListener* gotLevelInfoListener = new GotLevelInfoListener(this);
 	m_eventEngine->addListener("game.got_level_info", gotLevelInfoListener);
 	m_createdListeners.push_back(gotLevelInfoListener);
@@ -58,11 +68,6 @@ void GraphicsEngine::ProcessEvent(EngineEvent& _event)
 		case REMOVE_LVL_BLOC:
 			m_listForegroundItems.erase(_event.data.m_id);
 			break;
-		case INFO_POS_CHAR:
-			SetDisplayableObjectToDraw(_event.data.m_infoDisplay);
-			if (_event.data.m_infoDisplay.name == "mario")
-				MoveCameraOnMario(_event.data.m_infoDisplay.coordinates);
-			break;
 #ifdef DEBUG_MODE
 		case INFO_DEBUG:
 			StoreDebugInfo(_event.m_debugInfo);
@@ -73,13 +78,13 @@ void GraphicsEngine::ProcessEvent(EngineEvent& _event)
 	}
 }
 
+/// Obsolete
 void GraphicsEngine::ResetSpritesToDraw()
 {
 	while (!m_backgroundToDraw.empty())
 		m_backgroundToDraw.pop_back();
 	while (!m_levelStructureToDraw.empty())
 		m_levelStructureToDraw.pop_back();
-	m_displayableObjectsToDraw.clear();
 }
 
 // Process windows events that have happened since the last loop iteration (sent by SFML)
@@ -162,13 +167,13 @@ void GraphicsEngine::SetLevelStructureObjectToDraw(InfoForDisplay _info)
 
 void GraphicsEngine::UpdateForegroundItem(InfoForDisplay _info)
 {
-	if (_info.name.find("pipe_") == std::string::npos)
-		m_listForegroundItems[_info.id] = _info;
-	else
+	if (_info.name.find("pipe_") != std::string::npos)
 		m_listPipes[_info.id] = _info;
+	else
+		m_listForegroundItems[_info.id] = _info;
 }
 
-void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
+void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info) /* Need to copy the object, otherwise (by reference) I'd modify it */
 {
 	ResetTmpSprite();
 	_info.name = GetTextureName(_info.id, _info.name, _info.state);
@@ -182,14 +187,6 @@ void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info)
 	// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions (the sprite size might have changed)
 	EngineEvent tmpEvent(INFO_POS_LVL, _info.id, RelativeToAbsolute(m_tmpSprite->getGlobalBounds()));
 	m_engines["g"]->PushEvent(tmpEvent);
-
-#ifdef DEBUG_MODE
-	if (_info.name == "mario")
-	{
-		m_posMario.x = _info.coordinates.left;
-		m_posMario.y = _info.coordinates.top;
-	}
-#endif
 }
 
 /* Figures out which sprite to display, ie the name of the sprite in the RECT file. The name is fetched only if it's an animation or if the state has changed. */
@@ -199,7 +196,11 @@ std::string GraphicsEngine::GetTextureName(unsigned int _id, std::string _name, 
 	std::string fullStateName = m_spriteHandler->GetFullStateName(_name, _state);
 	int nbTextures = m_spriteHandler->HowManyLoadedTexturesContainThisName(fullStateName);
 
-	assert(nbTextures > 0);
+	if (nbTextures < 0)
+	{
+		std::cerr << "ERROR: " << nbTextures << " texture for " << fullStateName << " (name: \"" << _name << "\", state: \"" << _state << "\")" << std::endl;
+		assert(false);
+	}
 
 	if (m_animationStates.find(_id) == m_animationStates.end()) // If id doesn't exist in the map, create entry as UNKNOWN
 		m_animationStates[_id] = Sprite::UNKNOWN;
@@ -256,22 +257,40 @@ void GraphicsEngine::DrawGame()
 		m_gameWindow->draw(it->second);
 }
 
-void GraphicsEngine::RceiveLevelInfo(LevelInfo _info)
+void GraphicsEngine::RceiveLevelInfo(LevelInfo *_info)
 {
 	StoreLevelInfo(_info);
-	InitCameraPosition(_info.size.y);
+	InitCameraPosition(_info->size.y);
 }
 
-void GraphicsEngine::StoreLevelInfo(LevelInfo _info)
+void GraphicsEngine::StoreLevelInfo(LevelInfo *_info)
 {
-	m_currentBackgroundName = _info.backgroundName;
-	m_levelSize = _info.size;
+	m_currentBackgroundName = _info->backgroundName;
+	m_levelSize = _info->size;
 }
 
 void GraphicsEngine::InitCameraPosition(float _levelHeight)
 {
 	m_cameraPosition.x = 0;
 	m_cameraPosition.y = _levelHeight - WIN_HEIGHT;
+}
+
+void GraphicsEngine::ReceiveCharacterPosition(InfoForDisplay* _info)
+{
+	SetDisplayableObjectToDraw(*_info);
+	if (_info->name == "mario")
+	{
+		MoveCameraOnMario(_info->coordinates);
+#ifdef DEBUG_MODE
+		m_posMario.x = _info->coordinates.left;
+		m_posMario.y = _info->coordinates.top;
+#endif
+	}
+}
+
+void GraphicsEngine::RemoveDisplayableObject(unsigned int _id)
+{
+	m_displayableObjectsToDraw.erase(_id);
 }
 
 void GraphicsEngine::ResetTmpSprite()

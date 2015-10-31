@@ -24,7 +24,10 @@ class GraphicsEngine : public Engine
         void Frame();
 		float GetFramerateLimit();
 
-		void RceiveLevelInfo(LevelInfo _info);
+		void RceiveLevelInfo(LevelInfo* _info);
+		void ReceiveCharacterPosition(InfoForDisplay* _info);
+
+		void RemoveDisplayableObject(unsigned int _id);
 
     private:
 		virtual void CreateListeners();
@@ -71,7 +74,7 @@ class GraphicsEngine : public Engine
 
 		void DrawGame();
 
-		void StoreLevelInfo(LevelInfo _info);
+		void StoreLevelInfo(LevelInfo *_info);
 
 		void InitCameraPosition(float _levelHeight);
 

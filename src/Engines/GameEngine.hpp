@@ -19,7 +19,7 @@ class GameEngine : public Engine
 		void Frame();
 		void Frame(float _dt);
 
-		void StoreLevelInfo(LevelInfo& _info);
+		void StoreLevelInfo(LevelInfo* _info);
 
 		void AddCharacterToArray(MovingObject *_character);
 		void AddForegroundItemToArray(DisplayableObject *_item);

@@ -142,7 +142,11 @@ std::string SpriteHandler::FindNextTextureName(std::string _stateName, std::stri
 	if (_currentTextureName == "" || _currentTextureName.find(_stateName) == std::string::npos) // If it's the first time we are displaying this id OR if we are beginning the animation
 		return _stateName + "1";
 
-	assert(HowManyLoadedTexturesContainThisName(_stateName) > 1);
+	if (HowManyLoadedTexturesContainThisName(_stateName) <= 1)
+	{
+		std::cerr << HowManyLoadedTexturesContainThisName(_stateName) << " texture contain " << _stateName << std::endl;
+		assert(false);
+	}
 
 	// We are now ready to display the next sprite of the animation but we can't display a new sprite at every frame, that's too fast. So we use FramesBetweenAnimationChanges.
 	framesSinceLastChange++;
