@@ -9,8 +9,8 @@
 class Box : public DisplayableObject
 {
 	public:
-		Box(std::string _name, sf::Vector2f _coord, State _state);
-		Box(std::string _name, float _x, float _y, State _state);
+		Box(EventEngine *_eventEngine, std::string _name, sf::Vector2f _coord, State _state);
+		Box(EventEngine *_eventEngine, std::string _name, float _x, float _y, State _state);
 		void Init();
 
 		virtual void UpdateAfterCollision(CollisionDirection _direction, ObjectClass _classOfOtherObject);

@@ -1,11 +1,11 @@
 #include "Goomba.hpp"
 
-Goomba::Goomba(std::string _name, sf::Vector2f _coord, Direction _dir) : Enemy(_name, _coord, _dir)
+Goomba::Goomba(EventEngine *_eventEngine, std::string _name, sf::Vector2f _coord, Direction _dir) : Enemy(_eventEngine, _name, _coord, _dir)
 {
 
 }
 
-Goomba::Goomba(std::string _name, float _x, float _y, Direction _dir) : Enemy(_name, _x, _y, _dir)
+Goomba::Goomba(EventEngine *_eventEngine, std::string _name, float _x, float _y, Direction _dir) : Enemy(_eventEngine, _name, _x, _y, _dir)
 {
 
 }

@@ -76,14 +76,14 @@ void LevelImporter::StoreCharactersInitialPositions()
 					initPosMario.y = GetAttributeValueAsFloat("y");
 					m_gameEngine->SetMarioInitialPosition(initPosMario);
 
-					Player *mario = new Player("mario", initPosMario);
+					Player *mario = new Player(m_eventEngine, "mario", initPosMario);
 					Event newMario(mario);
 					m_eventEngine->dispatch(NEW_CHARACTER_READ, &newMario);
 				}
 				if (!strcmp("goomba", nodeName))
 				{
 					Direction tmpDir = GetAttributeValue("direction", true) == "left" ? DLEFT : DRIGHT; // direction = right if attribute not here
-					Goomba *goomba = new Goomba("goomba", GetAttributeValueAsFloat("x"), GetAttributeValueAsFloat("y"), tmpDir);
+					Goomba *goomba = new Goomba(m_eventEngine, "goomba", GetAttributeValueAsFloat("x"), GetAttributeValueAsFloat("y"), tmpDir);
 					Event newGoomba(goomba);
 					m_eventEngine->dispatch(NEW_CHARACTER_READ, &newGoomba);
 				}
@@ -135,7 +135,7 @@ void LevelImporter::StoreBox()
 
 	State tmpState = GetAttributeValue("state", true) == "empty" ? EMPTY : NORMAL;
 
-	Box *tmpBox = new Box("item_" + tmpTileName, tmpCoords, tmpState);
+	Box *tmpBox = new Box(m_eventEngine, "item_" + tmpTileName, tmpCoords, tmpState);
 	Event newBox(tmpBox);
 	m_eventEngine->dispatch("game.new_foreground_item_read", &newBox);
 
@@ -183,7 +183,7 @@ void LevelImporter::StoreFloor()
 	std::string tmpTileName;
 	GetCoordinatesAndTileName(&tmpCoords, &tmpTileName);
 
-	DisplayableObject *tmpFloor = new DisplayableObject("floor_" + tmpTileName, tmpCoords, NORMAL);
+	DisplayableObject *tmpFloor = new DisplayableObject(m_eventEngine, "floor_" + tmpTileName, tmpCoords, NORMAL);
 	Event newFloor(tmpFloor);
 	m_eventEngine->dispatch("game.new_foreground_item_read", &newFloor);
 

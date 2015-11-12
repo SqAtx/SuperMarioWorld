@@ -5,6 +5,8 @@
 #include "Debug.hpp"
 #include "Utilities/PhysicsConstants.hpp"
 
+class EventEngine;
+
 /*
 *	Information sent from g to gfx for display. The name and state will be used to fetch the correct sprite.
 */
@@ -25,8 +27,8 @@ class DisplayableObject
 {
 	public:
 		DisplayableObject();
-		DisplayableObject(std::string _name, sf::Vector2f _coord, State _state = UNKNOWN);
-		DisplayableObject(std::string _name, float _x, float _y, State _state = UNKNOWN);
+		DisplayableObject(EventEngine *_eventEngine, std::string _name, sf::Vector2f _coord, State _state = UNKNOWN);
+		DisplayableObject(EventEngine *_eventEngine, std::string _name, float _x, float _y, State _state = UNKNOWN);
 		virtual ~DisplayableObject();
 
 		virtual InfoForDisplay GetInfoForDisplay();
@@ -47,6 +49,8 @@ class DisplayableObject
 		void Slide(float _x, float _y);
 
 	protected:
+		EventEngine *m_eventEngine; // Any displayable object can trigger an event
+
 		int m_id; // Unique identifier for each object
 		std::string m_name;
 		ObjectClass m_class;

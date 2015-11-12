@@ -1,11 +1,11 @@
 #include "Box.hpp"
 
-Box::Box(std::string _name, sf::Vector2f _coord, State _state) : DisplayableObject(_name, _coord, _state)
+Box::Box(EventEngine *_eventEngine, std::string _name, sf::Vector2f _coord, State _state) : DisplayableObject(_eventEngine, _name, _coord, _state)
 {
 	Init();
 }
 
-Box::Box(std::string _name, float _x, float _y, State _state) : DisplayableObject(_name, _x, _y, _state)
+Box::Box(EventEngine *_eventEngine, std::string _name, float _x, float _y, State _state) : DisplayableObject(_eventEngine, _name, _x, _y, _state)
 {
 	Init();
 }

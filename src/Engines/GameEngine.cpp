@@ -1,5 +1,6 @@
 #include "GameEngine.hpp"
 #include "../Game.hpp"
+#include "../System/Listener/CharacterDiedListener.hpp"
 #include "../System/Listener/GotLevelInfoListener.hpp"
 #include "../System/Listener/KeyboardListener.hpp"
 #include "../System/Listener/NewCharacterReadListener.hpp"
@@ -16,6 +17,10 @@ GameEngine::GameEngine(EventEngine *_eventEngine) : Engine(_eventEngine), m_leve
 
 void GameEngine::CreateListeners()
 {
+	CharacterDiedListener* characterDiedListener = new CharacterDiedListener(this);
+	m_eventEngine->addListener(CHARACTER_DIED, characterDiedListener);
+	m_createdListeners.push_back(characterDiedListener);
+
 	GotLevelInfoListener* gotLevelInfoListener = new GotLevelInfoListener(this);
 	m_eventEngine->addListener(GOT_LVL_INFO, gotLevelInfoListener);
 	m_createdListeners.push_back(gotLevelInfoListener);
@@ -138,7 +143,7 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 		case sf::Keyboard::Escape:
 			if (m_indexMario == -1 && CanRespawnMario())
 			{
-				Player *mario = new Player("mario", m_initPosMario);
+				Player *mario = new Player(m_eventEngine, "mario", m_initPosMario);
 				AddCharacterToArray(mario);
 				m_listForegroundItems[mario->GetID()] = mario;
 
@@ -237,6 +242,23 @@ void GameEngine::AddPipeToArray(Pipe *_pipe)
 	m_listPipes[_pipe->GetPipeId()] = _pipe;
 };
 
+void GameEngine::KillCharacter(unsigned int _characterID)
+{
+	for (unsigned int i = 0; i < m_characters.size(); i++)
+	{
+		if (m_characters[i] != NULL && m_characters[i]->GetID() == _characterID)
+		{
+			m_listForegroundItems.erase(m_characters[i]->GetID());
+
+			delete m_characters[i];
+			m_characters[i] = NULL;
+
+			if ((int)i == m_indexMario)
+				m_indexMario = -1;
+		}
+	}
+}
+
 void GameEngine::UpdateCharacterPosition(MovingObject& _character, float _dt)
 {
 	unsigned int id = _character.GetID();
@@ -250,29 +272,14 @@ void GameEngine::UpdateCharacterPosition(MovingObject& _character, float _dt)
 
 void GameEngine::CheckCharacterDeath(MovingObject& _character)
 {
+	/*
 	if (_character.IsDead())
-		KillCharacter(_character);
-}
-
-void GameEngine::KillCharacter(MovingObject& _character)
-{
-	for (unsigned int i = 0; i < m_characters.size(); i++)
 	{
-		if (m_characters[i] != NULL && m_characters[i]->GetID() == _character.GetID())
-		{
-			InfoForDisplay character_info = _character.GetInfoForDisplay();
-			Event death(&character_info);
-			m_eventEngine->dispatch(CHARACTER_DIED, &death);
-
-			m_listForegroundItems.erase(m_characters[i]->GetID());
-
-			delete m_characters[i];
-			m_characters[i] = NULL;
-
-			if ((int) i == m_indexMario)
-				m_indexMario = -1;
-		}
+		InfoForDisplay character_info = _character.GetInfoForDisplay();
+		Event death(&character_info);
+		m_eventEngine->dispatch(CHARACTER_DIED, &death);
 	}
+	*/
 }
 
 // Send character's position to gfx

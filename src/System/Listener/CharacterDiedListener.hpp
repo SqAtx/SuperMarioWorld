@@ -3,6 +3,7 @@
 
 #include "../../EventEngine/Event.hpp"
 #include "../../EventEngine/EventListener.hpp"
+#include "../../Engines/GameEngine.hpp"
 #include "../../Engines/GraphicsEngine.hpp"
 #include "../../Engines/SoundEngine.hpp"
 #include <string>
@@ -12,9 +13,10 @@
 */
 class CharacterDiedListener : public EventListener
 {
-public:
-	CharacterDiedListener(GraphicsEngine* _graphicsEngine);
-	CharacterDiedListener(SoundEngine* _soundEngine);
+	public:
+		CharacterDiedListener(GameEngine* _gameEngine);
+		CharacterDiedListener(GraphicsEngine* _graphicsEngine);
+		CharacterDiedListener(SoundEngine* _soundEngine);
 
 		/**
 		* Called when an character_died event is dispatched
@@ -23,9 +25,10 @@ public:
 		*/
 		void onEvent(const std::string &_eventType, Event* _event);
 
-private:
-	GraphicsEngine* m_graphicsEngine;
-	SoundEngine* m_soundEngine;
+	private:
+		GameEngine* m_gameEngine;
+		GraphicsEngine* m_graphicsEngine;
+		SoundEngine* m_soundEngine;
 };
 
 #endif // CHARACTER_DIED_LISTENER_H

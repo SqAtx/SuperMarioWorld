@@ -1,11 +1,11 @@
 #include "MovingObject.hpp"
 
-MovingObject::MovingObject(std::string _name, sf::Vector2f _coord, State _state) : DisplayableObject(_name, _coord, _state), m_noCollision(false)
+MovingObject::MovingObject(EventEngine *_eventEngine, std::string _name, sf::Vector2f _coord, State _state) : DisplayableObject(_eventEngine, _name, _coord, _state), m_noCollision(false)
 {
 	Init();
 }
 
-MovingObject::MovingObject(std::string _name, float _x, float _y, State _state) : DisplayableObject(_name, _x, _y, _state), m_noCollision(false)
+MovingObject::MovingObject(EventEngine *_eventEngine, std::string _name, float _x, float _y, State _state) : DisplayableObject(_eventEngine, _name, _x, _y, _state), m_noCollision(false)
 {
 	Init();
 }

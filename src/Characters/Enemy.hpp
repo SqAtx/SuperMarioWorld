@@ -6,8 +6,8 @@
 class Enemy : public MovingObject
 {
 	public:
-		Enemy(std::string _name, sf::Vector2f _coord, Direction _dir);
-		Enemy(std::string _name, float _x, float _y, Direction _dir);
+		Enemy(EventEngine *_eventEngine, std::string _name, sf::Vector2f _coord, Direction _dir);
+		Enemy(EventEngine *_eventEngine, std::string _name, float _x, float _y, Direction _dir);
 		void Init();
 
 		virtual float GetMaxAbsVelocity_X() = 0;

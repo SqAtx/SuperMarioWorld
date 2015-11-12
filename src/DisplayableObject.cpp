@@ -1,4 +1,5 @@
 #include "DisplayableObject.hpp"
+#include "EventEngine\EventEngine.hpp"
 
 unsigned int DisplayableObject::id = 1;
 
@@ -8,13 +9,15 @@ DisplayableObject::DisplayableObject()
 	m_id = 0;
 }
 
-DisplayableObject::DisplayableObject(std::string _name, sf::Vector2f _coord, State _state) : DisplayableObject(_name, _coord.x, _coord.y, _state)
+DisplayableObject::DisplayableObject(EventEngine *_eventEngine, std::string _name, sf::Vector2f _coord, State _state) : DisplayableObject(_eventEngine, _name, _coord.x, _coord.y, _state)
 {
 
 }
 
-DisplayableObject::DisplayableObject(std::string _name, float _x, float _y, State _state)
+DisplayableObject::DisplayableObject(EventEngine *_eventEngine, std::string _name, float _x, float _y, State _state)
 {
+	m_eventEngine = _eventEngine;
+
 	m_id = DisplayableObject::id;
 	DisplayableObject::id++;
 
@@ -30,7 +33,7 @@ DisplayableObject::DisplayableObject(std::string _name, float _x, float _y, Stat
 
 DisplayableObject::~DisplayableObject()
 {
-
+	// Don't delete m_eventEngine because it lives longer than the objects..
 }
 
 void DisplayableObject::Slide(sf::Vector2f _vec)

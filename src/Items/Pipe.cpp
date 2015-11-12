@@ -3,7 +3,7 @@
 
 const int Pipe::milisecondsBetweenSpawns = 3000;
 
-Pipe::Pipe(std::string _name, sf::Vector2f _coord, int _pipeId, PipeType _type, GameEngine *_g, EventEngine *_eventEngine) : DisplayableObject(_name, _coord, NORMAL), m_pipeId(_pipeId), m_type(_type), m_gameEngine(_g), m_eventEngine(_eventEngine)
+Pipe::Pipe(std::string _name, sf::Vector2f _coord, int _pipeId, PipeType _type, GameEngine *_g, EventEngine *_eventEngine) : DisplayableObject(_eventEngine, _name, _coord, NORMAL), m_pipeId(_pipeId), m_type(_type), m_gameEngine(_g)
 {
 	m_spawnIsOn = true;
 	m_enemyBeingSpawned = NULL;
@@ -47,7 +47,7 @@ void Pipe::SpawnEnemyIfTimeElapsed()
 {
 	if (m_enemyBeingSpawned == NULL && m_spawnTimer.getElapsedTime().asMilliseconds() > Pipe::milisecondsBetweenSpawns)
 	{
-		m_enemyBeingSpawned = new DisplayableObject("goomba_fall", m_coord.x + 8, m_coord.y + 8); // Name is for gfx to pick the right sprite name: needs to be the full name as it is in the .rect file
+		m_enemyBeingSpawned = new DisplayableObject(m_eventEngine, "goomba_fall", m_coord.x + 8, m_coord.y + 8); // Name is for gfx to pick the right sprite name: needs to be the full name as it is in the .rect file
 
 		m_spawnTimer.restart();
 	}
@@ -68,7 +68,7 @@ void Pipe::PublishEnemyCreation()
 {
 	if (m_enemyBeingSpawned != NULL)
 	{
-		Goomba *goombaJustSpawned = new Goomba("goomba", m_enemyBeingSpawned->GetPosition(), DLEFT); // Will be deleted by game engine when character dies
+		Goomba *goombaJustSpawned = new Goomba(m_eventEngine, "goomba", m_enemyBeingSpawned->GetPosition(), DLEFT); // Will be deleted by game engine when character dies
 		Event newGoomba(goombaJustSpawned);
 		m_eventEngine->dispatch("game.new_character_read", &newGoomba);
 

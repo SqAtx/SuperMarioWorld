@@ -1,11 +1,11 @@
 #include "Player.hpp"
 
-Player::Player(std::string _name, sf::Vector2f _coord, State _state) : MovingObject(_name, _coord, _state)
+Player::Player(EventEngine *_eventEngine, std::string _name, sf::Vector2f _coord, State _state) : MovingObject(_eventEngine, _name, _coord, _state)
 {
 	Init();
 }
 
-Player::Player(std::string _name, float _x, float _y, State _state) : MovingObject(_name, _x, _y, _state)
+Player::Player(EventEngine *_eventEngine, std::string _name, float _x, float _y, State _state) : MovingObject(_eventEngine, _name, _x, _y, _state)
 {
 	Init();
 }

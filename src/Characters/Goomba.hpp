@@ -6,8 +6,8 @@
 class Goomba : public Enemy
 {
 	public:
-		Goomba(std::string _name, sf::Vector2f _coord, Direction _dir);
-		Goomba(std::string _name, float _x, float _y, Direction _dir);
+		Goomba(EventEngine *_eventEngine, std::string _name, sf::Vector2f _coord, Direction _dir);
+		Goomba(EventEngine *_eventEngine, std::string _name, float _x, float _y, Direction _dir);
 
 		virtual float GetMaxAbsVelocity_X();
 

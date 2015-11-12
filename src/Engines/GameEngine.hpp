@@ -25,6 +25,8 @@ class GameEngine : public Engine
 		void AddForegroundItemToArray(DisplayableObject *_item);
 		void AddPipeToArray(Pipe *_pipe);
 
+		void KillCharacter(unsigned int _characterID);
+
 		void HandlePressedKey(sf::Keyboard::Key _key);
 		void HandleReleasedKey(sf::Keyboard::Key _key);
 
@@ -56,7 +58,7 @@ class GameEngine : public Engine
 
 		void UpdateCharacterPosition(MovingObject& _character, float _dt);
 		void CheckCharacterDeath(MovingObject& _character);
-		void KillCharacter(MovingObject& _character);
+		
 		void SendCharacterPosition(int _indexCharacter);
 
 		void StartLevel(std::string _lvlName);

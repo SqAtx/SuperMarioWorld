@@ -34,7 +34,6 @@ class Pipe : public DisplayableObject
 		sf::Clock m_spawnTimer;
 
 		GameEngine *m_gameEngine; // TODO will be obsolete after refactor
-		EventEngine *m_eventEngine;
 
 		void MoveEnemyBeingSpawned(float _dt);
 		void SpawnEnemyIfTimeElapsed();
