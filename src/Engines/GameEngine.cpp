@@ -13,6 +13,10 @@ GameEngine::GameEngine(EventEngine *_eventEngine) : Engine(_eventEngine), m_leve
 	m_collisionHandler = new CollisionHandler(this, m_eventEngine);
 	m_levelImporter = new LevelImporter(this, _eventEngine);
 	CreateListeners();
+
+#ifdef DEBUG_MODE
+	m_debugInfo = new DebugInfo();
+#endif
 }
 
 void GameEngine::CreateListeners()
@@ -54,6 +58,10 @@ GameEngine::~GameEngine()
 
 	for (unsigned int i = 0; i < m_createdListeners.size(); i++)
 		delete m_createdListeners[i];
+
+#ifdef DEBUG_MODE
+	delete m_debugInfo;
+#endif
 }
 
 void GameEngine::Frame()
@@ -294,8 +302,9 @@ void GameEngine::SendCharacterPosition(int _indexCharacter)
 #ifdef DEBUG_MODE
 	if (_indexCharacter == m_indexMario)
 	{
-		EngineEvent debugInfo(INFO_DEBUG, character->GetDebugInfo());
-		m_engines["gfx"]->PushEvent(debugInfo);
+		*m_debugInfo = character->GetDebugInfo();
+		Event debugInfo(m_debugInfo);
+		m_eventEngine->dispatch(DEBUG_INFO_UPDATED, &debugInfo);
 	}
 #endif
 }

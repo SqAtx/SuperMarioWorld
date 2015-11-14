@@ -6,6 +6,10 @@
 class MovingObject;
 class Pipe;
 
+#ifdef DEBUG_MODE
+struct DebugInfo;
+#endif
+
 /**
  * Base class of events
  * @author Nicolas Djambazian <nicolas@djambazian.fr>
@@ -20,6 +24,9 @@ class Event
 		Event(DisplayableObject *_displayableObject) { m_displayableObject = _displayableObject; };
 		Event(Pipe *_pipe) { m_pipe = _pipe; };
 		Event(InfoForDisplay *_infoForDisplay) { m_infoForDisplay = _infoForDisplay; };
+#ifdef DEBUG_MODE
+		Event(DebugInfo *_debugInfo) { m_debugInfo = _debugInfo; };
+#endif
 
 		std::string GetString() { return m_stringInfo; };
 		LevelInfo* GetLevelInfo() { return m_levelInfo; };
@@ -27,6 +34,9 @@ class Event
 		DisplayableObject* GetDisplayableObject() { return m_displayableObject; };
 		Pipe* GetPipe() { return m_pipe; };
 		InfoForDisplay* GetInfoForDisplay() { return m_infoForDisplay; };
+#ifdef DEBUG_MODE
+		DebugInfo* GetDebugInfo() { return m_debugInfo; };
+#endif
 
 		void SetString(std::string _value) { m_stringInfo = _value; };
 	private:
@@ -36,6 +46,9 @@ class Event
 		DisplayableObject *m_displayableObject;
 		Pipe *m_pipe;
 		InfoForDisplay *m_infoForDisplay;
+#ifdef DEBUG_MODE
+		DebugInfo *m_debugInfo;
+#endif
 };
 
 #endif // EVENT_H

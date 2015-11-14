@@ -68,6 +68,10 @@ class GameEngine : public Engine
 		void HandleCollisions(MovingObject& _obj);
 
 		bool m_deathSoundIsPlaying; // No input is taken into account while this sound is playing [see sound engine]
+
+#ifdef DEBUG_MODE
+		DebugInfo *m_debugInfo;
+#endif
 };
 
 #endif // GAMEENGINE_H

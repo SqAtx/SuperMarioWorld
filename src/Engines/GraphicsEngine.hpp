@@ -29,6 +29,9 @@ class GraphicsEngine : public Engine
 
 		void RemoveDisplayableObject(unsigned int _id);
 
+#ifdef DEBUG_MODE
+		void StoreDebugInfo(DebugInfo *_info) { m_debugInfo = _info; };
+#endif
     private:
 		virtual void CreateListeners();
 
@@ -94,9 +97,8 @@ class GraphicsEngine : public Engine
 		sf::Text m_debugText;
 
 		sf::Vector2f m_posMario;
-		DebugInfo m_debugInfo;
+		DebugInfo *m_debugInfo;
 
-		void StoreDebugInfo(DebugInfo _info) { m_debugInfo = _info; };
 		void DrawDebugInfo();
 #endif
 };

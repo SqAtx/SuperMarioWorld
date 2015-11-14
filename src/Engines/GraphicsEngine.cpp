@@ -2,6 +2,7 @@
 #include "../Graphics/GraphicsEvents.hpp"
 #include "../System/Listener/CharacterDiedListener.hpp"
 #include "../System/Listener/CharacterPositionUpdateListener.hpp"
+#include "../System/Listener/DebugInfoUpdatedListener.hpp"
 #include "../System/Listener/GotLevelInfoListener.hpp"
 
 const float GraphicsEngine::FramerateLimit = 60;
@@ -34,6 +35,10 @@ void GraphicsEngine::CreateListeners()
 	CharacterPositionUpdateListener* characterPositionUpdateListener = new CharacterPositionUpdateListener(this);
 	m_eventEngine->addListener("game.character_position_updated", characterPositionUpdateListener);
 	m_createdListeners.push_back(characterPositionUpdateListener);
+
+	DebugInfoUpdatedListener* debugInfoUpdatedListener = new DebugInfoUpdatedListener(this);
+	m_eventEngine->addListener("game.debug_info_updated", debugInfoUpdatedListener);
+	m_createdListeners.push_back(debugInfoUpdatedListener);
 
 	GotLevelInfoListener* gotLevelInfoListener = new GotLevelInfoListener(this);
 	m_eventEngine->addListener("game.got_level_info", gotLevelInfoListener);
@@ -68,11 +73,6 @@ void GraphicsEngine::ProcessEvent(EngineEvent& _event)
 		case REMOVE_LVL_BLOC:
 			m_listForegroundItems.erase(_event.data.m_id);
 			break;
-#ifdef DEBUG_MODE
-		case INFO_DEBUG:
-			StoreDebugInfo(_event.m_debugInfo);
-			break;
-#endif
 		default:
 			break;
 	}
@@ -324,15 +324,15 @@ void GraphicsEngine::DrawDebugInfo()
 {
 	std::string toWrite;
 	sf::Vector2f playerPos = m_posMario;
-	sf::Vector2f playerVel = m_debugInfo.velocity;
-	sf::Vector2f playerAcc = m_debugInfo.acceleration;
+	sf::Vector2f playerVel = m_debugInfo->velocity;
+	sf::Vector2f playerAcc = m_debugInfo->acceleration;
 
 	toWrite += (" Framerate = " + std::to_string(floor((int)1 / m_clock.getElapsedTime().asSeconds())) + "\n");
 	toWrite += (" Position: { " + std::to_string(playerPos.x) + "; " + std::to_string(playerPos.y) + " }\n");
 	toWrite += (" Velocity: { " + std::to_string(playerVel.x) + "; " + std::to_string(playerVel.y) + " }\n");
 	toWrite += (" Acceleration: { " + std::to_string(playerAcc.x) + "; " + std::to_string(playerAcc.y) + " }\n");
-	toWrite += (" State: " + Debug::GetTextForState(m_debugInfo.state) + "\n");
-	toWrite += (" Jump state: " + Debug::GetTextForJumpState(m_debugInfo.jumpState) + "\n");
+	toWrite += (" State: " + Debug::GetTextForState(m_debugInfo->state) + "\n");
+	toWrite += (" Jump state: " + Debug::GetTextForJumpState(m_debugInfo->jumpState) + "\n");
 
 	m_clock.restart();
 	m_debugText.setString(toWrite);
