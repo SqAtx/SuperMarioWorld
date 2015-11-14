@@ -36,7 +36,6 @@ class LevelImporter
 		std::string GetAttributeValue(const char* _name, bool _optionalAttribute = false);
 		float GetAttributeValueAsFloat(const char* _name);
 		int GetAttributeValueAsInt(const char* _name);
-		void SendInfoPosLvlToGFX(InfoForDisplay _info);
 		void GetCoordinatesAndTileName(sf::Vector2f *_coords, std::string *_tileName);
 
 		static const std::string levelsPath;

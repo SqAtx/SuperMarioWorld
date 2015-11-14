@@ -4,6 +4,7 @@
 #include "../../EventEngine/Event.hpp"
 #include "../../EventEngine/EventListener.hpp"
 #include "../../Engines/GameEngine.hpp"
+#include "../../Engines/GraphicsEngine.hpp"
 #include <string>
 
 /**
@@ -13,6 +14,7 @@ class NewForegroundItemReadListener : public EventListener
 {
 	public:
 		NewForegroundItemReadListener(GameEngine* _gameEngine);
+		NewForegroundItemReadListener(GraphicsEngine* _graphicsEngine);
 
 		/**
 		* Called when an new_foreground_item_read event is dispatched
@@ -21,8 +23,9 @@ class NewForegroundItemReadListener : public EventListener
 		*/
 		void onEvent(const std::string &_eventType, Event* _event);
 
-	private:
-		GameEngine* m_gameEngine;
+private:
+	GameEngine* m_gameEngine;
+	GraphicsEngine* m_graphicsEngine;
 };
 
 #endif // NEW_FOREGROUND_ITEM_READ_LISTENER_H

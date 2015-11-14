@@ -3,7 +3,11 @@
 #include "../System/Listener/CharacterDiedListener.hpp"
 #include "../System/Listener/CharacterPositionUpdateListener.hpp"
 #include "../System/Listener/DebugInfoUpdatedListener.hpp"
+#include "../System/Listener/ForegroundItemRemovedListener.hpp"
+#include "../System/Listener/ForegroundItemUpdatedListener.hpp"
 #include "../System/Listener/GotLevelInfoListener.hpp"
+#include "../System/Listener/NewForegroundItemReadListener.hpp"
+#include "../System/Listener/NewPipeReadListener.hpp"
 
 const float GraphicsEngine::FramerateLimit = 60;
 
@@ -40,9 +44,25 @@ void GraphicsEngine::CreateListeners()
 	m_eventEngine->addListener("game.debug_info_updated", debugInfoUpdatedListener);
 	m_createdListeners.push_back(debugInfoUpdatedListener);
 
+	ForegroundItemRemovedListener* foregroundItemRemovedListener = new ForegroundItemRemovedListener(this);
+	m_eventEngine->addListener("game.foreground_item_removed", foregroundItemRemovedListener);
+	m_createdListeners.push_back(foregroundItemRemovedListener);
+
+	ForegroundItemUpdatedListener* foregroundItemUpdatedListener = new ForegroundItemUpdatedListener(this);
+	m_eventEngine->addListener("game.foreground_item_updated", foregroundItemUpdatedListener);
+	m_createdListeners.push_back(foregroundItemUpdatedListener);
+
 	GotLevelInfoListener* gotLevelInfoListener = new GotLevelInfoListener(this);
 	m_eventEngine->addListener("game.got_level_info", gotLevelInfoListener);
 	m_createdListeners.push_back(gotLevelInfoListener);
+
+	NewForegroundItemReadListener* newForegroundItemReadListener = new NewForegroundItemReadListener(this);
+	m_eventEngine->addListener("game.new_foreground_item_read", newForegroundItemReadListener);
+	m_createdListeners.push_back(newForegroundItemReadListener);
+
+	NewPipeReadListener* newPipeReadListener = new NewPipeReadListener(this);
+	m_eventEngine->addListener("game.new_pipe_read", newPipeReadListener);
+	m_createdListeners.push_back(newPipeReadListener);
 }
 
 GraphicsEngine::~GraphicsEngine()
@@ -62,20 +82,10 @@ void GraphicsEngine::Frame()
 	DisplayWindow();
 }
 
-// Process a single event, sent by another engine
+/// Obsolete
 void GraphicsEngine::ProcessEvent(EngineEvent& _event)
 {
-	switch (_event.m_type)
-	{
-		case INFO_POS_LVL:
-			UpdateForegroundItem(_event.data.m_infoDisplay);
-			break;
-		case REMOVE_LVL_BLOC:
-			m_listForegroundItems.erase(_event.data.m_id);
-			break;
-		default:
-			break;
-	}
+
 }
 
 /// Obsolete
@@ -165,12 +175,17 @@ void GraphicsEngine::SetLevelStructureObjectToDraw(InfoForDisplay _info)
 	m_engines["g"]->PushEvent(tmpEvent);
 }
 
-void GraphicsEngine::UpdateForegroundItem(InfoForDisplay _info)
+void GraphicsEngine::UpdateForegroundItem(InfoForDisplay *_info)
 {
-	if (_info.name.find("pipe_") != std::string::npos)
-		m_listPipes[_info.id] = _info;
+	if (_info->name.find("pipe_") != std::string::npos)
+		m_listPipes[_info->id] = *_info;
 	else
-		m_listForegroundItems[_info.id] = _info;
+		m_listForegroundItems[_info->id] = *_info;
+}
+
+void GraphicsEngine::DeleteForegroundItem(unsigned int _id)
+{
+	m_listForegroundItems.erase(_id);
 }
 
 void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info) /* Need to copy the object, otherwise (by reference) I'd modify it */

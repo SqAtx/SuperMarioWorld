@@ -30,6 +30,7 @@ class Pipe : public DisplayableObject
 
 		bool m_spawnIsOn;
 		DisplayableObject *m_enemyBeingSpawned; // One enemy at a time can be spawed and controlled by the pipe
+		InfoForDisplay *m_enemyInfo;
 		bool m_justFinishedSpawn;
 		sf::Clock m_spawnTimer;
 

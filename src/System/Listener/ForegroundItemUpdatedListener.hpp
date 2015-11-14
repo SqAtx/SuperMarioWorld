@@ -1,5 +1,5 @@
-#ifndef NEW_PIPE_READ_LISTENER_H
-#define NEW_PIPE_READ_LISTENER_H
+#ifndef FOREGROUND_ITEM_UPDATED_LISTENER_H
+#define FOREGROUND_ITEM_UPDATED_LISTENER_H
 
 #include "../../EventEngine/Event.hpp"
 #include "../../EventEngine/EventListener.hpp"
@@ -10,14 +10,14 @@
 /**
 * @author Kevin Guillaumond <kevin.guillaumond@gmail.com>
 */
-class NewPipeReadListener : public EventListener
+class ForegroundItemUpdatedListener : public EventListener
 {
 public:
-	NewPipeReadListener(GameEngine* _gameEngine);
-	NewPipeReadListener(GraphicsEngine* _graphicsEngine);
+	ForegroundItemUpdatedListener(GameEngine* _gameEngine);
+	ForegroundItemUpdatedListener(GraphicsEngine* _graphicsEngine);
 
 	/**
-	* Called when an new_foreground_item_read event is dispatched
+	* Called when an foreground_item_updated event is dispatched
 	* @param string eventType Type of received event
 	* @param Event* event
 	*/
@@ -28,4 +28,4 @@ private:
 	GraphicsEngine* m_graphicsEngine;
 };
 
-#endif // NEW_PIPE_READ_LISTENER_H
+#endif // FOREGROUND_ITEM_UPDATED_LISTENER_H

@@ -18,6 +18,7 @@ class Event
 {
 	public:
 		Event() { };
+		Event(unsigned int _id) { m_id = _id; };
 		Event(std::string _stringInfo) { m_stringInfo = _stringInfo; };
 		Event(LevelInfo *_levelInfo) { m_levelInfo = _levelInfo; };
 		Event(MovingObject *_movingObject) { m_movingObject = _movingObject; };
@@ -29,6 +30,7 @@ class Event
 #endif
 
 		std::string GetString() { return m_stringInfo; };
+		unsigned int GetID() { return m_id; };
 		LevelInfo* GetLevelInfo() { return m_levelInfo; };
 		MovingObject* GetMovingObject() { return m_movingObject; };
 		DisplayableObject* GetDisplayableObject() { return m_displayableObject; };
@@ -39,7 +41,9 @@ class Event
 #endif
 
 		void SetString(std::string _value) { m_stringInfo = _value; };
+
 	private:
+		unsigned int m_id;
 		std::string m_stringInfo;
 		LevelInfo *m_levelInfo;
 		MovingObject *m_movingObject;

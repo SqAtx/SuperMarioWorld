@@ -138,8 +138,6 @@ void LevelImporter::StoreBox()
 	Box *tmpBox = new Box(m_eventEngine, "item_" + tmpTileName, tmpCoords, tmpState);
 	Event newBox(tmpBox);
 	m_eventEngine->dispatch("game.new_foreground_item_read", &newBox);
-
-	SendInfoPosLvlToGFX(tmpBox->GetInfoForDisplay());
 }
 
 void LevelImporter::StorePipe()
@@ -156,8 +154,6 @@ void LevelImporter::StorePipe()
 		Pipe *tmpPipe = new Pipe("item_" + tmpTileName, tmpCoords, id, type, m_gameEngine, m_eventEngine);
 		Event newPipe(tmpPipe);
 		m_eventEngine->dispatch("game.new_pipe_read", &newPipe);
-
-		SendInfoPosLvlToGFX(tmpPipe->GetInfoForDisplay());
 
 		m_pipeIds.push_back(id);
 	}
@@ -186,8 +182,6 @@ void LevelImporter::StoreFloor()
 	DisplayableObject *tmpFloor = new DisplayableObject(m_eventEngine, "floor_" + tmpTileName, tmpCoords, NORMAL);
 	Event newFloor(tmpFloor);
 	m_eventEngine->dispatch("game.new_foreground_item_read", &newFloor);
-
-	SendInfoPosLvlToGFX(tmpFloor->GetInfoForDisplay());
 }
 
 std::string LevelImporter::GetAttributeValue(const char* _name, bool _optionalAttribute)
@@ -212,12 +206,6 @@ int LevelImporter::GetAttributeValueAsInt(const char* _name)
 	if (ret == -1)
 		std::cerr << "Can't read attribute " << _name << std::endl;
 	return ret;
-}
-
-void LevelImporter::SendInfoPosLvlToGFX(InfoForDisplay _info)
-{
-	EngineEvent tmpEvent(INFO_POS_LVL, _info);
-	m_gameEngine->TransmitInfoToGFX(tmpEvent);
 }
 
 void LevelImporter::GetCoordinatesAndTileName(sf::Vector2f *_coords, std::string *_tileName)

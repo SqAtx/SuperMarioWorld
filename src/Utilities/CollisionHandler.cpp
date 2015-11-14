@@ -51,13 +51,11 @@ void CollisionHandler::ReactToCollisionsWithObj(MovingObject& _obj, DisplayableO
 	SendNewObjectPositionToGFX(_ref);
 }
 
+/// Send information about the object that has been hit (for gfx to know about states changes)
 void CollisionHandler::SendNewObjectPositionToGFX(DisplayableObject& _obj)
 {
-	// Temporary funny layout while refactoring
-	// Send information about the object that has been hit (for gfx to know about states changes)
 	InfoForDisplay object_info = _obj.GetInfoForDisplay();
 	Event redisplayObject(&object_info);
-	EngineEvent _redisplayObject(INFO_POS_LVL);
 	if (_obj.GetClass() == PLAYER || _obj.GetClass() == ENEMY)
 	{
 		if (!((MovingObject&)_obj).IsDead())
@@ -65,8 +63,7 @@ void CollisionHandler::SendNewObjectPositionToGFX(DisplayableObject& _obj)
 	}
 	else
 	{
-		_redisplayObject.set(INFO_POS_LVL, _obj.GetInfoForDisplay());
-		m_gameEngine->TransmitInfoToGFX(_redisplayObject);
+		m_eventEngine->dispatch("game.foreground_item_updated", &redisplayObject);
 	}
 }
 

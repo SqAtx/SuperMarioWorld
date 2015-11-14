@@ -28,6 +28,8 @@ class GraphicsEngine : public Engine
 		void ReceiveCharacterPosition(InfoForDisplay* _info);
 
 		void RemoveDisplayableObject(unsigned int _id);
+		void UpdateForegroundItem(InfoForDisplay *_info);
+		void DeleteForegroundItem(unsigned int _id);
 
 #ifdef DEBUG_MODE
 		void StoreDebugInfo(DebugInfo *_info) { m_debugInfo = _info; };
@@ -52,8 +54,7 @@ class GraphicsEngine : public Engine
 
 		// List of all the foreground tiles in the current level and their coordinates
 		std::map<unsigned int, InfoForDisplay> m_listForegroundItems;
-		std::map<unsigned int, InfoForDisplay> m_listPipes; // The pipes are special because they need to be displayed last in order to hide whatever they contain
-		void UpdateForegroundItem(InfoForDisplay _info);
+		std::map<unsigned int, InfoForDisplay> m_listPipes; // The pipes are special because they need to be displayed last in order to hide their content
 
 		std::map<unsigned int, std::string> m_spritesCurrentlyDisplayed; // Contains id of displayable object and which sprite (name from RECT file) is displayed ATM
 		std::map<unsigned int, Sprite::StaticOrAnimated> m_animationStates; // One for each DisplayableObject

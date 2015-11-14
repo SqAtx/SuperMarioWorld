@@ -30,7 +30,7 @@ class GameEngine : public Engine
 		void HandlePressedKey(sf::Keyboard::Key _key);
 		void HandleReleasedKey(sf::Keyboard::Key _key);
 
-		void TransmitInfoToGFX(EngineEvent _event) { m_engines["gfx"]->PushEvent(_event); };
+		void TransmitInfoToGFX(EngineEvent _event) { m_engines["gfx"]->PushEvent(_event); }; // TODO will be obsolete after refactor
 
 		/* Getters / setters for LevelImporter */
 		void SetMarioInitialPosition(sf::Vector2f _pos) { m_initPosMario = _pos; };

@@ -7,6 +7,8 @@
 #define CHAR_POS_UPDATED "game.character_position_updated"
 #define DEBUG_INFO_UPDATED "game.debug_info_updated"
 #define GOT_LVL_INFO "game.got_level_info"
+#define FOREGROUND_ITEM_REMOVED "game.foreground_item_removed"
+#define FOREGROUND_ITEM_UPDATED "game.foreground_item_updated"
 #define LEVEL_START "game.level_start"
 #define MARIO_JUMP "game.mario_jump"
 #define MARIO_KICKED_ENEMY "game.mario_kicked_enemy"

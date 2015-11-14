@@ -7,6 +7,7 @@ Pipe::Pipe(std::string _name, sf::Vector2f _coord, int _pipeId, PipeType _type, 
 {
 	m_spawnIsOn = true;
 	m_enemyBeingSpawned = NULL;
+	m_enemyInfo = new InfoForDisplay();
 	m_justFinishedSpawn = false;
 	m_spawnTimer.restart();
 }
@@ -14,6 +15,7 @@ Pipe::Pipe(std::string _name, sf::Vector2f _coord, int _pipeId, PipeType _type, 
 Pipe::~Pipe()
 {
 	delete m_enemyBeingSpawned;
+	delete m_enemyInfo;
 	delete m_gameEngine;
 }
 
@@ -60,8 +62,9 @@ void Pipe::MoveEnemyBeingSpawned(float _dt)
 
 void Pipe::SendEnemyBeingSpawnedToGFX()
 {
-	EngineEvent tmpEvent(INFO_POS_LVL, m_enemyBeingSpawned->GetInfoForDisplay());
-	m_gameEngine->TransmitInfoToGFX(tmpEvent);
+	*m_enemyInfo = m_enemyBeingSpawned->GetInfoForDisplay();
+	Event tmpEvent(m_enemyInfo);
+	m_eventEngine->dispatch("game.foreground_item_updated", &tmpEvent);
 }
 
 void Pipe::PublishEnemyCreation()
@@ -78,9 +81,9 @@ void Pipe::PublishEnemyCreation()
 
 void Pipe::RemoveEnemyBeingSpawned()
 {
-	/* The enemy used to be a mere displayableObject (as seen by GFX), we remove it... */
-	EngineEvent removeEnemyBeingSpawned(REMOVE_LVL_BLOC, m_enemyBeingSpawned->GetID());
-	m_gameEngine->TransmitInfoToGFX(removeEnemyBeingSpawned);
+	/* The enemy used to be a simple displayableObject (as seen by GFX), we remove it... */
+	Event removeEnemyBeingSpawned(m_enemyBeingSpawned->GetID());
+	m_eventEngine->dispatch("game.foreground_item_removed", &removeEnemyBeingSpawned);
 
 	delete m_enemyBeingSpawned;
 	m_enemyBeingSpawned = NULL;
