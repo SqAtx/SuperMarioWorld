@@ -1,4 +1,6 @@
 #include "Goomba.hpp"
+#include "../EventEngine/EventEngine.hpp"
+#include "../EventEngine/Event.hpp"
 
 Goomba::Goomba(EventEngine *_eventEngine, std::string _name, sf::Vector2f _coord, Direction _dir) : Enemy(_eventEngine, _name, _coord, _dir)
 {
@@ -12,6 +14,9 @@ Goomba::Goomba(EventEngine *_eventEngine, std::string _name, float _x, float _y,
 
 void Goomba::UpdateAfterCollision(CollisionDirection _dir, ObjectClass _classOfOtherObject)
 {
+	if (m_isDead)
+		return;
+
 	switch (_dir)
 	{
 		case TOP:
@@ -23,6 +28,9 @@ void Goomba::UpdateAfterCollision(CollisionDirection _dir, ObjectClass _classOfO
 				m_noCollision = true; // No collision with anything -> will die when it reaches the bottom edge of the map
 				m_velocity.x = 0;
 				m_velocity.y = PhysicsConstants::GoombaMaxSpeed_Walk_X;
+
+				Event event;
+				m_eventEngine->dispatch("game.mario_kicked_enemy", &event);
 			}
 			break;
 		case BOTTOM:

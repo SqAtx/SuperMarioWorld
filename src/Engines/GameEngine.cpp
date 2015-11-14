@@ -86,11 +86,10 @@ void GameEngine::Frame(float _dt)
 				UpdateCharacterPosition(*currentCharacter, _dt);
 
 			HandleCollisions(*currentCharacter);
-
-			CheckCharacterDeath(*currentCharacter);
 			SendCharacterPosition(i);
 		}
 	}
+	DeleteAllDeadCharacters();
 }
 
 void GameEngine::ProcessEvent(EngineEvent& _event)
@@ -248,6 +247,18 @@ void GameEngine::KillCharacter(unsigned int _characterID)
 	{
 		if (m_characters[i] != NULL && m_characters[i]->GetID() == _characterID)
 		{
+			m_characters[i]->MarkAsDead(); // Will be killed at the end of the frame
+			break;
+		}
+	}
+}
+
+void GameEngine::DeleteAllDeadCharacters()
+{
+	for (unsigned int i = 0; i < m_characters.size(); i++)
+	{
+		if (m_characters[i] != NULL && m_characters[i]->IsDead())
+		{
 			m_listForegroundItems.erase(m_characters[i]->GetID());
 
 			delete m_characters[i];
@@ -270,23 +281,11 @@ void GameEngine::UpdateCharacterPosition(MovingObject& _character, float _dt)
 	m_listForegroundItems[id]->SetY(pos.y);
 }
 
-void GameEngine::CheckCharacterDeath(MovingObject& _character)
-{
-	/*
-	if (_character.IsDead())
-	{
-		InfoForDisplay character_info = _character.GetInfoForDisplay();
-		Event death(&character_info);
-		m_eventEngine->dispatch(CHARACTER_DIED, &death);
-	}
-	*/
-}
-
-// Send character's position to gfx
+// Broadcast character's position
 void GameEngine::SendCharacterPosition(int _indexCharacter)
 {
 	MovingObject *character = m_characters[_indexCharacter];
-	if (character == NULL)
+	if (character == NULL || character->IsDead())
 		return;
 
 	InfoForDisplay info = character->GetInfoForDisplay();
@@ -319,12 +318,6 @@ void GameEngine::HandleCollisions(MovingObject& _obj)
 			if (tmpDirection != NO_COL)
 			{
 				m_collisionHandler->ReactToCollisionsWithObj(_obj, *(m_listForegroundItems[it->first]), tmpDirection);
-
-				if (it->second->GetClass() == ENEMY && ((MovingObject*)it->second)->HasBeenHit()) // If class is ENEMY then it's a MovingObject
-				{
-					Event event;
-					m_eventEngine->dispatch(MARIO_KICKED_ENEMY, &event);
-				}
 			}
 		}
 	}

@@ -57,9 +57,9 @@ class GameEngine : public Engine
 		bool CanRespawnMario();
 
 		void UpdateCharacterPosition(MovingObject& _character, float _dt);
-		void CheckCharacterDeath(MovingObject& _character);
-		
 		void SendCharacterPosition(int _indexCharacter);
+
+		void DeleteAllDeadCharacters();
 
 		void StartLevel(std::string _lvlName);
 		std::string m_currentLevelName;

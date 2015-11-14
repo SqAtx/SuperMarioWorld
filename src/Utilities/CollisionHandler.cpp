@@ -15,6 +15,9 @@ CollisionHandler::~CollisionHandler()
 
 void CollisionHandler::HandleCollisionsWithMapEdges(MovingObject& _obj)
 {
+	if (_obj.IsDead()) // The character can already be dead by this point (as a result of a collision)
+		return;
+
 	if (_obj.GetPosition().x < 0)
 	{
 		_obj.UpdateAfterCollisionWithMapEdge(CollisionDirection::LEFT, _obj.GetPosition().x);
@@ -45,7 +48,6 @@ void CollisionHandler::ReactToCollisionsWithObj(MovingObject& _obj, DisplayableO
 	_obj.SetPosition(m_gameEngine->GetCoordinatesOfForegroundItem(_obj.GetID()));
 
 	_ref.UpdateAfterCollision(_direction, _obj.GetClass());
-
 	SendNewObjectPositionToGFX(_ref);
 }
 
@@ -57,7 +59,10 @@ void CollisionHandler::SendNewObjectPositionToGFX(DisplayableObject& _obj)
 	Event redisplayObject(&object_info);
 	EngineEvent _redisplayObject(INFO_POS_LVL);
 	if (_obj.GetClass() == PLAYER || _obj.GetClass() == ENEMY)
-		m_eventEngine->dispatch("game.character_position_updated", &redisplayObject);
+	{
+		if (!((MovingObject&)_obj).IsDead())
+			m_eventEngine->dispatch("game.character_position_updated", &redisplayObject);
+	}
 	else
 	{
 		_redisplayObject.set(INFO_POS_LVL, _obj.GetInfoForDisplay());

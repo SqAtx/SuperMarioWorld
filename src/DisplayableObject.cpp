@@ -60,7 +60,7 @@ InfoForDisplay DisplayableObject::GetInfoForDisplay()
 
 void DisplayableObject::UpdateAfterCollision(CollisionDirection _direction, ObjectClass _classOfOtherObject)
 {
-	/* Virtual. Nothing should happen here. It is not pure virtual because some objects such as floor tiles don't react to collisions (not yet ? ;) ) */
+	/* Virtual. Nothing should happen here. Could be in moving object but some objects such as floor tiles might react to collisions one day */
 }
 
 sf::FloatRect DisplayableObject::GetCoordinates() const

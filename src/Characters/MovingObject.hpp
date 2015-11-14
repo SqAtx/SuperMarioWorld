@@ -21,14 +21,17 @@ class MovingObject : public DisplayableObject
 		virtual void UpdateAfterCollision(CollisionDirection _dir, ObjectClass _classOfOtherObject) = 0;
 		virtual void UpdateAfterCollisionWithMapEdge(CollisionDirection _dir, float _gap);
 
+		void Kill();
+
 		void SetVelX(float _x) { m_velocity.x = _x; };
 		void SetVelY(float _y) { m_velocity.y = _y; }
 		void SetJumpState(JumpState _state) { m_jumpState = _state; };
-		void Kill() { m_isDead = true; };
-		bool IsDead() { return m_isDead; };
 		bool IsInTheAir() { return m_jumpState != ONFLOOR; };
 		bool CanCollide() { return !m_noCollision; };
 		bool HasBeenHit() { return m_noCollision; }; // m_noCollision has been set to true exactly when character has been hit
+
+		void MarkAsDead() { m_isDead = true; };
+		bool IsDead() { return m_isDead; };
 
 #ifdef DEBUG_MODE
 		DebugInfo GetDebugInfo();
@@ -55,7 +58,7 @@ class MovingObject : public DisplayableObject
 		bool m_isRunning;
 
 		bool m_noCollision; // Character is not affected by any collision (will die when hitting the bottom of the screen)
-		bool m_isDead;
+		bool m_isDead; // Flag to set when caracter dies so all the dead are deleted at the end of GameEngineFrame()
 };
 
 #endif

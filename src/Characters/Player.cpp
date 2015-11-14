@@ -33,6 +33,9 @@ InfoForDisplay Player::GetInfoForDisplay()
 
 void Player::UpdateAfterCollision(CollisionDirection _dir, ObjectClass _classOfOtherObject)
 {
+	if (m_isDead)
+		return;
+
 	switch (_dir)
 	{
 		case TOP:
@@ -40,7 +43,7 @@ void Player::UpdateAfterCollision(CollisionDirection _dir, ObjectClass _classOfO
 			m_jumpState = FALLING;
 
 			if (_classOfOtherObject == ENEMY)
-				m_isDead = true;
+				this->Kill();
 			break;
 		case BOTTOM:
 			if (m_jumpState != ONFLOOR) // Landing
@@ -50,18 +53,12 @@ void Player::UpdateAfterCollision(CollisionDirection _dir, ObjectClass _classOfO
 			m_jumpState = ONFLOOR;
 			break;
 		case LEFT:
-			m_velocity.x = 0;
-			m_jumpState = FALLING;
-
-			if (_classOfOtherObject == ENEMY)
-				m_isDead = true;
-			break;
 		case RIGHT:
 			m_velocity.x = 0;
 			m_jumpState = FALLING;
 
 			if (_classOfOtherObject == ENEMY)
-				m_isDead = true;
+				this->Kill();
 			break;
 		case NO_COL:
 		default:

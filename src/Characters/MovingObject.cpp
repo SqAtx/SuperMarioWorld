@@ -1,4 +1,6 @@
 #include "MovingObject.hpp"
+#include "../EventEngine/EventEngine.hpp"
+#include "../EventEngine/Event.hpp"
 
 MovingObject::MovingObject(EventEngine *_eventEngine, std::string _name, sf::Vector2f _coord, State _state) : DisplayableObject(_eventEngine, _name, _coord, _state), m_noCollision(false)
 {
@@ -124,6 +126,13 @@ void MovingObject::UpdateVelocity(float _dt)
 
 	if (abs(m_velocity.x) < PhysicsConstants::MinSpeed)
 		m_velocity.x = 0;
+}
+
+void MovingObject::Kill()
+{
+	InfoForDisplay character_info = GetInfoForDisplay();
+	Event death(&character_info);
+	m_eventEngine->dispatch("game.character_died", &death);
 }
 
 #ifdef DEBUG_MODE
