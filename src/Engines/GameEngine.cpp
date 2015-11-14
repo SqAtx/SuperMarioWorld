@@ -1,6 +1,7 @@
 #include "GameEngine.hpp"
 #include "../Game.hpp"
 #include "../System/Listener/CharacterDiedListener.hpp"
+#include "../System/Listener/ForegroundItemUpdatedListener.hpp"
 #include "../System/Listener/GotLevelInfoListener.hpp"
 #include "../System/Listener/KeyboardListener.hpp"
 #include "../System/Listener/NewCharacterReadListener.hpp"
@@ -24,6 +25,10 @@ void GameEngine::CreateListeners()
 	CharacterDiedListener* characterDiedListener = new CharacterDiedListener(this);
 	m_eventEngine->addListener(CHARACTER_DIED, characterDiedListener);
 	m_createdListeners.push_back(characterDiedListener);
+
+	ForegroundItemUpdatedListener* foregroundItemUpdatedListener = new ForegroundItemUpdatedListener(this);
+	m_eventEngine->addListener(FOREGROUND_ITEM_UPDATED, foregroundItemUpdatedListener);
+	m_createdListeners.push_back(foregroundItemUpdatedListener);
 
 	GotLevelInfoListener* gotLevelInfoListener = new GotLevelInfoListener(this);
 	m_eventEngine->addListener(GOT_LVL_INFO, gotLevelInfoListener);
@@ -104,13 +109,6 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 {
 	switch (_event.m_type)
 	{
-		case INFO_POS_LVL:
-		{
-			auto DOtoUpdate = m_listForegroundItems.find(_event.data.m_id);
-			if (DOtoUpdate != m_listForegroundItems.end() && DOtoUpdate->second != NULL)
-				m_listForegroundItems[_event.data.m_id]->SetCoordinates(_event.m_rect);
-			break;
-		}
 		case DEATH_SOUND_STARTED:
 			m_deathSoundIsPlaying = true;
 			break;
@@ -120,6 +118,13 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 		default:
 			break;
 	}
+}
+
+void GameEngine::UpdateForegroundItem(unsigned int _id, sf::FloatRect _coordinates)
+{
+	auto DOtoUpdate = m_listForegroundItems.find(_id);
+	if (DOtoUpdate != m_listForegroundItems.end() && DOtoUpdate->second != NULL)
+		m_listForegroundItems[_id]->SetCoordinates(_coordinates);
 }
 
 void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)

@@ -25,6 +25,8 @@ class GameEngine : public Engine
 		void AddForegroundItemToArray(DisplayableObject *_item);
 		void AddPipeToArray(Pipe *_pipe);
 
+		void UpdateForegroundItem(unsigned int _id, sf::FloatRect _coordinates);
+
 		void KillCharacter(unsigned int _characterID);
 
 		void HandlePressedKey(sf::Keyboard::Key _key);
@@ -38,7 +40,6 @@ class GameEngine : public Engine
 		/* Getters / setters for Collisionhandler */
 		DisplayableObject *GetForegroundItem(unsigned int _id) { return m_listForegroundItems[_id]; };
 		const sf::Vector2f GetCoordinatesOfForegroundItem(unsigned int _id) { return m_listForegroundItems[_id]->GetPosition(); };
-		void UpdateForegroundItem(unsigned int _id, sf::FloatRect& _coords) { m_listForegroundItems[_id]->SetCoordinates(_coords); };
 
     private:
 		virtual void CreateListeners();

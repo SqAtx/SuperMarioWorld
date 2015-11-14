@@ -171,8 +171,8 @@ void GraphicsEngine::SetLevelStructureObjectToDraw(InfoForDisplay _info)
 	m_levelStructureToDraw.push_back(*m_tmpSprite);
 
 	// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions (the sprite size might have changed)
-	EngineEvent tmpEvent(INFO_POS_LVL, _info.id, RelativeToAbsolute(m_tmpSprite->getGlobalBounds()));
-	m_engines["g"]->PushEvent(tmpEvent);
+	Event tmpEvent(_info.id, RelativeToAbsolute(m_tmpSprite->getGlobalBounds()));
+	m_eventEngine->dispatch("game.foreground_item_updated", &tmpEvent);
 }
 
 void GraphicsEngine::UpdateForegroundItem(InfoForDisplay *_info)
@@ -200,8 +200,8 @@ void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info) /* Need to
 	m_displayableObjectsToDraw[_info.id] = *m_tmpSprite;
 
 	// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions (the sprite size might have changed)
-	EngineEvent tmpEvent(INFO_POS_LVL, _info.id, RelativeToAbsolute(m_tmpSprite->getGlobalBounds()));
-	m_engines["g"]->PushEvent(tmpEvent);
+	Event tmpEvent(_info.id, RelativeToAbsolute(m_tmpSprite->getGlobalBounds()));
+	m_eventEngine->dispatch("game.foreground_item_updated", &tmpEvent);
 }
 
 /* Figures out which sprite to display, ie the name of the sprite in the RECT file. The name is fetched only if it's an animation or if the state has changed. */

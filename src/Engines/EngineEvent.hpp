@@ -7,7 +7,6 @@
  */
 typedef enum
 {
-	INFO_POS_LVL,			// gfx <-> g: position of a foreground sprite
 	DEATH_SOUND_STARTED,	// s to g
 	DEATH_SOUND_STOPPED		// s to g
 } EventType;

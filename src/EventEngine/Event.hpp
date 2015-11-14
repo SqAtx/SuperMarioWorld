@@ -19,6 +19,7 @@ class Event
 	public:
 		Event() { };
 		Event(unsigned int _id) { m_id = _id; };
+		Event(unsigned int _id, sf::FloatRect _coordinates) { m_id = _id; m_coordinates = _coordinates; };
 		Event(std::string _stringInfo) { m_stringInfo = _stringInfo; };
 		Event(LevelInfo *_levelInfo) { m_levelInfo = _levelInfo; };
 		Event(MovingObject *_movingObject) { m_movingObject = _movingObject; };
@@ -31,6 +32,7 @@ class Event
 
 		std::string GetString() { return m_stringInfo; };
 		unsigned int GetID() { return m_id; };
+		sf::FloatRect GetCoordinates() { return m_coordinates; };
 		LevelInfo* GetLevelInfo() { return m_levelInfo; };
 		MovingObject* GetMovingObject() { return m_movingObject; };
 		DisplayableObject* GetDisplayableObject() { return m_displayableObject; };
@@ -44,6 +46,7 @@ class Event
 
 	private:
 		unsigned int m_id;
+		sf::FloatRect m_coordinates;
 		std::string m_stringInfo;
 		LevelInfo *m_levelInfo;
 		MovingObject *m_movingObject;

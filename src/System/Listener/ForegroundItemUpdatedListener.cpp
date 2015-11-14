@@ -15,8 +15,8 @@ ForegroundItemUpdatedListener::ForegroundItemUpdatedListener(GraphicsEngine* _gr
 
 void ForegroundItemUpdatedListener::onEvent(const std::string &_eventType, Event* _event)
 {
-	if (m_gameEngine != NULL)
-		;// m_gameEngine->StoreLevelInfo(_event->GetLevelInfo());
-	if (m_graphicsEngine != NULL)
+	if (m_gameEngine != NULL && _event->GetID() != 0)
+		m_gameEngine->UpdateForegroundItem(_event->GetID(), _event->GetCoordinates());
+	if (m_graphicsEngine != NULL && _event->GetInfoForDisplay() != NULL)
 		m_graphicsEngine->UpdateForegroundItem(_event->GetInfoForDisplay());
 }
