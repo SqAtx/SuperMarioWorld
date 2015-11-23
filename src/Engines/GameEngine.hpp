@@ -32,6 +32,8 @@ class GameEngine : public Engine
 		void HandlePressedKey(sf::Keyboard::Key _key);
 		void HandleReleasedKey(sf::Keyboard::Key _key);
 
+		void ToggleIgnoreUserInput(bool _ignore);
+
 		void TransmitInfoToGFX(EngineEvent _event) { m_engines["gfx"]->PushEvent(_event); }; // TODO will be obsolete after refactor
 
 		/* Getters / setters for LevelImporter */
@@ -68,7 +70,7 @@ class GameEngine : public Engine
 
 		void HandleCollisions(MovingObject& _obj);
 
-		bool m_deathSoundIsPlaying; // No input is taken into account while this sound is playing [see sound engine]
+		bool m_ignoreUserInput; // No input is taken into account while this sound is playing [see sound engine]
 
 #ifdef DEBUG_MODE
 		DebugInfo *m_debugInfo;

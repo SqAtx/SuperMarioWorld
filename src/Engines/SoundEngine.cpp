@@ -49,8 +49,8 @@ void SoundEngine::Frame()
 	if (m_deathSoundIsPlaying && m_soundBeingPlayed->getStatus() != sf::SoundSource::Status::Playing)
 	{
 		m_deathSoundIsPlaying = false;
-		EngineEvent deathSoundStopped(DEATH_SOUND_STOPPED);
-		m_engines["g"]->PushEvent(deathSoundStopped);
+		Event deathSoundPlaying(false);
+		m_eventEngine->dispatch("game.toggle_ignore_input", &deathSoundPlaying);
 	}
 
 	if (m_indexCurrentMusic != -1 && m_currentMusic->getStatus() == sf::SoundSource::Status::Stopped)
@@ -91,8 +91,8 @@ void SoundEngine::PlaySound(SoundType _type)
 		m_indexCurrentMusic = -1;
 
 		m_deathSoundIsPlaying = true;
-		EngineEvent deathSoundStarted(DEATH_SOUND_STARTED);
-		m_engines["g"]->PushEvent(deathSoundStarted);
+		Event deathSoundPlaying(true);
+		m_eventEngine->dispatch("game.toggle_ignore_input", &deathSoundPlaying);
 	}
 
 	m_soundBeingPlayed->setBuffer(m_soundBuffers[_type]); // Could optimize this by remembering the last buffer set

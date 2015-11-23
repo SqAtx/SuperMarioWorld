@@ -7,6 +7,7 @@
 #include "../System/Listener/NewCharacterReadListener.hpp"
 #include "../System/Listener/NewForegroundItemReadListener.hpp"
 #include "../System/Listener/NewPipeReadListener.hpp"
+#include "../System/Listener/ToggleIgnoreInputListener.hpp"
 #include "../Game/GameEvents.hpp"
 
 GameEngine::GameEngine(EventEngine *_eventEngine) : Engine(_eventEngine), m_levelStarted(false), m_indexMario(-1)
@@ -49,6 +50,10 @@ void GameEngine::CreateListeners()
 	NewPipeReadListener* newPipeReadListener = new NewPipeReadListener(this);
 	m_eventEngine->addListener(NEW_PIPE_READ, newPipeReadListener);
 	m_createdListeners.push_back(newPipeReadListener);
+
+	ToggleIgnoreInputListener* toggleIgnoreInputListener = new ToggleIgnoreInputListener(this);
+	m_eventEngine->addListener(TOGGLE_IGNORE_INPUT, toggleIgnoreInputListener);
+	m_createdListeners.push_back(toggleIgnoreInputListener);
 }
 
 GameEngine::~GameEngine()
@@ -109,12 +114,6 @@ void GameEngine::ProcessEvent(EngineEvent& _event)
 {
 	switch (_event.m_type)
 	{
-		case DEATH_SOUND_STARTED:
-			m_deathSoundIsPlaying = true;
-			break;
-		case DEATH_SOUND_STOPPED:
-			m_deathSoundIsPlaying = false;
-			break;
 		default:
 			break;
 	}
@@ -173,7 +172,7 @@ void GameEngine::HandlePressedKey(sf::Keyboard::Key _key)
 
 bool GameEngine::CanRespawnMario()
 {
-	return !m_deathSoundIsPlaying;
+	return !m_ignoreUserInput;
 }
 
 void GameEngine::HandleReleasedKey(sf::Keyboard::Key _key)
@@ -201,6 +200,11 @@ void GameEngine::HandleReleasedKey(sf::Keyboard::Key _key)
 		default:
 			break;
 	}
+}
+
+void GameEngine::ToggleIgnoreUserInput(bool _ignore)
+{
+	m_ignoreUserInput = _ignore;
 }
 
 void GameEngine::StoreLevelInfo(LevelInfo* _info)
