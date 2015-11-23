@@ -13,7 +13,7 @@
 GameEngine::GameEngine(EventEngine *_eventEngine) : Engine(_eventEngine), m_levelStarted(false), m_indexMario(-1)
 {
 	m_collisionHandler = new CollisionHandler(this, m_eventEngine);
-	m_levelImporter = new LevelImporter(this, _eventEngine);
+	m_levelImporter = new LevelImporter(_eventEngine);
 	CreateListeners();
 
 #ifdef DEBUG_MODE
@@ -86,8 +86,6 @@ void GameEngine::Frame(float _dt)
 	if (!m_levelStarted)
 		StartLevel("biglvl"); // In the future there will be some sort of level selection so this call will be moved
 
-	ProcessQueue();
-
 	// Spawn enemies from pipes
 	for (std::map<unsigned int, Pipe*>::iterator it = m_listPipes.begin(); it != m_listPipes.end(); ++it)
 	{
@@ -108,15 +106,6 @@ void GameEngine::Frame(float _dt)
 		}
 	}
 	DeleteAllDeadCharacters();
-}
-
-void GameEngine::ProcessEvent(EngineEvent& _event)
-{
-	switch (_event.m_type)
-	{
-		default:
-			break;
-	}
 }
 
 void GameEngine::UpdateForegroundItem(unsigned int _id, sf::FloatRect _coordinates)

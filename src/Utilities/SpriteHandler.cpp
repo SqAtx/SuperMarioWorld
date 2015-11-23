@@ -2,6 +2,7 @@
 	SpriteHandler: All operations from retrieving the textures to deciding which sprites to display
 */
 #include <exception>
+#include "../DisplayableObject.hpp"
 #include "../Engines/GraphicsEngine.hpp"
 #include "SpriteHandler.hpp"
 

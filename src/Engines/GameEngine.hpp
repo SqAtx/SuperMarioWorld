@@ -34,8 +34,6 @@ class GameEngine : public Engine
 
 		void ToggleIgnoreUserInput(bool _ignore);
 
-		void TransmitInfoToGFX(EngineEvent _event) { m_engines["gfx"]->PushEvent(_event); }; // TODO will be obsolete after refactor
-
 		/* Getters / setters for LevelImporter */
 		void SetMarioInitialPosition(sf::Vector2f _pos) { m_initPosMario = _pos; };
 
@@ -56,7 +54,6 @@ class GameEngine : public Engine
 		std::map<unsigned int, DisplayableObject*> m_listForegroundItems; // Part of the level the characters can be in collision with. Pointers stored to allow polymorphism.
 		std::map<unsigned int, Pipe*> m_listPipes;
 
-		void ProcessEvent(EngineEvent& _event);
 		bool CanRespawnMario();
 
 		void UpdateCharacterPosition(MovingObject& _character, float _dt);

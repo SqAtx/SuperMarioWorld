@@ -8,9 +8,8 @@ using namespace io;
 
 const std::string LevelImporter::levelsPath = "../assets/levels/";
 
-LevelImporter::LevelImporter(GameEngine *_parent, EventEngine *_eventEngine)
+LevelImporter::LevelImporter(EventEngine *_eventEngine)
 {
-	m_gameEngine = _parent;
 	m_eventEngine = _eventEngine;
 }
 
@@ -74,7 +73,6 @@ void LevelImporter::StoreCharactersInitialPositions()
 					sf::Vector2f initPosMario;
 					initPosMario.x = GetAttributeValueAsFloat("x");
 					initPosMario.y = GetAttributeValueAsFloat("y");
-					m_gameEngine->SetMarioInitialPosition(initPosMario);
 
 					Player *mario = new Player(m_eventEngine, "mario", initPosMario);
 					Event newMario(mario);
@@ -151,7 +149,7 @@ void LevelImporter::StorePipe()
 
 	if (std::find(m_pipeIds.begin(), m_pipeIds.end(), id) == m_pipeIds.end())
 	{
-		Pipe *tmpPipe = new Pipe("item_" + tmpTileName, tmpCoords, id, type, m_gameEngine, m_eventEngine);
+		Pipe *tmpPipe = new Pipe("item_" + tmpTileName, tmpCoords, id, type, m_eventEngine);
 		Event newPipe(tmpPipe);
 		m_eventEngine->dispatch("game.new_pipe_read", &newPipe);
 

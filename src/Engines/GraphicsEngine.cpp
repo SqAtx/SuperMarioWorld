@@ -78,17 +78,9 @@ void GraphicsEngine::Frame()
 	ResetSpritesToDraw();
 	if (m_gameWindow->isOpen())
 		ProcessWindowEvents();
-	ProcessQueue();
 	DisplayWindow();
 }
 
-/// Obsolete
-void GraphicsEngine::ProcessEvent(EngineEvent& _event)
-{
-
-}
-
-/// Obsolete
 void GraphicsEngine::ResetSpritesToDraw()
 {
 	while (!m_backgroundToDraw.empty())
@@ -101,7 +93,6 @@ void GraphicsEngine::ResetSpritesToDraw()
 void GraphicsEngine::ProcessWindowEvents()
 {
 	sf::Event windowEvent;
-	EngineEvent engineEvent;
 
 	while (m_gameWindow->pollEvent(windowEvent))
 	{

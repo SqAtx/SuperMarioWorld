@@ -55,13 +55,6 @@ void SoundEngine::Frame()
 
 	if (m_indexCurrentMusic != -1 && m_currentMusic->getStatus() == sf::SoundSource::Status::Stopped)
 		ChangeMusic();
-
-	ProcessQueue();
-}
-
-void SoundEngine::ProcessEvent(EngineEvent& _event)
-{
-	// To be removed with EngineEvent
 }
 
 void SoundEngine::LoadSounds()

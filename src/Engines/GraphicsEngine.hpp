@@ -59,7 +59,6 @@ class GraphicsEngine : public Engine
 		std::map<unsigned int, std::string> m_spritesCurrentlyDisplayed; // Contains id of displayable object and which sprite (name from RECT file) is displayed ATM
 		std::map<unsigned int, Sprite::StaticOrAnimated> m_animationStates; // One for each DisplayableObject
 
-		void ProcessEvent(EngineEvent& _event);
 		void ProcessWindowEvents();
 
 		std::string GetTextureName(unsigned int _id, std::string _name, State _state);

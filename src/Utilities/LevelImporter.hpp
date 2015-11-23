@@ -16,7 +16,7 @@ class GameEngine;
 class LevelImporter
 {
 	public:
-		LevelImporter(GameEngine *_parent, EventEngine *_eventEngine);
+		LevelImporter(EventEngine *_eventEngine);
 
 		bool LoadLevel(std::string _lvlName);
 		void StoreCharactersInitialPositions();
@@ -27,7 +27,6 @@ class LevelImporter
 		void StoreFloor();
 
 	private:
-		GameEngine *m_gameEngine; // TODO remove after refactor
 		EventEngine *m_eventEngine;
 		irr::io::IrrXMLReader *m_lvlFile;
 

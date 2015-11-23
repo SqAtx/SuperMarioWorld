@@ -28,7 +28,7 @@ class CollisionHandler
 		void SetLevelSize(sf::Vector2f _size) { m_levelSize = _size; };
 
 	private:
-		GameEngine *m_gameEngine; // TODO obsolete after refactor
+		GameEngine *m_gameEngine;
 		EventEngine *m_eventEngine;
 
 		sf::Vector2f m_levelSize;

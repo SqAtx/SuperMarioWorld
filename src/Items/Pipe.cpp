@@ -3,7 +3,7 @@
 
 const int Pipe::milisecondsBetweenSpawns = 3000;
 
-Pipe::Pipe(std::string _name, sf::Vector2f _coord, int _pipeId, PipeType _type, GameEngine *_g, EventEngine *_eventEngine) : DisplayableObject(_eventEngine, _name, _coord, NORMAL), m_pipeId(_pipeId), m_type(_type), m_gameEngine(_g)
+Pipe::Pipe(std::string _name, sf::Vector2f _coord, int _pipeId, PipeType _type, EventEngine *_eventEngine) : DisplayableObject(_eventEngine, _name, _coord, NORMAL), m_pipeId(_pipeId), m_type(_type)
 {
 	m_spawnIsOn = true;
 	m_enemyBeingSpawned = NULL;
@@ -16,7 +16,6 @@ Pipe::~Pipe()
 {
 	delete m_enemyBeingSpawned;
 	delete m_enemyInfo;
-	delete m_gameEngine;
 }
 
 void Pipe::HandleSpawnEnemies(float _dt)

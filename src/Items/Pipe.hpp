@@ -14,7 +14,7 @@ class Enemy;
 class Pipe : public DisplayableObject
 {
 	public:
-		Pipe(std::string _name, sf::Vector2f _coord, int _pipeId, PipeType _type, GameEngine *_g, EventEngine *_eventEngine);
+		Pipe(std::string _name, sf::Vector2f _coord, int _pipeId, PipeType _type, EventEngine *_eventEngine);
 		~Pipe();
 
 		void HandleSpawnEnemies(float _dt);
@@ -34,8 +34,6 @@ class Pipe : public DisplayableObject
 		bool m_justFinishedSpawn;
 		sf::Clock m_spawnTimer;
 
-		GameEngine *m_gameEngine; // TODO will be obsolete after refactor
-
 		void MoveEnemyBeingSpawned(float _dt);
 		void SpawnEnemyIfTimeElapsed();
 		void SendEnemyBeingSpawnedToGFX();
@@ -43,7 +41,7 @@ class Pipe : public DisplayableObject
 		void PublishEnemyCreation();
 		void RemoveEnemyBeingSpawned();
 
-		bool Pipe::IsEnemyReadyToLeavePipe();
+		bool IsEnemyReadyToLeavePipe();
 
 		static const int milisecondsBetweenSpawns;
 };

@@ -30,8 +30,6 @@ class SoundEngine : public Engine
 		sf::Music *m_currentMusic;
 		int m_indexCurrentMusic;
 
-		void ProcessEvent(EngineEvent& _event);
-
 		void LoadSounds();
 		void LoadSoundFromFile(SoundType _type, std::string _name);
 
