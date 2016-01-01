@@ -70,12 +70,16 @@ GraphicsEngine::~GraphicsEngine()
 	delete m_spriteHandler;
 	m_gameWindow->close();
 	delete m_gameWindow;
+	
+	for (std::map<unsigned int, InfoForDisplay*>::iterator it = m_animatedLevelItems.begin(); it != m_animatedLevelItems.end(); ++it)
+		delete(it->second);
 }
 
 void GraphicsEngine::Frame()
 {
 	m_gameWindow->clear();
 	ResetSpritesToDraw();
+	UpdateAnimatedLevelSprites();
 	if (m_gameWindow->isOpen())
 		ProcessWindowEvents();
 	DisplayWindow();
@@ -85,8 +89,14 @@ void GraphicsEngine::ResetSpritesToDraw()
 {
 	while (!m_backgroundToDraw.empty())
 		m_backgroundToDraw.pop_back();
-	while (!m_levelStructureToDraw.empty())
-		m_levelStructureToDraw.pop_back();
+}
+
+void GraphicsEngine::UpdateAnimatedLevelSprites()
+{
+	for (std::map<unsigned int, InfoForDisplay*>::iterator it = m_animatedLevelItems.begin(); it != m_animatedLevelItems.end(); ++it)
+	{
+		UpdateForegroundItem(it->second);
+	}
 }
 
 // Process windows events that have happened since the last loop iteration (sent by SFML)
@@ -120,7 +130,6 @@ void GraphicsEngine::ProcessWindowEvents()
 void GraphicsEngine::DisplayWindow()
 {
 	SetBackgroundToDraw();
-	SetForegroundToDraw();
 
 	DrawGame();
 
@@ -138,45 +147,45 @@ void GraphicsEngine::SetBackgroundToDraw()
 	m_backgroundToDraw.push_back(*m_tmpSprite);
 }
 
-void GraphicsEngine::SetForegroundToDraw()
-{
-	SetListOfDisplayablesToDraw(m_listForegroundItems);
-	SetListOfDisplayablesToDraw(m_listPipes);
-}
-
-void GraphicsEngine::SetListOfDisplayablesToDraw(std::map<unsigned int, InfoForDisplay>& _list)
-{
-	for (std::map<unsigned int, InfoForDisplay>::iterator it = _list.begin(); it != _list.end(); ++it)
-	{
-		SetLevelStructureObjectToDraw(it->second);
-	}
-}
-
-void GraphicsEngine::SetLevelStructureObjectToDraw(InfoForDisplay _info)
+void GraphicsEngine::UpdateForegroundItem(const InfoForDisplay *_info)
 {
 	ResetTmpSprite();
-	_info.name = GetTextureName(_info.id, _info.name, _info.state);
-	_info.coordinates = AbsoluteToRelative(_info.coordinates);
-	m_spriteHandler->SetDisplayInfoOnSprite(_info, m_tmpSprite);
+	InfoForDisplay* infoToApplyOnSprite = new InfoForDisplay(*_info); // in order to not modify _info
+	infoToApplyOnSprite->name = GetTextureName(_info->id, _info->name, _info->state);
+	infoToApplyOnSprite->coordinates = AbsoluteToRelative(_info->coordinates);
+	m_spriteHandler->SetDisplayInfoOnSprite(*infoToApplyOnSprite, m_tmpSprite);
 
-	m_levelStructureToDraw.push_back(*m_tmpSprite);
+	if (_info->name.find("pipe_") != std::string::npos)
+	{
+		m_pipeSpritesToDraw[_info->id] = *m_tmpSprite;
+	}
+	else
+	{
+		m_foregroundSpritesToDraw[_info->id] = *m_tmpSprite;
+	}
+
+	assert(m_spritesCurrentlyDisplayed.find(_info->id) != m_spritesCurrentlyDisplayed.end());
+	if (m_spritesCurrentlyDisplayed[_info->id].state == Sprite::ANIMATED)
+		AddOrUpdateAnimatedLevelItem(_info); // What if it goes from ANIMATED to something else ? It would need to be removed from the list
 
 	// Tell GameEngine what is to be drawn (id and coordinates), so it can handle collisions (the sprite size might have changed)
-	Event tmpEvent(_info.id, RelativeToAbsolute(m_tmpSprite->getGlobalBounds()));
+	// TODO check that game.foreground_item_updated is not being sent back and forth
+	Event tmpEvent(_info->id, RelativeToAbsolute(m_tmpSprite->getGlobalBounds()));
 	m_eventEngine->dispatch("game.foreground_item_updated", &tmpEvent);
 }
 
-void GraphicsEngine::UpdateForegroundItem(InfoForDisplay *_info)
+void GraphicsEngine::AddOrUpdateAnimatedLevelItem(const InfoForDisplay *_info)
 {
-	if (_info->name.find("pipe_") != std::string::npos)
-		m_listPipes[_info->id] = *_info;
+	if (m_animatedLevelItems.find(_info->id) != m_animatedLevelItems.end())
+		*(m_animatedLevelItems[_info->id]) = *_info;
 	else
-		m_listForegroundItems[_info->id] = *_info;
+		m_animatedLevelItems[_info->id] = new InfoForDisplay(*_info); 
 }
+
 
 void GraphicsEngine::DeleteForegroundItem(unsigned int _id)
 {
-	m_listForegroundItems.erase(_id);
+	m_foregroundSpritesToDraw.erase(_id);
 }
 
 void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info) /* Need to copy the object, otherwise (by reference) I'd modify it */
@@ -196,44 +205,43 @@ void GraphicsEngine::SetDisplayableObjectToDraw(InfoForDisplay _info) /* Need to
 }
 
 /* Figures out which sprite to display, ie the name of the sprite in the RECT file. The name is fetched only if it's an animation or if the state has changed. */
-std::string GraphicsEngine::GetTextureName(unsigned int _id, std::string _name, State _state)
+std::string GraphicsEngine::GetTextureName(unsigned int _id, std::string _currentName, State _state)
 {
-	std::string newTextureName, oldTextureName;
-	std::string fullStateName = m_spriteHandler->GetFullStateName(_name, _state);
+	std::string newTextureName;
+	std::string fullStateName = m_spriteHandler->GetFullStateName(_currentName, _state);
 	int nbTextures = m_spriteHandler->HowManyLoadedTexturesContainThisName(fullStateName);
 
 	if (nbTextures < 0)
 	{
-		std::cerr << "ERROR: " << nbTextures << " texture for " << fullStateName << " (name: \"" << _name << "\", state: \"" << _state << "\")" << std::endl;
+		std::cerr << "ERROR: " << nbTextures << " texture for " << fullStateName << " (name: \"" << _currentName << "\", state: \"" << _state << "\")" << std::endl;
 		assert(false);
 	}
 
-	if (m_animationStates.find(_id) == m_animationStates.end()) // If id doesn't exist in the map, create entry as UNKNOWN
-		m_animationStates[_id] = Sprite::UNKNOWN;
+	if (m_spritesCurrentlyDisplayed.find(_id) == m_spritesCurrentlyDisplayed.end())
+	{
+		m_spritesCurrentlyDisplayed[_id].name = "";
+		m_spritesCurrentlyDisplayed[_id].framesSinceLastChange = 0;
+		m_spritesCurrentlyDisplayed[_id].state = nbTextures > 1 ? Sprite::ANIMATED : Sprite::NEW_STATIC;
+	}
 
-	if (m_spritesCurrentlyDisplayed.find(_id) != m_spritesCurrentlyDisplayed.end())
-		oldTextureName = m_spritesCurrentlyDisplayed[_id];
-	else
-		oldTextureName = "";
-
-	switch (m_animationStates[_id])
+	switch (m_spritesCurrentlyDisplayed[_id].state)
 	{
 		case Sprite::UNKNOWN:
 		case Sprite::ANIMATED:
 		case Sprite::NEW_STATIC:
-			newTextureName = m_spriteHandler->GetTextureNameFromStateName(fullStateName, oldTextureName, nbTextures);
+			newTextureName = m_spriteHandler->GetTextureNameFromStateName(fullStateName, m_spritesCurrentlyDisplayed[_id], nbTextures);
 			break;
 		case Sprite::STATIC:
-			if (fullStateName == m_spritesCurrentlyDisplayed[_id]) // Sprite same as previous
+			if (fullStateName == m_spritesCurrentlyDisplayed[_id].name) // Sprite same as previously
 				newTextureName = fullStateName;
 			else
-				newTextureName = m_spriteHandler->GetTextureNameFromStateName(fullStateName, oldTextureName, nbTextures);
+				newTextureName = m_spriteHandler->GetTextureNameFromStateName(fullStateName, m_spritesCurrentlyDisplayed[_id], nbTextures);
 			break;
 		default:
 			throw std::exception();
 	}
 
-	m_spritesCurrentlyDisplayed[_id] = newTextureName;
+	m_spritesCurrentlyDisplayed[_id].name = newTextureName;
 	return newTextureName;
 }
 
@@ -241,24 +249,26 @@ void GraphicsEngine::UpdateAnimationStates(unsigned int _id, std::string _stateF
 {
 	if (nbTextures == 1)			// Static
 	{
-		m_animationStates[_id] = Sprite::STATIC;
+		m_spritesCurrentlyDisplayed[_id].state = Sprite::STATIC;
 
-		if (_stateFullName != m_spritesCurrentlyDisplayed[_id])
-			m_animationStates[_id] = Sprite::NEW_STATIC;
+		if (_stateFullName != m_spritesCurrentlyDisplayed[_id].name)
+			m_spritesCurrentlyDisplayed[_id].state = Sprite::NEW_STATIC;
 	}
 	else							// Animation
 	{
-		m_animationStates[_id] = Sprite::ANIMATED;
+		m_spritesCurrentlyDisplayed[_id].state = Sprite::ANIMATED;
 	}
 }
 
-// Draw the 3 layers in the correct order
+// Draw the layers in the correct order
 void GraphicsEngine::DrawGame()
 {
 	for (unsigned int i = 0; i < m_backgroundToDraw.size(); i++)
 		m_gameWindow->draw(m_backgroundToDraw[i]);
-	for (unsigned int i = 0; i < m_levelStructureToDraw.size(); i++)
-		m_gameWindow->draw(m_levelStructureToDraw[i]);
+	for (std::map<unsigned int, sf::Sprite>::iterator it = m_foregroundSpritesToDraw.begin(); it != m_foregroundSpritesToDraw.end(); ++it)
+		m_gameWindow->draw(it->second);
+	for (std::map<unsigned int, sf::Sprite>::iterator it = m_pipeSpritesToDraw.begin(); it != m_pipeSpritesToDraw.end(); ++it)
+		m_gameWindow->draw(it->second);
 	for (std::map<unsigned int, sf::Sprite>::iterator it = m_displayableObjectsToDraw.begin(); it != m_displayableObjectsToDraw.end(); ++it)
 		m_gameWindow->draw(it->second);
 }
@@ -307,6 +317,8 @@ void GraphicsEngine::ResetTmpSprite()
 
 void GraphicsEngine::MoveCameraOnMario(sf::FloatRect _coordsMario)
 {
+	sf::Vector2f oldCameraPosition = m_cameraPosition;
+
 	float newCameraX = _coordsMario.left - WIN_WIDTH / 2;
 	if (newCameraX < 0)
 		m_cameraPosition.x = 0;
@@ -322,8 +334,20 @@ void GraphicsEngine::MoveCameraOnMario(sf::FloatRect _coordsMario)
 		m_cameraPosition.y = m_levelSize.y - WIN_HEIGHT;
 	else
 		m_cameraPosition.y = newCameraY;
+
+	if (m_cameraPosition != oldCameraPosition)
+		MoveEverythingBy(oldCameraPosition - m_cameraPosition);
 }
 
+void GraphicsEngine::MoveEverythingBy(sf::Vector2f _vect)
+{
+	for (std::map<unsigned int, sf::Sprite>::iterator it = m_foregroundSpritesToDraw.begin(); it != m_foregroundSpritesToDraw.end(); ++it)
+		it->second.move(_vect);
+	for (std::map<unsigned int, sf::Sprite>::iterator it = m_pipeSpritesToDraw.begin(); it != m_pipeSpritesToDraw.end(); ++it)
+		it->second.move(_vect);
+	for (std::map<unsigned int, sf::Sprite>::iterator it = m_displayableObjectsToDraw.begin(); it != m_displayableObjectsToDraw.end(); ++it)
+		it->second.move(_vect);
+}
 
 #ifdef DEBUG_MODE
 void GraphicsEngine::DrawDebugInfo()

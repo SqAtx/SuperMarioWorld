@@ -97,6 +97,13 @@ namespace Sprite
 		NEW_STATIC,		// No: is static BUT different than the previous state (used to be NEW_STATE)
 		UNKNOWN
 	} StaticOrAnimated;
+
+	struct SpriteInfo
+	{
+		StaticOrAnimated state;
+		std::string name;
+		int framesSinceLastChange;
+	};
 }
 
 #ifdef DEBUG_MODE

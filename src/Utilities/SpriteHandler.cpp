@@ -86,6 +86,11 @@ void SpriteHandler::SetDisplayInfoOnSprite(InfoForDisplay _info, sf::Sprite *_sp
 	}
 }
 
+void SpriteHandler::SetTextureOnSprite(std::string _textureName, sf::Sprite *_sprite)
+{
+	_sprite->setTexture(m_textures[_textureName]);
+}
+
 /* Figures out which sprite to display, ie the name of the sprite in the RECT file */
 std::string SpriteHandler::GetFullStateName(std::string _name, State _state)
 {
@@ -111,9 +116,9 @@ std::string SpriteHandler::GetFullStateName(std::string _name, State _state)
 	}
 }
 
-std::string SpriteHandler::GetTextureNameFromStateName(std::string _stateFullName, std::string _currentTextureName, int _nbTextures)
+std::string SpriteHandler::GetTextureNameFromStateName(std::string _stateFullName, Sprite::SpriteInfo& _currentInfo, int _nbTextures)
 {
-	return _nbTextures == 1 ? _stateFullName : FindNextTextureName(_stateFullName, _currentTextureName, _nbTextures);
+	return _nbTextures == 1 ? _stateFullName : FindNextTextureName(_stateFullName, _currentInfo, _nbTextures);
 }
 
 int SpriteHandler::HowManyLoadedTexturesContainThisName(std::string _stateName)
@@ -136,11 +141,9 @@ int SpriteHandler::HowManyLoadedTexturesContainThisName(std::string _stateName)
 	return nb == 1 ? 0 : nb; // nb == 1 here means that _stateName == "walk" and there is no "walk" in the map, but rather a "walk1", and this is a problem (this would be an animation with only 1 sprite)
 }
 
-std::string SpriteHandler::FindNextTextureName(std::string _stateName, std::string _currentTextureName, int _nbTextures)
+std::string SpriteHandler::FindNextTextureName(std::string _stateName, Sprite::SpriteInfo& _currentInfo, int _nbTextures)
 {
-	static int framesSinceLastChange = 0;
-
-	if (_currentTextureName == "" || _currentTextureName.find(_stateName) == std::string::npos) // If it's the first time we are displaying this id OR if we are beginning the animation
+	if (_currentInfo.name == "" || _currentInfo.name.find(_stateName) == std::string::npos) // If it's the first time we are displaying this id OR if we are beginning the animation
 		return _stateName + "1";
 
 	if (HowManyLoadedTexturesContainThisName(_stateName) <= 1)
@@ -150,12 +153,12 @@ std::string SpriteHandler::FindNextTextureName(std::string _stateName, std::stri
 	}
 
 	// We are now ready to display the next sprite of the animation but we can't display a new sprite at every frame, that's too fast. So we use FramesBetweenAnimationChanges.
-	framesSinceLastChange++;
-	if (framesSinceLastChange % SpriteHandler::FramesBetweenAnimationChanges != 0)
-		return _currentTextureName;
+	_currentInfo.framesSinceLastChange++;
+	if (_currentInfo.framesSinceLastChange % SpriteHandler::FramesBetweenAnimationChanges != 0)
+		return _currentInfo.name;
 	else
-		framesSinceLastChange = 0;
+		_currentInfo.framesSinceLastChange = 0;
 
-	int nbCurrentFrame = std::stoi(_currentTextureName.substr(_stateName.length())); // currentTextureName is like mario_walk2 and _stateName is like mario_walk ==> we get the 2
+	int nbCurrentFrame = std::stoi(_currentInfo.name.substr(_stateName.length())); // currentTextureName is like mario_walk2 and _stateName is like mario_walk ==> we get the 2
 	return _stateName + (nbCurrentFrame == _nbTextures ? "1" : std::to_string(++nbCurrentFrame));
 }

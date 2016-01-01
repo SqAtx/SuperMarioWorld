@@ -28,7 +28,7 @@ class GraphicsEngine : public Engine
 		void ReceiveCharacterPosition(InfoForDisplay* _info);
 
 		void RemoveDisplayableObject(unsigned int _id);
-		void UpdateForegroundItem(InfoForDisplay *_info);
+		void UpdateForegroundItem(const InfoForDisplay *_info);
 		void DeleteForegroundItem(unsigned int _id);
 
 #ifdef DEBUG_MODE
@@ -49,30 +49,26 @@ class GraphicsEngine : public Engine
 
 		// Sprites to draw: 3 levels
 		std::vector<sf::Sprite> m_backgroundToDraw;
-		std::vector<sf::Sprite> m_levelStructureToDraw;
+		std::map<unsigned int, sf::Sprite> m_foregroundSpritesToDraw;
+		std::map<unsigned int, sf::Sprite> m_pipeSpritesToDraw;
 		std::map<unsigned int, sf::Sprite> m_displayableObjectsToDraw;
 
-		// List of all the foreground tiles in the current level and their coordinates
-		std::map<unsigned int, InfoForDisplay> m_listForegroundItems;
-		std::map<unsigned int, InfoForDisplay> m_listPipes; // The pipes are special because they need to be displayed last in order to hide their content
+		std::map<unsigned int, Sprite::SpriteInfo> m_spritesCurrentlyDisplayed; // Contains id of displayable object and info about the sprite currently displayed (name from RECT file)
 
-		std::map<unsigned int, std::string> m_spritesCurrentlyDisplayed; // Contains id of displayable object and which sprite (name from RECT file) is displayed ATM
-		std::map<unsigned int, Sprite::StaticOrAnimated> m_animationStates; // One for each DisplayableObject
-
+		std::map<unsigned int, InfoForDisplay*> m_animatedLevelItems;
+		
+		void ResetSpritesToDraw();
+		void UpdateAnimatedLevelSprites();
+		void AddOrUpdateAnimatedLevelItem(const InfoForDisplay *_info);
 		void ProcessWindowEvents();
 
 		std::string GetTextureName(unsigned int _id, std::string _name, State _state);
 		void UpdateAnimationStates(unsigned int _id, std::string _stateFullName, int nbTextures);
 
-		void ResetSpritesToDraw();
-
 		void DisplayWindow();
 
 		// Add sprites in m_toDraw: the farthest first
 		void SetBackgroundToDraw();
-		void SetForegroundToDraw();
-		void SetListOfDisplayablesToDraw(std::map<unsigned int, InfoForDisplay>& _list);
-		void SetLevelStructureObjectToDraw(InfoForDisplay _info);
 		void SetDisplayableObjectToDraw(InfoForDisplay _info);
 
 		void DrawGame();
@@ -80,11 +76,11 @@ class GraphicsEngine : public Engine
 		void StoreLevelInfo(LevelInfo *_info);
 
 		void InitCameraPosition(float _levelHeight);
+		void MoveCameraOnMario(sf::FloatRect _coordsMario);
+		void MoveEverythingBy(sf::Vector2f _vect);
 
 		void ResetTmpSprite();
-
-		void MoveCameraOnMario(sf::FloatRect _coordsMario);
-
+	
 		sf::Vector2f RelativeToAbsolute(sf::Vector2f _rel);
 		sf::FloatRect RelativeToAbsolute(sf::FloatRect _rel);
 		sf::Vector2f AbsoluteToRelative(sf::Vector2f _abs);

@@ -17,9 +17,10 @@ class SpriteHandler
 		sf::Texture& GetTexture(std::string _name);
 
 		void SetDisplayInfoOnSprite(InfoForDisplay _info, sf::Sprite *_sprite);
+		void SpriteHandler::SetTextureOnSprite(std::string _textureName, sf::Sprite *_sprite);
 
 		std::string GetFullStateName(std::string _name, State _state);
-		std::string GetTextureNameFromStateName(std::string _stateFullName, std::string _currentTextureName, int _nbTextures);
+		std::string GetTextureNameFromStateName(std::string _stateFullName, Sprite::SpriteInfo& _currentInfo, int _nbTextures);
 		int HowManyLoadedTexturesContainThisName(std::string _name);
 
 		static const int FramesBetweenAnimationChanges;
@@ -30,7 +31,7 @@ class SpriteHandler
 
 		void LoadTexturesFromFile(std::string _fileName);
 
-		std::string FindNextTextureName(std::string _stateName, std::string _currentTextureName, int _nbTextures);
+		std::string FindNextTextureName(std::string _stateName, Sprite::SpriteInfo& _currentInfo, int _nbTextures);
 };
 
 #endif
