@@ -39,11 +39,11 @@ void GraphicsEngine::CreateListeners()
 	CharacterPositionUpdateListener* characterPositionUpdateListener = new CharacterPositionUpdateListener(this);
 	m_eventEngine->addListener("game.character_position_updated", characterPositionUpdateListener);
 	m_createdListeners.push_back(characterPositionUpdateListener);
-
+#ifdef DEBUG
 	DebugInfoUpdatedListener* debugInfoUpdatedListener = new DebugInfoUpdatedListener(this);
 	m_eventEngine->addListener("game.debug_info_updated", debugInfoUpdatedListener);
 	m_createdListeners.push_back(debugInfoUpdatedListener);
-
+#endif
 	ForegroundItemRemovedListener* foregroundItemRemovedListener = new ForegroundItemRemovedListener(this);
 	m_eventEngine->addListener("game.foreground_item_removed", foregroundItemRemovedListener);
 	m_createdListeners.push_back(foregroundItemRemovedListener);

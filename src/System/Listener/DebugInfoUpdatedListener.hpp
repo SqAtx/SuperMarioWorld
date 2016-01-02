@@ -1,6 +1,8 @@
 #ifndef DEBUG_INFO_UPDATED_LISTENER_H
 #define DEBUG_INFO_UPDATED_LISTENER_H
 
+#ifdef DEBUG
+
 #include "../../EventEngine/Event.hpp"
 #include "../../EventEngine/EventListener.hpp"
 #include "../../Engines/GraphicsEngine.hpp"
@@ -24,5 +26,7 @@ class DebugInfoUpdatedListener : public EventListener
 	private:
 		GraphicsEngine* m_graphicsEngine;
 };
+
+#endif
 
 #endif // DEBUG_INFO_UPDATED_LISTENER_H

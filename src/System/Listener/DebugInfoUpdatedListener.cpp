@@ -1,4 +1,6 @@
 #include "DebugInfoUpdatedListener.hpp"
+
+#ifdef DEBUG
 #include <iostream>
 
 DebugInfoUpdatedListener::DebugInfoUpdatedListener(GraphicsEngine* _graphicsEngine)
@@ -10,3 +12,5 @@ void DebugInfoUpdatedListener::onEvent(const std::string &_eventType, Event* _ev
 {
 	m_graphicsEngine->StoreDebugInfo(_event->GetDebugInfo());
 }
+
+#endif
