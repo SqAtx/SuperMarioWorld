@@ -3,7 +3,7 @@
 /*
  * List of events sent by the Graphics Components
  */
-#define KEY_EVENT "graphics.key_event"
 #define GAME_STOP_REQUEST "graphics.stop_request"
+#define KEY_EVENT "graphics.key_event"
 
 #endif // GRAPHICS_EVENTS_H

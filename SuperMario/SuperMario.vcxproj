@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E4F513F3-D4B8-4FF0-BAB3-CF1D4A7682A4}</ProjectGuid>
+    <RootNamespace>SuperMario</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\Debug</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\admi\Documents\Visual Studio 2013\Projects\SFML\SFML-2.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\admi\Documents\Visual Studio 2013\Projects\SFML\SFML-2.2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-audio-d.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>NotSet</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\admi\Documents\Visual Studio 2013\Projects\SFML\SFML-2.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\Users\admi\Documents\Visual Studio 2013\Projects\SFML\SFML-2.2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-audio.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Characters\Enemy.cpp" />
+    <ClCompile Include="src\Characters\Goomba.cpp" />
+    <ClCompile Include="src\Characters\MovingObject.cpp" />
+    <ClCompile Include="src\Characters\Player.cpp" />
+    <ClCompile Include="src\Engines\Engine.cpp" />
+    <ClCompile Include="src\Engines\GameEngine.cpp" />
+    <ClCompile Include="src\Engines\GraphicsEngine.cpp" />
+    <ClCompile Include="src\Engines\SoundEngine.cpp" />
+    <ClCompile Include="src\EventEngine\EventEngine.cpp" />
+    <ClCompile Include="src\EventEngine\KeyboardEvent.cpp" />
+    <ClCompile Include="src\irrXML\irrXML.cpp" />
+    <ClCompile Include="src\Items\Box.cpp" />
+    <ClCompile Include="src\Items\Pipe.cpp" />
+    <ClCompile Include="src\DisplayableObject.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\System\Listener\CharacterPositionUpdateListener.cpp" />
+    <ClCompile Include="src\System\Listener\CloseRequestListener.cpp" />
+    <ClCompile Include="src\System\Listener\DebugInfoUpdatedListener.cpp" />
+    <ClCompile Include="src\System\Listener\ForegroundItemRemovedListener.cpp" />
+    <ClCompile Include="src\System\Listener\ForegroundItemUpdatedListener.cpp" />
+    <ClCompile Include="src\System\Listener\GotLevelInfoListener.cpp" />
+    <ClCompile Include="src\System\Listener\KeyboardListener.cpp" />
+    <ClCompile Include="src\System\Listener\LevelStartListener.cpp" />
+    <ClCompile Include="src\System\Listener\CharacterDiedListener.cpp" />
+    <ClCompile Include="src\System\Listener\MarioJumpListener.cpp" />
+    <ClCompile Include="src\System\Listener\MarioKickedEnemyListener.cpp" />
+    <ClCompile Include="src\System\Listener\NewCharacterReadListener.cpp" />
+    <ClCompile Include="src\System\Listener\NewForegroundItemReadListener.cpp" />
+    <ClCompile Include="src\System\Listener\NewPipeReadListener.cpp" />
+    <ClCompile Include="src\System\Listener\ToggleIgnoreInputListener.cpp" />
+    <ClCompile Include="src\Utilities\CollisionHandler.cpp" />
+    <ClCompile Include="src\Utilities\LevelImporter.cpp" />
+    <ClCompile Include="src\Utilities\SpriteHandler.cpp" />
+    <ClCompile Include="src\Utilities\Util.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Characters\Enemy.hpp" />
+    <ClInclude Include="src\Characters\Goomba.hpp" />
+    <ClInclude Include="src\Characters\MovingObject.hpp" />
+    <ClInclude Include="src\Characters\Player.hpp" />
+    <ClInclude Include="src\Debug.hpp" />
+    <ClInclude Include="src\Engines\Engine.hpp" />
+    <ClInclude Include="src\Engines\GameEngine.hpp" />
+    <ClInclude Include="src\Engines\GraphicsEngine.hpp" />
+    <ClInclude Include="src\Engines\SoundEngine.hpp" />
+    <ClInclude Include="src\EventEngine\Event.hpp" />
+    <ClInclude Include="src\EventEngine\EventEngine.hpp" />
+    <ClInclude Include="src\EventEngine\EventListener.hpp" />
+    <ClInclude Include="src\EventEngine\KeyboardEvent.hpp" />
+    <ClInclude Include="src\Game\GameEvents.hpp" />
+    <ClInclude Include="src\Graphics\GraphicsEvents.hpp" />
+    <ClInclude Include="src\irrXML\CXMLReaderImpl.h" />
+    <ClInclude Include="src\irrXML\fast_atof.h" />
+    <ClInclude Include="src\irrXML\heapsort.h" />
+    <ClInclude Include="src\irrXML\irrArray.h" />
+    <ClInclude Include="src\irrXML\irrString.h" />
+    <ClInclude Include="src\irrXML\irrTypes.h" />
+    <ClInclude Include="src\irrXML\irrXML.h" />
+    <ClInclude Include="src\Items\Box.hpp" />
+    <ClInclude Include="src\DisplayableObject.hpp" />
+    <ClInclude Include="src\Game.hpp" />
+    <ClInclude Include="src\Items\Pipe.hpp" />
+    <ClInclude Include="src\System\Listener\CharacterPositionUpdateListener.hpp" />
+    <ClInclude Include="src\System\Listener\CloseRequestListener.hpp" />
+    <ClInclude Include="src\System\Listener\DebugInfoUpdatedListener.hpp" />
+    <ClInclude Include="src\System\Listener\ForegroundItemRemovedListener.hpp" />
+    <ClInclude Include="src\System\Listener\ForegroundItemUpdatedListener.hpp" />
+    <ClInclude Include="src\System\Listener\GotLevelInfoListener.hpp" />
+    <ClInclude Include="src\System\Listener\KeyboardListener.hpp" />
+    <ClInclude Include="src\System\Listener\LevelStartListener.hpp" />
+    <ClInclude Include="src\System\Listener\CharacterDiedListener.hpp" />
+    <ClInclude Include="src\System\Listener\MarioJumpListener.hpp" />
+    <ClInclude Include="src\System\Listener\MarioKickedEnemyListener.hpp" />
+    <ClInclude Include="src\System\Listener\NewCharacterReadListener.hpp" />
+    <ClInclude Include="src\System\Listener\NewForegroundItemReadListener.hpp" />
+    <ClInclude Include="src\System\Listener\NewPipeReadListener.hpp" />
+    <ClInclude Include="src\System\Listener\ToggleIgnoreInputListener.hpp" />
+    <ClInclude Include="src\Utilities\CollisionHandler.hpp" />
+    <ClInclude Include="src\Utilities\LevelImporter.hpp" />
+    <ClInclude Include="src\Utilities\PhysicsConstants.hpp" />
+    <ClInclude Include="src\Utilities\SpriteHandler.hpp" />
+    <ClInclude Include="src\Utilities\Util.hpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

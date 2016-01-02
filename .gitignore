@@ -4,7 +4,6 @@ assets/sounds/*.mp3
 assets/sounds/Devastation's_Doorway_OC_ReMix.ogg
 assets/sprites/enemies.png
 assets/sprites/enemies_green_background.png
-*.vcxproj
 *.obj
 *.tlog
 ToDo.txt
@@ -14,3 +13,7 @@ bugGoomba.png
 Collisions.xlsx
 
 bin
+SuperMario.opensdf
+*.sdf
+*.suo
+System/System.vcxproj.filters
