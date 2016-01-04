@@ -1,5 +1,5 @@
 #include "Game.hpp"
-#include "System/Listener/CloseRequestListener.hpp"
+#include "../System/Listener/CloseRequestListener.hpp"
 
 Game::Game()
 {

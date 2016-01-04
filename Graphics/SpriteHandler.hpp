@@ -1,7 +1,7 @@
 #ifndef SPRITEHANDLER_H
 #define SPRITEHANDLER_H
 
-#include "Util.hpp"
+#include "../System/Util.hpp"
 
 class GraphicsEngine;
 

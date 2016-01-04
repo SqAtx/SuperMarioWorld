@@ -1,4 +1,4 @@
-#include "NewCharacterReadListener.hpp"
+#include "../../System/Listener/NewCharacterReadListener.hpp"
 #include <iostream>
 
 NewCharacterReadListener::NewCharacterReadListener(GameEngine* _gameEngine)

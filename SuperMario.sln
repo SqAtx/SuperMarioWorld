@@ -5,6 +5,19 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SuperMario", "SuperMario\SuperMario.vcxproj", "{E4F513F3-D4B8-4FF0-BAB3-CF1D4A7682A4}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "System", "System\System.vcxproj", "{B026FDAE-EC1A-4406-A911-95D68F7CCBD0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sound", "Sound\Sound.vcxproj", "{D9F0FEC4-3F79-4D53-8ABB-BD98523BD549}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B026FDAE-EC1A-4406-A911-95D68F7CCBD0} = {B026FDAE-EC1A-4406-A911-95D68F7CCBD0}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EventEngine", "EventEngine\EventEngine.vcxproj", "{38A34F5D-BF7E-4AF6-8101-545788241762}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj", "{729476A3-979A-4016-9BA5-DC88EFE252FF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Graphics", "Graphics\Graphics.vcxproj", "{163C44E5-CE04-47C5-892C-57CD5A51BE19}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -15,6 +28,26 @@ Global
 		{E4F513F3-D4B8-4FF0-BAB3-CF1D4A7682A4}.Debug|Win32.Build.0 = Debug|Win32
 		{E4F513F3-D4B8-4FF0-BAB3-CF1D4A7682A4}.Release|Win32.ActiveCfg = Release|Win32
 		{E4F513F3-D4B8-4FF0-BAB3-CF1D4A7682A4}.Release|Win32.Build.0 = Release|Win32
+		{B026FDAE-EC1A-4406-A911-95D68F7CCBD0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B026FDAE-EC1A-4406-A911-95D68F7CCBD0}.Debug|Win32.Build.0 = Debug|Win32
+		{B026FDAE-EC1A-4406-A911-95D68F7CCBD0}.Release|Win32.ActiveCfg = Release|Win32
+		{B026FDAE-EC1A-4406-A911-95D68F7CCBD0}.Release|Win32.Build.0 = Release|Win32
+		{D9F0FEC4-3F79-4D53-8ABB-BD98523BD549}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D9F0FEC4-3F79-4D53-8ABB-BD98523BD549}.Debug|Win32.Build.0 = Debug|Win32
+		{D9F0FEC4-3F79-4D53-8ABB-BD98523BD549}.Release|Win32.ActiveCfg = Release|Win32
+		{D9F0FEC4-3F79-4D53-8ABB-BD98523BD549}.Release|Win32.Build.0 = Release|Win32
+		{38A34F5D-BF7E-4AF6-8101-545788241762}.Debug|Win32.ActiveCfg = Debug|Win32
+		{38A34F5D-BF7E-4AF6-8101-545788241762}.Debug|Win32.Build.0 = Debug|Win32
+		{38A34F5D-BF7E-4AF6-8101-545788241762}.Release|Win32.ActiveCfg = Release|Win32
+		{38A34F5D-BF7E-4AF6-8101-545788241762}.Release|Win32.Build.0 = Release|Win32
+		{729476A3-979A-4016-9BA5-DC88EFE252FF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{729476A3-979A-4016-9BA5-DC88EFE252FF}.Debug|Win32.Build.0 = Debug|Win32
+		{729476A3-979A-4016-9BA5-DC88EFE252FF}.Release|Win32.ActiveCfg = Release|Win32
+		{729476A3-979A-4016-9BA5-DC88EFE252FF}.Release|Win32.Build.0 = Release|Win32
+		{163C44E5-CE04-47C5-892C-57CD5A51BE19}.Debug|Win32.ActiveCfg = Debug|Win32
+		{163C44E5-CE04-47C5-892C-57CD5A51BE19}.Debug|Win32.Build.0 = Debug|Win32
+		{163C44E5-CE04-47C5-892C-57CD5A51BE19}.Release|Win32.ActiveCfg = Release|Win32
+		{163C44E5-CE04-47C5-892C-57CD5A51BE19}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

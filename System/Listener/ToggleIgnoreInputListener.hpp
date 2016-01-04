@@ -1,9 +1,9 @@
 #ifndef TOGGLE_IGNORE_INPUT_LISTENER_H
 #define TOGGLE_IGNORE_INPUT_LISTENER_H
 
-#include "../../EventEngine/Event.hpp"
-#include "../../EventEngine/EventListener.hpp"
-#include "../../Engines/GameEngine.hpp"
+#include "../EventEngine/Event.hpp"
+#include "../EventEngine/EventListener.hpp"
+#include "../../Game/GameEngine.hpp"
 #include <string>
 
 /**

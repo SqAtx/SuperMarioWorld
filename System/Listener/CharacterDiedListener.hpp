@@ -1,11 +1,11 @@
 #ifndef CHARACTER_DIED_LISTENER_H
 #define CHARACTER_DIED_LISTENER_H
 
-#include "../../EventEngine/Event.hpp"
-#include "../../EventEngine/EventListener.hpp"
-#include "../../Engines/GameEngine.hpp"
-#include "../../Engines/GraphicsEngine.hpp"
-#include "../../Engines/SoundEngine.hpp"
+#include "../EventEngine/Event.hpp"
+#include "../EventEngine/EventListener.hpp"
+#include "../../Game/GameEngine.hpp"
+#include "../../Graphics/GraphicsEngine.hpp"
+#include "../../Sound/SoundEngine.hpp"
 #include <string>
 
 /**

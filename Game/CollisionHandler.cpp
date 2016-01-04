@@ -1,5 +1,5 @@
 #include "CollisionHandler.hpp"
-#include "../Engines/GameEngine.hpp"
+#include "GameEngine.hpp"
 
 
 CollisionHandler::CollisionHandler(GameEngine *_parent, EventEngine *_eventEngine)

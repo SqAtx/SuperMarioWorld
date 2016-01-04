@@ -1,4 +1,4 @@
-#include "DebugInfoUpdatedListener.hpp"
+#include "../../System/Listener/DebugInfoUpdatedListener.hpp"
 
 #ifdef DEBUG
 #include <iostream>

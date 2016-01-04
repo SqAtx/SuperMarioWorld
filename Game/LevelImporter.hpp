@@ -2,10 +2,10 @@
 #define LEVELIMPORTER_H
 
 #include <string>
-#include "../irrXML/irrXML.h"
-#include "../Items/Pipe.hpp"
-#include "Util.hpp"
-#include "../EventEngine/EventEngine.hpp"
+#include "../System/irrXML/irrXML.h"
+#include "../System/Items/Pipe.hpp"
+#include "../System/Util.hpp"
+#include "../System/EventEngine/EventEngine.hpp"
 
 class GameEngine;
 

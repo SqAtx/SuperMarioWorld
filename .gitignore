@@ -17,3 +17,4 @@ SuperMario.opensdf
 *.sdf
 *.suo
 System/System.vcxproj.filters
+*.lib

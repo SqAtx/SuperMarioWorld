@@ -1,4 +1,4 @@
-#include "CharacterPositionUpdateListener.hpp"
+#include "../../System/Listener/CharacterPositionUpdateListener.hpp"
 #include <iostream>
 
 CharacterPositionUpdateListener::CharacterPositionUpdateListener(GraphicsEngine* _graphicsEngine)

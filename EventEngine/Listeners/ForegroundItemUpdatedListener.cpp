@@ -1,4 +1,4 @@
-#include "ForegroundItemUpdatedListener.hpp"
+#include "../../System/Listener/ForegroundItemUpdatedListener.hpp"
 #include <iostream>
 
 ForegroundItemUpdatedListener::ForegroundItemUpdatedListener(GameEngine* _gameEngine)

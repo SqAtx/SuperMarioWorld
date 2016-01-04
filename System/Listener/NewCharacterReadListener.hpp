@@ -1,9 +1,9 @@
 #ifndef NEW_CHARACTER_READ_LISTENER_H
 #define NEW_CHARACTER_READ_LISTENER_H
 
-#include "../../EventEngine/Event.hpp"
-#include "../../EventEngine/EventListener.hpp"
-#include "../../Engines/GameEngine.hpp"
+#include "../EventEngine/Event.hpp"
+#include "../EventEngine/EventListener.hpp"
+#include "../../Game/GameEngine.hpp"
 #include <string>
 
 /**

@@ -4,7 +4,7 @@
 #include "../System/Listener/MarioKickedEnemyListener.hpp"
 #include "../System/Listener/LevelStartListener.hpp"
 
-const std::string SoundEngine::soundsPath = "../assets/sounds/";
+const std::string SoundEngine::soundsPath = Util::GetAssetsPath() + "sounds/";
 
 SoundEngine::SoundEngine(EventEngine* _eventEngine) : Engine(_eventEngine), m_indexCurrentMusic(-1)
 {

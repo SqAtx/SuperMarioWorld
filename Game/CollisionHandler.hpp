@@ -1,7 +1,7 @@
 #ifndef COLLISION_HANDLER_H
 #define COLLISION_HANDLER_H
 
-#include "../Characters/Player.hpp"
+#include "../System/Characters/Player.hpp"
 
 class GameEngine;
 class EventEngine;

@@ -4,11 +4,11 @@
 #include <mutex>
 #include <vector>
 
-#include "Engines/GameEngine.hpp"
-#include "Engines/GraphicsEngine.hpp"
-#include "Engines/SoundEngine.hpp"
-#include "EventEngine/EventEngine.hpp"
-#include "EventEngine/EventListener.hpp"
+#include "../Game/GameEngine.hpp"
+#include "../Graphics/GraphicsEngine.hpp"
+#include "../Sound/SoundEngine.hpp"
+#include "../System/EventEngine/EventEngine.hpp"
+#include "../System/EventEngine/EventListener.hpp"
 
 /*
     Base class of the game

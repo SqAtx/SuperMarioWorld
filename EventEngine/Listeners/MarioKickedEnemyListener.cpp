@@ -1,4 +1,4 @@
-#include "MarioKickedEnemyListener.hpp"
+#include "../../System/Listener/MarioKickedEnemyListener.hpp"
 #include <iostream>
 
 MarioKickedEnemyListener::MarioKickedEnemyListener(SoundEngine* _soundEngine)

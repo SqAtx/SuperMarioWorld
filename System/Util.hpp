@@ -9,7 +9,7 @@
 #include <vector>
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
-#include "../Debug.hpp"
+#include "Debug.hpp"
 
 class DisplayableObject;
 struct InfoForDisplay;
@@ -133,13 +133,16 @@ struct DebugInfo {
 class Util
 {
 	public:
+		static const std::string GetAssetsPath(); // If I put a static const variable it doesn't get initialized in the other projects for some reason
+
 		static bool isInteger(std::string& _str);
 		static std::vector<std::string> Split(std::string _str, char _sep);
 		static bool StringEndsWith(std::string _full, std::string _ending);
 		static CollisionDirection OppositeCollisionDirection(CollisionDirection _dir);
 };
 
-class CompareInfoForDisplay {
+class CompareInfoForDisplay 
+{
 	public:
 		bool operator()(InfoForDisplay const& _a, InfoForDisplay const& _b);
 };

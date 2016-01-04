@@ -1,5 +1,4 @@
 #include "Pipe.hpp"
-#include "../Engines/GameEngine.hpp"
 
 const int Pipe::milisecondsBetweenSpawns = 3000;
 

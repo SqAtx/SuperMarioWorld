@@ -1,9 +1,9 @@
 #ifndef MARIO_JUMP_LISTENER_H
 #define MARIO_JUMP_LISTENER_H
 
-#include "../../EventEngine/Event.hpp"
-#include "../../EventEngine/EventListener.hpp"
-#include "../../Engines/SoundEngine.hpp"
+#include "../EventEngine/Event.hpp"
+#include "../EventEngine/EventListener.hpp"
+#include "../../Sound/SoundEngine.hpp"
 #include <string>
 
 /**

@@ -10,37 +10,13 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\EventEngine\EventEngine.vcxproj">
-      <Project>{38a34f5d-bf7e-4af6-8101-545788241762}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Game\Game.vcxproj">
-      <Project>{729476a3-979a-4016-9ba5-dc88efe252ff}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Graphics\Graphics.vcxproj">
-      <Project>{163c44e5-ce04-47c5-892c-57cd5a51be19}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Sound\Sound.vcxproj">
-      <Project>{d9f0fec4-3f79-4d53-8abb-bd98523bd549}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\System\System.vcxproj">
-      <Project>{b026fdae-ec1a-4406-a911-95d68f7ccbd0}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Game.hpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{E4F513F3-D4B8-4FF0-BAB3-CF1D4A7682A4}</ProjectGuid>
-    <RootNamespace>SuperMario</RootNamespace>
+    <ProjectGuid>{38A34F5D-BF7E-4AF6-8101-545788241762}</ProjectGuid>
+    <RootNamespace>EventEngine</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -74,13 +50,9 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\Users\admi\Documents\Visual Studio 2013\Projects\SFML\SFML-2.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\admi\Documents\Visual Studio 2013\Projects\SFML\SFML-2.2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-audio-d.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>NotSet</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -90,17 +62,37 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\admi\Documents\Visual Studio 2013\Projects\SFML\SFML-2.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\admi\Documents\Visual Studio 2013\Projects\SFML\SFML-2.2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-audio.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="EventEngine.cpp" />
+    <ClCompile Include="KeyboardEvent.cpp" />
+    <ClCompile Include="Listeners\CharacterDiedListener.cpp" />
+    <ClCompile Include="Listeners\CharacterPositionUpdateListener.cpp" />
+    <ClCompile Include="Listeners\CloseRequestListener.cpp" />
+    <ClCompile Include="Listeners\DebugInfoUpdatedListener.cpp" />
+    <ClCompile Include="Listeners\ForegroundItemRemovedListener.cpp" />
+    <ClCompile Include="Listeners\ForegroundItemUpdatedListener.cpp" />
+    <ClCompile Include="Listeners\GotLevelInfoListener.cpp" />
+    <ClCompile Include="Listeners\KeyboardListener.cpp" />
+    <ClCompile Include="Listeners\LevelStartListener.cpp" />
+    <ClCompile Include="Listeners\MarioJumpListener.cpp" />
+    <ClCompile Include="Listeners\MarioKickedEnemyListener.cpp" />
+    <ClCompile Include="Listeners\NewCharacterReadListener.cpp" />
+    <ClCompile Include="Listeners\NewForegroundItemReadListener.cpp" />
+    <ClCompile Include="Listeners\NewPipeReadListener.cpp" />
+    <ClCompile Include="Listeners\ToggleIgnoreInputListener.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\System\System.vcxproj">
+      <Project>{b026fdae-ec1a-4406-a911-95d68f7ccbd0}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

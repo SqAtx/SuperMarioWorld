@@ -1,12 +1,12 @@
 #include <cstring>
 #include "LevelImporter.hpp"
-#include "../Engines/GameEngine.hpp"
-#include "../Game/GameEvents.hpp"
+#include "GameEngine.hpp"
+#include "GameEvents.hpp"
 
 using namespace irr;
 using namespace io;
 
-const std::string LevelImporter::levelsPath = "../assets/levels/";
+const std::string LevelImporter::levelsPath = Util::GetAssetsPath() + "levels/";
 
 LevelImporter::LevelImporter(EventEngine *_eventEngine)
 {

@@ -1,5 +1,4 @@
 #include "GameEngine.hpp"
-#include "../Game.hpp"
 #include "../System/Listener/CharacterDiedListener.hpp"
 #include "../System/Listener/ForegroundItemUpdatedListener.hpp"
 #include "../System/Listener/GotLevelInfoListener.hpp"

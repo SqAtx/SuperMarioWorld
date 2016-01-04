@@ -1,10 +1,10 @@
 #ifndef NEW_FOREGROUND_ITEM_READ_LISTENER_H
 #define NEW_FOREGROUND_ITEM_READ_LISTENER_H
 
-#include "../../EventEngine/Event.hpp"
-#include "../../EventEngine/EventListener.hpp"
-#include "../../Engines/GameEngine.hpp"
-#include "../../Engines/GraphicsEngine.hpp"
+#include "../EventEngine/Event.hpp"
+#include "../EventEngine/EventListener.hpp"
+#include "../../Game/GameEngine.hpp"
+#include "../../Graphics/GraphicsEngine.hpp"
 #include <string>
 
 /**

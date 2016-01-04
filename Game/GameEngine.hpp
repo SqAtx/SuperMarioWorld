@@ -1,11 +1,11 @@
 #ifndef GAMEENGINE_H
 #define GAMEENGINE_H
 
-#include "Engine.hpp"
-#include "../Utilities/CollisionHandler.hpp"
-#include "../Utilities/LevelImporter.hpp"
-#include "../Items/Box.hpp"
-#include "../Characters/Goomba.hpp"
+#include "../System/Engine.hpp"
+#include "CollisionHandler.hpp"
+#include "LevelImporter.hpp"
+#include "../System/Items/Box.hpp"
+#include "../System/Characters/Goomba.hpp"
 
 /*
     Game engine: Handles the movements of the player, collisions, etc.

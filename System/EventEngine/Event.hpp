@@ -1,7 +1,7 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-#include "../Utilities/Util.hpp"
+#include "../Util.hpp"
 
 class MovingObject;
 class Pipe;

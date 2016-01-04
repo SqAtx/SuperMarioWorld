@@ -1,4 +1,4 @@
-#include "CharacterDiedListener.hpp"
+#include "../../System/Listener/CharacterDiedListener.hpp"
 #include <iostream>
 
 CharacterDiedListener::CharacterDiedListener(GameEngine* _gameEngine)

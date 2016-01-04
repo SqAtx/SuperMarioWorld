@@ -1,10 +1,10 @@
 #ifndef FOREGROUND_ITEM_UPDATED_LISTENER_H
 #define FOREGROUND_ITEM_UPDATED_LISTENER_H
 
-#include "../../EventEngine/Event.hpp"
-#include "../../EventEngine/EventListener.hpp"
-#include "../../Engines/GameEngine.hpp"
-#include "../../Engines/GraphicsEngine.hpp"
+#include "../EventEngine/Event.hpp"
+#include "../EventEngine/EventListener.hpp"
+#include "../../Game/GameEngine.hpp"
+#include "../../Graphics/GraphicsEngine.hpp"
 #include <string>
 
 /**

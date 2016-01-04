@@ -2,12 +2,12 @@
 	SpriteHandler: All operations from retrieving the textures to deciding which sprites to display
 */
 #include <exception>
-#include "../DisplayableObject.hpp"
-#include "../Engines/GraphicsEngine.hpp"
+#include "../System/DisplayableObject.hpp"
+#include "GraphicsEngine.hpp"
 #include "SpriteHandler.hpp"
 
 const int SpriteHandler::FramesBetweenAnimationChanges = 7;
-const std::string SpriteHandler::texturesPath = "../assets/sprites/";
+const std::string SpriteHandler::texturesPath = Util::GetAssetsPath() +  "sprites/";
 
 SpriteHandler::SpriteHandler()
 {

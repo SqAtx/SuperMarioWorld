@@ -3,6 +3,7 @@
 
 #include "../DisplayableObject.hpp"
 #include "../EventEngine/EventEngine.hpp"
+#include "../Characters/Goomba.hpp"
 #include <SFML/System/Clock.hpp>
 
 class GameEngine;

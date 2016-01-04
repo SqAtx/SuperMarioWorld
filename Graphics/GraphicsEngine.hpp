@@ -1,8 +1,8 @@
 #ifndef GRAPHICSENGINE_H
 #define GRAPHICSENGINE_H
 
-#include "Engine.hpp"
-#include "../Utilities/SpriteHandler.hpp"
+#include "../System/Engine.hpp"
+#include "../Graphics/SpriteHandler.hpp"
 
 #include <fstream>
 

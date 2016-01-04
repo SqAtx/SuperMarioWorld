@@ -1,9 +1,9 @@
 #ifndef CLOSE_REQUEST_LISTENER_H
 #define CLOSE_REQUEST_LISTENER_H
 
-#include "../../EventEngine/Event.hpp"
-#include "../../EventEngine/EventListener.hpp"
-#include "../../Game.hpp"
+#include "../EventEngine/Event.hpp"
+#include "../EventEngine/EventListener.hpp"
+#include "../../SuperMario/Game.hpp"
 #include <string>
 
 /**

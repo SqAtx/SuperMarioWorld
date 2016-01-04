@@ -1,9 +1,9 @@
 #ifndef CHAR_POS_UPDATE_LISTENER_H
 #define CHAR_POS_UPDATE_LISTENER_H
 
-#include "../../EventEngine/Event.hpp"
-#include "../../EventEngine/EventListener.hpp"
-#include "../../Engines/GraphicsEngine.hpp"
+#include "../EventEngine/Event.hpp"
+#include "../EventEngine/EventListener.hpp"
+#include "../../Graphics/GraphicsEngine.hpp"
 #include <string>
 
 /**

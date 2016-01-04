@@ -1,9 +1,9 @@
 #ifndef KEYBOARD_LISTENER_H
 #define KEYBOARD_LISTENER_H
 
-#include "../../EventEngine/KeyboardEvent.hpp"
-#include "../../EventEngine/EventListener.hpp"
-#include "../../Engines/GameEngine.hpp"
+#include "../EventEngine/KeyboardEvent.hpp"
+#include "../EventEngine/EventListener.hpp"
+#include "../../Game/GameEngine.hpp"
 #include <string>
 
 /**

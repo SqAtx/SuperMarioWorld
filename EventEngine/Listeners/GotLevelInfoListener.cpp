@@ -1,4 +1,4 @@
-#include "GotLevelInfoListener.hpp"
+#include "../../System/Listener/GotLevelInfoListener.hpp"
 #include <iostream>
 
 GotLevelInfoListener::GotLevelInfoListener(GameEngine* _gameEngine)

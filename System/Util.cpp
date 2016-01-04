@@ -1,5 +1,10 @@
 #include "Util.hpp"
-#include "../DisplayableObject.hpp"
+#include "DisplayableObject.hpp"
+
+const std::string Util::GetAssetsPath()
+{
+	return "../../assets/";
+}
 
 bool Util::isInteger(std::string& _str)
 {
@@ -63,7 +68,7 @@ CollisionDirection Util::OppositeCollisionDirection(CollisionDirection _dir)
 		case NO_COL:
 			return NO_COL;
 		default:
-			assert(false);
+			throw std::exception();
 	}
 }
 

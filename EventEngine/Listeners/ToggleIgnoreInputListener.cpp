@@ -1,4 +1,4 @@
-#include "ToggleIgnoreInputListener.hpp"
+#include "../../System/Listener/ToggleIgnoreInputListener.hpp"
 #include <iostream>
 
 ToggleIgnoreInputListener::ToggleIgnoreInputListener(GameEngine* _gameEngine)

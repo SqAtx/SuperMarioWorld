@@ -5,7 +5,7 @@
 #include <iostream>
 #include <queue>
 
-#include "../EventEngine/EventEngine.hpp"
+#include "EventEngine/EventEngine.hpp"
 
 // Game needs Engine and Engine needs Game, we solve that problem with a forward declaration
 class Game;
