@@ -83,6 +83,12 @@
       <AdditionalDependencies>sfml-audio-d.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>NotSet</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /y $(ProjectDir)..\assets\levels\*  $(OutDir)levels\</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if not exist $(OutDir)levels mkdir $(OutDir)levels</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -101,6 +107,12 @@
       <AdditionalDependencies>sfml-audio.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /y $(ProjectDir)..\assets\levels\*  $(OutDir)levels\</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if not exist $(OutDir)levels mkdir $(OutDir)levels</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

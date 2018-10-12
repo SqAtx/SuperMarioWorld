@@ -83,7 +83,7 @@ void GameEngine::Frame(float _dt)
 	MovingObject *currentCharacter = NULL;
 
 	if (!m_levelStarted)
-		StartLevel("biglvl"); // In the future there will be some sort of level selection so this call will be moved
+		StartLevel("activelvl"); // In the future there will be some sort of level selection so this call will be moved
 
 	// Spawn enemies from pipes
 	for (std::map<unsigned int, Pipe*>::iterator it = m_listPipes.begin(); it != m_listPipes.end(); ++it)

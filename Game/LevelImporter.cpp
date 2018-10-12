@@ -6,7 +6,7 @@
 using namespace irr;
 using namespace io;
 
-const std::string LevelImporter::levelsPath = Util::GetAssetsPath() + "levels/";
+const std::string LevelImporter::levelsPath = "levels/";
 
 LevelImporter::LevelImporter(EventEngine *_eventEngine)
 {
