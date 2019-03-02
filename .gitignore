@@ -15,6 +15,9 @@ Collisions.xlsx
 bin
 SuperMario.opensdf
 *.sdf
+.vs/
 *.suo
 System/System.vcxproj.filters
 *.lib
+
+SFML/
