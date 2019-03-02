@@ -1,6 +1,3 @@
-# SuperMarioWorld
-An amazing 2D Mario game made from scratch with C++ and SFML!
-
 ## History
 I wrote Super Mario World in 2015, in order to keep my C++ skills sharp. C++ was my main language at the time, but my day job involved only C and C#.
 
